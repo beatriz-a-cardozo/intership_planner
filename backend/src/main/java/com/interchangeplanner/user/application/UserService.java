@@ -11,6 +11,7 @@ import com.interchangeplanner.user.domain.UserRepository;
 import com.interchangeplanner.user.domain.UserSettings;
 import com.interchangeplanner.user.domain.UserSettingsRepository;
 import java.time.DateTimeException;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Set;
 import java.util.UUID;
@@ -68,6 +69,17 @@ public class UserService {
         settings.update(request.theme(), request.locale(), request.timezone(), request.primaryCurrency(),
                 request.secondaryCurrency());
         return mapper.toResponse(settings);
+    }
+
+    /** Marca o onboarding como concluído. Retorna false se já estava concluído. */
+    @Transactional
+    public boolean completeOnboarding(UUID userId, Instant when) {
+        AppUser user = users.findById(userId).orElseThrow(() -> new NotFoundException("Usuário"));
+        if (user.isOnboardingCompleted()) {
+            return false;
+        }
+        user.completeOnboarding(when);
+        return true;
     }
 
     private UserSettings settingsOf(UUID userId) {

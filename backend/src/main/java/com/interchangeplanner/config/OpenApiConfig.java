@@ -2,6 +2,7 @@ package com.interchangeplanner.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.SpecVersion;
 import com.interchangeplanner.shared.security.CurrentUser;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Schema;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springdoc.core.utils.SpringDocUtils;
 import org.springframework.context.annotation.Bean;
@@ -45,10 +47,11 @@ public class OpenApiConfig {
     }
 
     /**
-     * Convenção de contrato: todo campo de um schema {@code *Response} é sempre enviado, então é marcado como
-     * obrigatório (o TypeScript gerado não o trata como opcional). Campos que podem vir nulos devem ser
-     * declarados com {@code @Schema(nullable = true)} / tipo {@code null} e ficam de fora.
-     * Requests já recebem {@code required} das anotações de validação ({@code @NotNull}, {@code @NotBlank}).
+     * Convenção de contrato: todo campo de um schema de saída (qualquer schema que não seja {@code *Request},
+     * inclusive records aninhados como {@code Totals}) é sempre enviado, então é marcado como obrigatório
+     * (o TypeScript gerado não o trata como opcional). Campos que podem vir nulos são declarados com
+     * {@code @Schema(types = {"string", "null"})} e viram {@code string | null} no TypeScript.
+     * Requests recebem {@code required} das anotações de validação ({@code @NotNull}, {@code @NotBlank}).
      */
     @Bean
     public OpenApiCustomizer responseFieldsRequired() {
@@ -57,14 +60,17 @@ public class OpenApiConfig {
                 return;
             }
             openApi.getComponents().getSchemas().forEach((name, schema) -> {
-                if (!name.endsWith("Response") || schema.getProperties() == null) {
+                if (name.endsWith("Request") || schema.getProperties() == null) {
                     return;
                 }
                 Map<String, Schema<?>> properties = castProperties(schema);
                 List<String> required = new ArrayList<>();
                 properties.forEach((property, propertySchema) -> {
-                    if (!isNullable(propertySchema)) {
-                        required.add(property);
+                    // Sempre presente no JSON (o Jackson também envia nulls): obrigatório, ainda que anulável
+                    required.add(property);
+                    if (isNullable(propertySchema) && propertySchema.get$ref() != null) {
+                        // Objeto anulável: forma padrão do OpenAPI 3.1 => TypeScript "X | null"
+                        properties.put(property, nullableRef(propertySchema.get$ref()));
                     }
                 });
                 Collections.sort(required);
@@ -76,6 +82,14 @@ public class OpenApiConfig {
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static Map<String, Schema<?>> castProperties(Schema schema) {
         return (Map<String, Schema<?>>) schema.getProperties();
+    }
+
+    private static Schema<?> nullableRef(String ref) {
+        Schema<?> nullType = new Schema<>(SpecVersion.V31);
+        nullType.setTypes(Set.of("null"));
+        Schema<?> wrapper = new Schema<>(SpecVersion.V31);
+        wrapper.setOneOf(List.of(new Schema<>(SpecVersion.V31).$ref(ref), nullType));
+        return wrapper;
     }
 
     private static boolean isNullable(Schema<?> schema) {

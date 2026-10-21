@@ -15,6 +15,8 @@ import { SegmentedControl } from '@/components/ui/segmented'
 import { NativeSelect } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useCurrencies, useUpdateSettings } from './api'
+import { CatalogCard } from './catalog-card'
+import { ExchangeRateCard } from './exchange-rate-card'
 
 const TIMEZONES = [
   'America/Sao_Paulo',
@@ -147,7 +149,11 @@ function PreferencesCard({ settings }: { settings: UserSettings }) {
                   ))}
                 </NativeSelect>
               </Field>
-              <Field id="secondaryCurrency" label="Moeda secundária" error={errors.secondaryCurrency?.message}>
+              <Field
+                id="secondaryCurrency"
+                label="Moeda secundária"
+                error={errors.secondaryCurrency?.message}
+              >
                 <NativeSelect
                   id="secondaryCurrency"
                   aria-invalid={!!errors.secondaryCurrency}
@@ -171,7 +177,12 @@ function PreferencesCard({ settings }: { settings: UserSettings }) {
               </Field>
             </div>
             <div className="flex justify-end">
-              <Button type="submit" disabled={!isDirty} loading={update.isPending} className="w-full sm:w-auto">
+              <Button
+                type="submit"
+                disabled={!isDirty}
+                loading={update.isPending}
+                className="w-full sm:w-auto"
+              >
                 Salvar preferências
               </Button>
             </div>
@@ -187,7 +198,7 @@ export function SettingsPage() {
   if (!user) return null
   return (
     <>
-      <PageHeader title="Configurações" description="Ajuste aparência, moedas e região." />
+      <PageHeader title="Configurações" description="Aparência, moedas, cotação e catálogo de gastos." />
       <div className="grid gap-5">
         <Card>
           <CardHeader className="flex-col">
@@ -200,6 +211,8 @@ export function SettingsPage() {
         </Card>
         <ThemeCard settings={user.settings} />
         <PreferencesCard settings={user.settings} />
+        <ExchangeRateCard />
+        <CatalogCard />
       </div>
     </>
   )

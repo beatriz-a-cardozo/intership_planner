@@ -16,7 +16,8 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 5173,
       // Em desenvolvimento, /api é encaminhado ao backend: mesmo domínio => cookie de refresh funciona sem CORS.
-      proxy: { '/api': { target: apiTarget, changeOrigin: true } },
+      // changeOrigin: false mantém Host == Origin (localhost:5173); com true o backend veria CORS e responderia 403.
+      proxy: { '/api': { target: apiTarget, changeOrigin: false } },
     },
     test: {
       environment: 'jsdom',

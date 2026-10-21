@@ -16,7 +16,13 @@ interface SegmentedControlProps<T extends string> {
   className?: string
 }
 
-export function SegmentedControl<T extends string>({ value, onValueChange, options, ariaLabel, className }: SegmentedControlProps<T>) {
+export function SegmentedControl<T extends string>({
+  value,
+  onValueChange,
+  options,
+  ariaLabel,
+  className,
+}: SegmentedControlProps<T>) {
   return (
     <ToggleGroup.Root
       type="single"
@@ -29,7 +35,7 @@ export function SegmentedControl<T extends string>({ value, onValueChange, optio
         <ToggleGroup.Item
           key={o.value}
           value={o.value}
-          className="flex h-10 flex-1 items-center justify-center gap-2 rounded-lg px-3 text-sm text-muted transition-colors data-[state=on]:bg-surface data-[state=on]:text-foreground data-[state=on]:shadow-card sm:flex-none [&_svg]:size-4"
+          className="flex h-10 flex-1 items-center justify-center gap-2 rounded-lg px-3 text-sm text-muted transition-colors data-[state=on]:bg-surface data-[state=on]:font-medium data-[state=on]:text-primary data-[state=on]:shadow-card data-[state=on]:ring-1 data-[state=on]:ring-primary/40 sm:flex-none [&_svg]:size-4"
         >
           {o.icon}
           {o.label}

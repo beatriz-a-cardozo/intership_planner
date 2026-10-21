@@ -13,7 +13,7 @@
 
     <groupId>com.interchangeplanner</groupId>
     <artifactId>interchange-planner-api</artifactId>
-    <version>0.1.0</version>
+    <version>0.3.0</version>
     <name>Interchange Planner API</name>
     <description>API de planejamento financeiro e de intercâmbio</description>
 
