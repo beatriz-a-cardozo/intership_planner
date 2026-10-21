@@ -5,15 +5,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.jayway.jsonpath.JsonPath;
 import jakarta.servlet.http.Cookie;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 /**
  * Base dos testes de integração: contexto completo + PostgreSQL real (Testcontainers) + MockMvc.
@@ -61,6 +66,39 @@ public abstract class IntegrationTest {
                 .andExpect(status().isCreated())
                 .andReturn();
         return sessionFrom(result, email);
+    }
+
+    // ------------------------------------------------------------------ requisições autenticadas
+
+    protected ResultActions getAs(TestSession s, String url, Object... vars) throws Exception {
+        return mvc.perform(MockMvcRequestBuilders.get(url, vars).header(HttpHeaders.AUTHORIZATION, s.bearer()));
+    }
+
+    protected ResultActions postAs(TestSession s, String url, String body, Object... vars) throws Exception {
+        MockHttpServletRequestBuilder req = MockMvcRequestBuilders.post(url, vars)
+                .header(HttpHeaders.AUTHORIZATION, s.bearer());
+        return mvc.perform(body == null ? req : req.contentType(MediaType.APPLICATION_JSON).content(body));
+    }
+
+    protected ResultActions putAs(TestSession s, String url, String body, Object... vars) throws Exception {
+        MockHttpServletRequestBuilder req = MockMvcRequestBuilders.put(url, vars)
+                .header(HttpHeaders.AUTHORIZATION, s.bearer());
+        return mvc.perform(body == null ? req : req.contentType(MediaType.APPLICATION_JSON).content(body));
+    }
+
+    protected ResultActions deleteAs(TestSession s, String url, Object... vars) throws Exception {
+        return mvc.perform(MockMvcRequestBuilders.delete(url, vars).header(HttpHeaders.AUTHORIZATION, s.bearer()));
+    }
+
+    /** Lê um valor do JSON da resposta. */
+    protected static <T> T read(ResultActions result, String jsonPath) throws Exception {
+        return JsonPath.read(result.andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8), jsonPath);
+    }
+
+    /** Fixa EUR→BRL para o usuário (cotação manual): conversões determinísticas e isoladas entre testes. */
+    protected void fixEurBrl(TestSession s, String rate) throws Exception {
+        putAs(s, "/api/exchange-rates/override", """
+                {"base":"EUR","quote":"BRL","rate":%s}""".formatted(rate)).andExpect(status().isOk());
     }
 
     protected static TestSession sessionFrom(MvcResult result, String email) throws Exception {

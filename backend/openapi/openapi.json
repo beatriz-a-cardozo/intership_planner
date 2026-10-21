@@ -12,6 +12,198 @@
     "bearerAuth" : [ ]
   } ],
   "paths" : {
+    "/api/accounts" : {
+      "get" : {
+        "operationId" : "list_4",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/AccountResponse"
+                  }
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Lista as contas com o saldo mais recente",
+        "tags" : [ "Contas e saldos" ]
+      },
+      "post" : {
+        "operationId" : "create_4",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AccountRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccountResponse"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Cria uma conta",
+        "tags" : [ "Contas e saldos" ]
+      }
+    },
+    "/api/accounts/summary" : {
+      "get" : {
+        "operationId" : "summary_1",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccountsSummaryResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Saldos por moeda e total convertido para a moeda principal",
+        "tags" : [ "Contas e saldos" ]
+      }
+    },
+    "/api/accounts/{id}" : {
+      "delete" : {
+        "operationId" : "delete_4",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Exclui a conta e seu histórico de saldos",
+        "tags" : [ "Contas e saldos" ]
+      },
+      "put" : {
+        "operationId" : "update_4",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AccountRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccountResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Atualiza uma conta (a moeda não muda)",
+        "tags" : [ "Contas e saldos" ]
+      }
+    },
+    "/api/accounts/{id}/balances" : {
+      "get" : {
+        "operationId" : "history",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/BalanceSnapshotResponse"
+                  }
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Histórico de saldos da conta (mais recente primeiro)",
+        "tags" : [ "Contas e saldos" ]
+      },
+      "post" : {
+        "operationId" : "recordBalance",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BalanceRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BalanceSnapshotResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Lança o saldo numa data (substitui se já houver saldo nessa data)",
+        "tags" : [ "Contas e saldos" ]
+      }
+    },
     "/api/auth/login" : {
       "post" : {
         "operationId" : "login",
@@ -107,7 +299,7 @@
     },
     "/api/currencies" : {
       "get" : {
-        "operationId" : "list",
+        "operationId" : "list_5",
         "responses" : {
           "200" : {
             "content" : {
@@ -125,6 +317,820 @@
         },
         "summary" : "Lista as moedas suportadas",
         "tags" : [ "Moedas" ]
+      }
+    },
+    "/api/dashboard" : {
+      "get" : {
+        "operationId" : "dashboard",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "objectiveId",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DashboardResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Resumo da tela inicial (padrão: objetivo principal)",
+        "tags" : [ "Dashboard" ]
+      }
+    },
+    "/api/exchange-rates/current" : {
+      "get" : {
+        "operationId" : "current",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "base",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "EUR"
+          }
+        }, {
+          "in" : "query",
+          "name" : "quote",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "BRL"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExchangeRateResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Cotação vigente para o usuário (manual, se ativa; senão a de mercado)",
+        "tags" : [ "Câmbio" ]
+      }
+    },
+    "/api/exchange-rates/history" : {
+      "get" : {
+        "operationId" : "history_1",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "base",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "EUR"
+          }
+        }, {
+          "in" : "query",
+          "name" : "quote",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "BRL"
+          }
+        }, {
+          "in" : "query",
+          "name" : "from",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }, {
+          "in" : "query",
+          "name" : "to",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/RatePointResponse"
+                  }
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Histórico diário da cotação de mercado (padrão: últimos 90 dias)",
+        "tags" : [ "Câmbio" ]
+      }
+    },
+    "/api/exchange-rates/override" : {
+      "delete" : {
+        "operationId" : "clearOverride",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "base",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "EUR"
+          }
+        }, {
+          "in" : "query",
+          "name" : "quote",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "BRL"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Remove a cotação manual e volta a usar a de mercado",
+        "tags" : [ "Câmbio" ]
+      },
+      "put" : {
+        "operationId" : "setOverride",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ExchangeRateOverrideRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExchangeRateResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Define uma cotação manual (prevalece até ser removida)",
+        "tags" : [ "Câmbio" ]
+      }
+    },
+    "/api/expense-categories" : {
+      "get" : {
+        "operationId" : "list_3",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CatalogResponse"
+                  }
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Lista (inclui arquivados)",
+        "tags" : [ "Categorias de gasto" ]
+      },
+      "post" : {
+        "operationId" : "create_3",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CatalogRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CatalogResponse"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Cria",
+        "tags" : [ "Categorias de gasto" ]
+      }
+    },
+    "/api/expense-categories/{id}" : {
+      "delete" : {
+        "operationId" : "delete_3",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Exclui (409 se estiver em uso)",
+        "tags" : [ "Categorias de gasto" ]
+      },
+      "put" : {
+        "operationId" : "update_3",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CatalogRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CatalogResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Atualiza (inclusive arquivar)",
+        "tags" : [ "Categorias de gasto" ]
+      }
+    },
+    "/api/expense-cycles" : {
+      "get" : {
+        "operationId" : "list_2",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CatalogResponse"
+                  }
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Lista (inclui arquivados)",
+        "tags" : [ "Ciclos de gasto" ]
+      },
+      "post" : {
+        "operationId" : "create_2",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CatalogRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CatalogResponse"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Cria",
+        "tags" : [ "Ciclos de gasto" ]
+      }
+    },
+    "/api/expense-cycles/{id}" : {
+      "delete" : {
+        "operationId" : "delete_2",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Exclui (409 se estiver em uso)",
+        "tags" : [ "Ciclos de gasto" ]
+      },
+      "put" : {
+        "operationId" : "update_2",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CatalogRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CatalogResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Atualiza (inclusive arquivar)",
+        "tags" : [ "Ciclos de gasto" ]
+      }
+    },
+    "/api/expenses" : {
+      "get" : {
+        "operationId" : "list_1",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "objectiveId",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "in" : "query",
+          "name" : "categoryId",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "in" : "query",
+          "name" : "cycleId",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "in" : "query",
+          "name" : "status",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "PARTIALLY_PAID", "PAID", "CANCELLED" ]
+          }
+        }, {
+          "in" : "query",
+          "name" : "required",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "in" : "query",
+          "name" : "currency",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "from",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }, {
+          "in" : "query",
+          "name" : "to",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }, {
+          "in" : "query",
+          "name" : "q",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ExpenseResponse"
+                  }
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Lista gastos do objetivo (padrão: principal), com filtros",
+        "tags" : [ "Gastos" ]
+      },
+      "post" : {
+        "operationId" : "create_1",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ExpenseRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExpenseDetailResponse"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Cria um gasto",
+        "tags" : [ "Gastos" ]
+      }
+    },
+    "/api/expenses/preview-total" : {
+      "post" : {
+        "operationId" : "preview",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PreviewTotalRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PreviewTotalResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Calcula ocorrências e total sem salvar (formulário em tempo real)",
+        "tags" : [ "Gastos" ]
+      }
+    },
+    "/api/expenses/summary" : {
+      "get" : {
+        "operationId" : "summary",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "objectiveId",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "in" : "query",
+          "name" : "groupBy",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "CYCLE",
+            "enum" : [ "CYCLE", "CATEGORY", "RECURRENCE", "STATUS" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExpenseSummaryResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Totais e agrupamento por ciclo, categoria, periodicidade ou status",
+        "tags" : [ "Gastos" ]
+      }
+    },
+    "/api/expenses/{id}" : {
+      "delete" : {
+        "operationId" : "delete_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Exclui o gasto e seus pagamentos",
+        "tags" : [ "Gastos" ]
+      },
+      "get" : {
+        "operationId" : "get_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExpenseDetailResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Detalhe do gasto com pagamentos",
+        "tags" : [ "Gastos" ]
+      },
+      "put" : {
+        "operationId" : "update_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ExpenseRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExpenseDetailResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Atualiza um gasto",
+        "tags" : [ "Gastos" ]
+      }
+    },
+    "/api/expenses/{id}/cancel" : {
+      "post" : {
+        "operationId" : "cancel",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExpenseDetailResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Cancela o gasto (sai dos totais; histórico preservado)",
+        "tags" : [ "Gastos" ]
+      }
+    },
+    "/api/expenses/{id}/payments" : {
+      "get" : {
+        "operationId" : "payments",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PaymentResponse"
+                  }
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Pagamentos do gasto",
+        "tags" : [ "Gastos" ]
+      },
+      "post" : {
+        "operationId" : "addPayment",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PaymentRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExpenseDetailResponse"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Registra um pagamento (parcial ou total, em qualquer moeda)",
+        "tags" : [ "Gastos" ]
+      }
+    },
+    "/api/expenses/{id}/payments/{paymentId}" : {
+      "delete" : {
+        "operationId" : "deletePayment",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "in" : "path",
+          "name" : "paymentId",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExpenseDetailResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Remove um pagamento",
+        "tags" : [ "Gastos" ]
+      }
+    },
+    "/api/expenses/{id}/restore" : {
+      "post" : {
+        "operationId" : "restore",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExpenseDetailResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Reativa um gasto cancelado",
+        "tags" : [ "Gastos" ]
       }
     },
     "/api/me" : {
@@ -191,10 +1197,490 @@
         "summary" : "Atualiza preferências (tema, idioma, fuso, moedas)",
         "tags" : [ "Usuário" ]
       }
+    },
+    "/api/objectives" : {
+      "get" : {
+        "operationId" : "list",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ObjectiveResponse"
+                  }
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Lista objetivos (principal primeiro)",
+        "tags" : [ "Objetivos" ]
+      },
+      "post" : {
+        "operationId" : "create",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ObjectiveRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ObjectiveResponse"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Cria um objetivo (o primeiro vira o principal)",
+        "tags" : [ "Objetivos" ]
+      }
+    },
+    "/api/objectives/{id}" : {
+      "delete" : {
+        "operationId" : "delete",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Exclui o objetivo, seus gastos e ajustes (contas são desvinculadas)",
+        "tags" : [ "Objetivos" ]
+      },
+      "get" : {
+        "operationId" : "get",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ObjectiveResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Detalhe do objetivo",
+        "tags" : [ "Objetivos" ]
+      },
+      "put" : {
+        "operationId" : "update",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ObjectiveRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ObjectiveResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Atualiza o objetivo",
+        "tags" : [ "Objetivos" ]
+      }
+    },
+    "/api/objectives/{id}/adjustments" : {
+      "get" : {
+        "operationId" : "adjustments",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/AdjustmentResponse"
+                  }
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Ajustes manuais da necessidade planejada (ex.: Sperrkonto)",
+        "tags" : [ "Objetivos" ]
+      },
+      "post" : {
+        "operationId" : "createAdjustment",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AdjustmentRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdjustmentResponse"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Cria um ajuste manual (valor com sinal)",
+        "tags" : [ "Objetivos" ]
+      }
+    },
+    "/api/objectives/{id}/adjustments/{adjustmentId}" : {
+      "delete" : {
+        "operationId" : "deleteAdjustment",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "in" : "path",
+          "name" : "adjustmentId",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "Remove um ajuste manual",
+        "tags" : [ "Objetivos" ]
+      },
+      "put" : {
+        "operationId" : "updateAdjustment",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "in" : "path",
+          "name" : "adjustmentId",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AdjustmentRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdjustmentResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Atualiza um ajuste manual",
+        "tags" : [ "Objetivos" ]
+      }
+    },
+    "/api/objectives/{id}/primary" : {
+      "put" : {
+        "operationId" : "makePrimary",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ObjectiveResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Define como objetivo principal",
+        "tags" : [ "Objetivos" ]
+      }
+    },
+    "/api/objectives/{id}/progress" : {
+      "get" : {
+        "operationId" : "progress",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ObjectiveProgressResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Meta, mobilizado, faltam e economia mensal necessária",
+        "tags" : [ "Objetivos" ]
+      }
+    },
+    "/api/onboarding" : {
+      "post" : {
+        "operationId" : "complete",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/OnboardingRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OnboardingResponse"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "summary" : "Conclui o onboarding: cria o objetivo principal e a reserva inicial",
+        "tags" : [ "Onboarding" ]
+      }
     }
   },
   "components" : {
     "schemas" : {
+      "AccountRequest" : {
+        "type" : "object",
+        "properties" : {
+          "archived" : {
+            "type" : "boolean"
+          },
+          "currency" : {
+            "type" : "string",
+            "pattern" : "[A-Z]{3}"
+          },
+          "name" : {
+            "type" : "string",
+            "maxLength" : 80,
+            "minLength" : 0
+          },
+          "objectiveId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "CHECKING", "SAVINGS", "INVESTMENT", "CASH", "BLOCKED", "OTHER" ]
+          }
+        },
+        "required" : [ "currency", "name", "type" ]
+      },
+      "AccountResponse" : {
+        "type" : "object",
+        "properties" : {
+          "archived" : {
+            "type" : "boolean"
+          },
+          "balance" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "balanceAsOf" : {
+            "type" : [ "string", "null" ],
+            "format" : "date"
+          },
+          "currency" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "objectiveId" : {
+            "type" : [ "string", "null" ],
+            "format" : "uuid"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "CHECKING", "SAVINGS", "INVESTMENT", "CASH", "BLOCKED", "OTHER" ]
+          }
+        },
+        "required" : [ "archived", "balance", "balanceAsOf", "currency", "id", "name", "objectiveId", "type" ]
+      },
+      "AccountsSummaryResponse" : {
+        "type" : "object",
+        "properties" : {
+          "accountCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "byCurrency" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MoneyResponse"
+            }
+          },
+          "exchangeRates" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ExchangeRateResponse"
+            }
+          },
+          "total" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          }
+        },
+        "required" : [ "accountCount", "byCurrency", "exchangeRates", "total" ]
+      },
+      "AdjustmentRequest" : {
+        "type" : "object",
+        "properties" : {
+          "amount" : {
+            "type" : "number"
+          },
+          "currency" : {
+            "type" : "string",
+            "pattern" : "[A-Z]{3}"
+          },
+          "label" : {
+            "type" : "string",
+            "maxLength" : 120,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "amount", "currency", "label" ]
+      },
+      "AdjustmentResponse" : {
+        "type" : "object",
+        "properties" : {
+          "amount" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "label" : {
+            "type" : "string"
+          },
+          "objectiveId" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        },
+        "required" : [ "amount", "id", "label", "objectiveId" ]
+      },
       "AuthResponse" : {
         "type" : "object",
         "properties" : {
@@ -214,6 +1700,109 @@
         },
         "required" : [ "accessToken", "expiresIn", "tokenType", "user" ]
       },
+      "BalanceRequest" : {
+        "type" : "object",
+        "properties" : {
+          "asOf" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "balance" : {
+            "type" : "number"
+          }
+        },
+        "required" : [ "balance" ]
+      },
+      "BalanceSnapshotResponse" : {
+        "type" : "object",
+        "properties" : {
+          "asOf" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "balance" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        },
+        "required" : [ "asOf", "balance", "id" ]
+      },
+      "CatalogRef" : {
+        "type" : "object",
+        "properties" : {
+          "color" : {
+            "type" : "string"
+          },
+          "icon" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "color", "icon", "id", "name" ]
+      },
+      "CatalogRequest" : {
+        "type" : "object",
+        "properties" : {
+          "archived" : {
+            "type" : "boolean"
+          },
+          "color" : {
+            "type" : "string",
+            "minLength" : 1,
+            "pattern" : "#[0-9a-fA-F]{6}"
+          },
+          "icon" : {
+            "type" : "string",
+            "minLength" : 1,
+            "pattern" : "[a-z0-9-]{1,40}"
+          },
+          "name" : {
+            "type" : "string",
+            "maxLength" : 60,
+            "minLength" : 0
+          },
+          "sortOrder" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "color", "icon", "name" ]
+      },
+      "CatalogResponse" : {
+        "type" : "object",
+        "properties" : {
+          "archived" : {
+            "type" : "boolean"
+          },
+          "color" : {
+            "type" : "string"
+          },
+          "icon" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "sortOrder" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "archived", "color", "icon", "id", "name", "sortOrder" ]
+      },
       "CurrencyResponse" : {
         "type" : "object",
         "properties" : {
@@ -232,6 +1821,326 @@
           }
         },
         "required" : [ "code", "name", "scale", "symbol" ]
+      },
+      "DashboardResponse" : {
+        "type" : "object",
+        "properties" : {
+          "accounts" : {
+            "$ref" : "#/components/schemas/AccountsSummaryResponse"
+          },
+          "exchangeRate" : {
+            "$ref" : "#/components/schemas/ExchangeRateResponse"
+          },
+          "expenses" : {
+            "oneOf" : [ {
+              "$ref" : "#/components/schemas/ExpenseSummaryResponse"
+            }, {
+              "type" : "null"
+            } ]
+          },
+          "objective" : {
+            "oneOf" : [ {
+              "$ref" : "#/components/schemas/ObjectiveResponse"
+            }, {
+              "type" : "null"
+            } ]
+          },
+          "progress" : {
+            "oneOf" : [ {
+              "$ref" : "#/components/schemas/ObjectiveProgressResponse"
+            }, {
+              "type" : "null"
+            } ]
+          }
+        },
+        "required" : [ "accounts", "exchangeRate", "expenses", "objective", "progress" ]
+      },
+      "ExchangeRateOverrideRequest" : {
+        "type" : "object",
+        "properties" : {
+          "base" : {
+            "type" : "string",
+            "pattern" : "[A-Z]{3}"
+          },
+          "quote" : {
+            "type" : "string",
+            "pattern" : "[A-Z]{3}"
+          },
+          "rate" : {
+            "type" : "number",
+            "exclusiveMinimum" : 0,
+            "maximum" : 1000000
+          }
+        },
+        "required" : [ "base", "quote", "rate" ]
+      },
+      "ExchangeRateResponse" : {
+        "type" : "object",
+        "properties" : {
+          "base" : {
+            "type" : "string"
+          },
+          "effectiveDate" : {
+            "type" : [ "string", "null" ],
+            "format" : "date"
+          },
+          "fetchedAt" : {
+            "type" : [ "string", "null" ],
+            "format" : "date-time"
+          },
+          "manual" : {
+            "type" : "boolean"
+          },
+          "marketRate" : {
+            "type" : [ "number", "null" ]
+          },
+          "quote" : {
+            "type" : "string"
+          },
+          "rate" : {
+            "type" : "number"
+          },
+          "source" : {
+            "type" : "string"
+          },
+          "stale" : {
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "base", "effectiveDate", "fetchedAt", "manual", "marketRate", "quote", "rate", "source", "stale" ]
+      },
+      "ExpenseDetailResponse" : {
+        "type" : "object",
+        "properties" : {
+          "expense" : {
+            "$ref" : "#/components/schemas/ExpenseResponse"
+          },
+          "payments" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PaymentResponse"
+            }
+          }
+        },
+        "required" : [ "expense", "payments" ]
+      },
+      "ExpenseRequest" : {
+        "type" : "object",
+        "properties" : {
+          "categoryId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "currency" : {
+            "type" : "string",
+            "pattern" : "[A-Z]{3}"
+          },
+          "cycleId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "description" : {
+            "type" : "string",
+            "maxLength" : 2000,
+            "minLength" : 0
+          },
+          "dueDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "endDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "name" : {
+            "type" : "string",
+            "maxLength" : 160,
+            "minLength" : 0
+          },
+          "notes" : {
+            "type" : "string",
+            "maxLength" : 2000,
+            "minLength" : 0
+          },
+          "objectiveId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "occurrences" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 1200,
+            "minimum" : 1
+          },
+          "quantity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 10000,
+            "minimum" : 1
+          },
+          "recurrence" : {
+            "type" : "string",
+            "enum" : [ "ONE_TIME", "MONTHLY", "SEMIANNUAL", "ANNUAL", "PER_UNIT", "CUSTOM" ]
+          },
+          "refundable" : {
+            "type" : "boolean"
+          },
+          "required" : {
+            "type" : "boolean"
+          },
+          "unitPrice" : {
+            "type" : "number",
+            "minimum" : 0
+          }
+        },
+        "required" : [ "categoryId", "currency", "name", "objectiveId", "recurrence", "unitPrice" ]
+      },
+      "ExpenseResponse" : {
+        "type" : "object",
+        "properties" : {
+          "category" : {
+            "$ref" : "#/components/schemas/CatalogRef"
+          },
+          "currency" : {
+            "type" : "string"
+          },
+          "cycle" : {
+            "oneOf" : [ {
+              "$ref" : "#/components/schemas/CatalogRef"
+            }, {
+              "type" : "null"
+            } ]
+          },
+          "description" : {
+            "type" : [ "string", "null" ]
+          },
+          "dueDate" : {
+            "type" : [ "string", "null" ],
+            "format" : "date"
+          },
+          "endDate" : {
+            "type" : [ "string", "null" ],
+            "format" : "date"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "notes" : {
+            "type" : [ "string", "null" ]
+          },
+          "objectiveId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "occurrences" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "paid" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "quantity" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "recurrence" : {
+            "type" : "string",
+            "enum" : [ "ONE_TIME", "MONTHLY", "SEMIANNUAL", "ANNUAL", "PER_UNIT", "CUSTOM" ]
+          },
+          "refundable" : {
+            "type" : "boolean"
+          },
+          "remaining" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "required" : {
+            "type" : "boolean"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "PARTIALLY_PAID", "PAID", "CANCELLED" ]
+          },
+          "total" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "totalConverted" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "unitPrice" : {
+            "type" : "number"
+          }
+        },
+        "required" : [ "category", "currency", "cycle", "description", "dueDate", "endDate", "id", "name", "notes", "objectiveId", "occurrences", "paid", "quantity", "recurrence", "refundable", "remaining", "required", "status", "total", "totalConverted", "unitPrice" ]
+      },
+      "ExpenseSummaryResponse" : {
+        "type" : "object",
+        "properties" : {
+          "currency" : {
+            "type" : "string"
+          },
+          "exchangeRates" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ExchangeRateResponse"
+            }
+          },
+          "groupBy" : {
+            "type" : "string",
+            "enum" : [ "CYCLE", "CATEGORY", "RECURRENCE", "STATUS" ]
+          },
+          "groups" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Group"
+            }
+          },
+          "objectiveId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "totals" : {
+            "$ref" : "#/components/schemas/Totals"
+          }
+        },
+        "required" : [ "currency", "exchangeRates", "groupBy", "groups", "objectiveId", "totals" ]
+      },
+      "Group" : {
+        "type" : "object",
+        "properties" : {
+          "color" : {
+            "type" : [ "string", "null" ]
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "icon" : {
+            "type" : [ "string", "null" ]
+          },
+          "key" : {
+            "type" : "string"
+          },
+          "label" : {
+            "type" : "string"
+          },
+          "paid" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "remaining" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "required" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "total" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          }
+        },
+        "required" : [ "color", "count", "icon", "key", "label", "paid", "remaining", "required", "total" ]
       },
       "LoginRequest" : {
         "type" : "object",
@@ -271,6 +2180,416 @@
         },
         "required" : [ "displayName", "email", "id", "onboardingCompleted", "settings" ]
       },
+      "MoneyResponse" : {
+        "type" : "object",
+        "properties" : {
+          "amount" : {
+            "type" : "number"
+          },
+          "currency" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "amount", "currency" ]
+      },
+      "ObjectiveProgressResponse" : {
+        "type" : "object",
+        "properties" : {
+          "accountsBalance" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "adjustments" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "currency" : {
+            "type" : "string"
+          },
+          "exchangeRates" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ExchangeRateResponse"
+            }
+          },
+          "expenseScope" : {
+            "type" : "string",
+            "enum" : [ "REQUIRED_ONLY", "ALL" ]
+          },
+          "mobilized" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "monthlySavingNeeded" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "monthsRemaining" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "objectiveId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "onTrack" : {
+            "type" : [ "boolean", "null" ]
+          },
+          "overdue" : {
+            "type" : "boolean"
+          },
+          "paid" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "percentComplete" : {
+            "type" : "number"
+          },
+          "plannedExpenses" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "plannedMonthlySaving" : {
+            "oneOf" : [ {
+              "$ref" : "#/components/schemas/MoneyResponse"
+            }, {
+              "type" : "null"
+            } ]
+          },
+          "plannedNeed" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "ratio" : {
+            "type" : "number"
+          },
+          "remaining" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "target" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "targetDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "targetMode" : {
+            "type" : "string",
+            "enum" : [ "MANUAL", "DERIVED" ]
+          }
+        },
+        "required" : [ "accountsBalance", "adjustments", "currency", "exchangeRates", "expenseScope", "mobilized", "monthlySavingNeeded", "monthsRemaining", "objectiveId", "onTrack", "overdue", "paid", "percentComplete", "plannedExpenses", "plannedMonthlySaving", "plannedNeed", "ratio", "remaining", "target", "targetDate", "targetMode" ]
+      },
+      "ObjectiveRequest" : {
+        "type" : "object",
+        "properties" : {
+          "city" : {
+            "type" : "string",
+            "maxLength" : 120,
+            "minLength" : 0
+          },
+          "color" : {
+            "type" : "string",
+            "maxLength" : 20,
+            "minLength" : 0
+          },
+          "countryCode" : {
+            "type" : "string",
+            "pattern" : "[A-Z]{2}"
+          },
+          "currency" : {
+            "type" : "string",
+            "pattern" : "[A-Z]{3}"
+          },
+          "description" : {
+            "type" : "string",
+            "maxLength" : 1000,
+            "minLength" : 0
+          },
+          "expenseScope" : {
+            "type" : "string",
+            "enum" : [ "REQUIRED_ONLY", "ALL" ]
+          },
+          "horizonMonths" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 120,
+            "minimum" : 1
+          },
+          "icon" : {
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 0
+          },
+          "name" : {
+            "type" : "string",
+            "maxLength" : 120,
+            "minLength" : 0
+          },
+          "plannedMonthlySaving" : {
+            "type" : "number",
+            "minimum" : 0
+          },
+          "startDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "ACTIVE", "COMPLETED", "ARCHIVED" ]
+          },
+          "targetAmount" : {
+            "type" : "number",
+            "minimum" : 0
+          },
+          "targetDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "targetMode" : {
+            "type" : "string",
+            "enum" : [ "MANUAL", "DERIVED" ]
+          }
+        },
+        "required" : [ "currency", "name", "targetDate", "targetMode" ]
+      },
+      "ObjectiveResponse" : {
+        "type" : "object",
+        "properties" : {
+          "city" : {
+            "type" : [ "string", "null" ]
+          },
+          "color" : {
+            "type" : [ "string", "null" ]
+          },
+          "countryCode" : {
+            "type" : [ "string", "null" ]
+          },
+          "currency" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : [ "string", "null" ]
+          },
+          "expenseScope" : {
+            "type" : "string",
+            "enum" : [ "REQUIRED_ONLY", "ALL" ]
+          },
+          "horizonMonths" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "icon" : {
+            "type" : [ "string", "null" ]
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "plannedMonthlySaving" : {
+            "type" : [ "number", "null" ]
+          },
+          "primary" : {
+            "type" : "boolean"
+          },
+          "startDate" : {
+            "type" : [ "string", "null" ],
+            "format" : "date"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "ACTIVE", "COMPLETED", "ARCHIVED" ]
+          },
+          "targetAmount" : {
+            "type" : [ "number", "null" ]
+          },
+          "targetDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "targetMode" : {
+            "type" : "string",
+            "enum" : [ "MANUAL", "DERIVED" ]
+          }
+        },
+        "required" : [ "city", "color", "countryCode", "currency", "description", "expenseScope", "horizonMonths", "icon", "id", "name", "plannedMonthlySaving", "primary", "startDate", "status", "targetAmount", "targetDate", "targetMode" ]
+      },
+      "OnboardingRequest" : {
+        "type" : "object",
+        "properties" : {
+          "city" : {
+            "type" : "string",
+            "maxLength" : 120,
+            "minLength" : 0
+          },
+          "countryCode" : {
+            "type" : "string",
+            "pattern" : "[A-Z]{2}"
+          },
+          "currency" : {
+            "type" : "string",
+            "pattern" : "[A-Z]{3}"
+          },
+          "currentSavings" : {
+            "type" : "number",
+            "minimum" : 0
+          },
+          "currentSavingsCurrency" : {
+            "type" : "string",
+            "pattern" : "[A-Z]{3}"
+          },
+          "objectiveName" : {
+            "type" : "string",
+            "maxLength" : 120,
+            "minLength" : 0
+          },
+          "plannedMonthlySaving" : {
+            "type" : "number",
+            "minimum" : 0
+          },
+          "targetAmount" : {
+            "type" : "number",
+            "minimum" : 0
+          },
+          "targetDate" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        },
+        "required" : [ "countryCode", "currency", "objectiveName", "targetDate" ]
+      },
+      "OnboardingResponse" : {
+        "type" : "object",
+        "properties" : {
+          "objective" : {
+            "$ref" : "#/components/schemas/ObjectiveResponse"
+          },
+          "user" : {
+            "$ref" : "#/components/schemas/MeResponse"
+          }
+        },
+        "required" : [ "objective", "user" ]
+      },
+      "PaymentRequest" : {
+        "type" : "object",
+        "properties" : {
+          "amount" : {
+            "type" : "number",
+            "exclusiveMinimum" : 0
+          },
+          "currency" : {
+            "type" : "string",
+            "pattern" : "[A-Z]{3}"
+          },
+          "note" : {
+            "type" : "string",
+            "maxLength" : 500,
+            "minLength" : 0
+          },
+          "paidOn" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "rateToExpenseCurrency" : {
+            "type" : "number",
+            "exclusiveMinimum" : 0
+          }
+        },
+        "required" : [ "amount", "currency", "paidOn" ]
+      },
+      "PaymentResponse" : {
+        "type" : "object",
+        "properties" : {
+          "amount" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "amountInExpenseCurrency" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "note" : {
+            "type" : [ "string", "null" ]
+          },
+          "paidOn" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "rateToExpenseCurrency" : {
+            "type" : "number"
+          }
+        },
+        "required" : [ "amount", "amountInExpenseCurrency", "id", "note", "paidOn", "rateToExpenseCurrency" ]
+      },
+      "PreviewTotalRequest" : {
+        "type" : "object",
+        "properties" : {
+          "currency" : {
+            "type" : "string",
+            "pattern" : "[A-Z]{3}"
+          },
+          "objectiveId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "occurrences" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 1200,
+            "minimum" : 1
+          },
+          "quantity" : {
+            "type" : "integer",
+            "format" : "int32",
+            "maximum" : 10000,
+            "minimum" : 1
+          },
+          "recurrence" : {
+            "type" : "string",
+            "enum" : [ "ONE_TIME", "MONTHLY", "SEMIANNUAL", "ANNUAL", "PER_UNIT", "CUSTOM" ]
+          },
+          "unitPrice" : {
+            "type" : "number",
+            "minimum" : 0
+          }
+        },
+        "required" : [ "currency", "objectiveId", "recurrence", "unitPrice" ]
+      },
+      "PreviewTotalResponse" : {
+        "type" : "object",
+        "properties" : {
+          "horizonMonths" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "occurrences" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "suggestedOccurrences" : {
+            "type" : [ "integer", "null" ],
+            "format" : "int32"
+          },
+          "total" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "totalConverted" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          }
+        },
+        "required" : [ "horizonMonths", "occurrences", "suggestedOccurrences", "total", "totalConverted" ]
+      },
+      "RatePointResponse" : {
+        "type" : "object",
+        "properties" : {
+          "date" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "rate" : {
+            "type" : "number"
+          }
+        },
+        "required" : [ "date", "rate" ]
+      },
       "RegisterRequest" : {
         "type" : "object",
         "properties" : {
@@ -293,6 +2612,47 @@
           }
         },
         "required" : [ "displayName", "email", "password" ]
+      },
+      "Totals" : {
+        "type" : "object",
+        "properties" : {
+          "adjustments" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "cancelledCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "monthlyRecurring" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "optional" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "paid" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "remaining" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "required" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "requiredAfterAdjustments" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "total" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          },
+          "totalAfterAdjustments" : {
+            "$ref" : "#/components/schemas/MoneyResponse"
+          }
+        },
+        "required" : [ "adjustments", "cancelledCount", "count", "monthlyRecurring", "optional", "paid", "remaining", "required", "requiredAfterAdjustments", "total", "totalAfterAdjustments" ]
       },
       "UpdateSettingsRequest" : {
         "type" : "object",

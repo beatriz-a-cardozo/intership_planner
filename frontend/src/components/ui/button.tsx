@@ -30,10 +30,26 @@ export const buttonVariants = cva(
 type ButtonProps = ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & { asChild?: boolean; loading?: boolean }
 
-export function Button({ className, variant, size, asChild, loading, disabled, children, ...props }: ButtonProps) {
-  const Comp = asChild ? Slot.Root : 'button'
+export function Button({
+  className,
+  variant,
+  size,
+  asChild,
+  loading,
+  disabled,
+  children,
+  ...props
+}: ButtonProps) {
+  // asChild (ex.: <Button asChild><Link/></Button>): o Slot exige exatamente UM filho, então sem spinner.
+  if (asChild) {
+    return (
+      <Slot.Root className={cn(buttonVariants({ variant, size }), className)} {...props}>
+        {children}
+      </Slot.Root>
+    )
+  }
   return (
-    <Comp
+    <button
       className={cn(buttonVariants({ variant, size }), className)}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
@@ -41,6 +57,6 @@ export function Button({ className, variant, size, asChild, loading, disabled, c
     >
       {loading && <Loader2 className="animate-spin" aria-hidden />}
       {children}
-    </Comp>
+    </button>
   )
 }

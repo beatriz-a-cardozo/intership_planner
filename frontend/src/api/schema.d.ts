@@ -4,6 +4,77 @@
  */
 
 export interface paths {
+  '/api/accounts': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Lista as contas com o saldo mais recente */
+    get: operations['list_4']
+    put?: never
+    /** Cria uma conta */
+    post: operations['create_4']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/accounts/summary': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Saldos por moeda e total convertido para a moeda principal */
+    get: operations['summary_1']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/accounts/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Atualiza uma conta (a moeda não muda) */
+    put: operations['update_4']
+    post?: never
+    /** Exclui a conta e seu histórico de saldos */
+    delete: operations['delete_4']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/accounts/{id}/balances': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Histórico de saldos da conta (mais recente primeiro) */
+    get: operations['history']
+    put?: never
+    /** Lança o saldo numa data (substitui se já houver saldo nessa data) */
+    post: operations['recordBalance']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/auth/login': {
     parameters: {
       query?: never
@@ -80,9 +151,290 @@ export interface paths {
       cookie?: never
     }
     /** Lista as moedas suportadas */
-    get: operations['list']
+    get: operations['list_5']
     put?: never
     post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/dashboard': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Resumo da tela inicial (padrão: objetivo principal) */
+    get: operations['dashboard']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/exchange-rates/current': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Cotação vigente para o usuário (manual, se ativa; senão a de mercado) */
+    get: operations['current']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/exchange-rates/history': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Histórico diário da cotação de mercado (padrão: últimos 90 dias) */
+    get: operations['history_1']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/exchange-rates/override': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Define uma cotação manual (prevalece até ser removida) */
+    put: operations['setOverride']
+    post?: never
+    /** Remove a cotação manual e volta a usar a de mercado */
+    delete: operations['clearOverride']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/expense-categories': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Lista (inclui arquivados) */
+    get: operations['list_3']
+    put?: never
+    /** Cria */
+    post: operations['create_3']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/expense-categories/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Atualiza (inclusive arquivar) */
+    put: operations['update_3']
+    post?: never
+    /** Exclui (409 se estiver em uso) */
+    delete: operations['delete_3']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/expense-cycles': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Lista (inclui arquivados) */
+    get: operations['list_2']
+    put?: never
+    /** Cria */
+    post: operations['create_2']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/expense-cycles/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Atualiza (inclusive arquivar) */
+    put: operations['update_2']
+    post?: never
+    /** Exclui (409 se estiver em uso) */
+    delete: operations['delete_2']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/expenses': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Lista gastos do objetivo (padrão: principal), com filtros */
+    get: operations['list_1']
+    put?: never
+    /** Cria um gasto */
+    post: operations['create_1']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/expenses/preview-total': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Calcula ocorrências e total sem salvar (formulário em tempo real) */
+    post: operations['preview']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/expenses/summary': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Totais e agrupamento por ciclo, categoria, periodicidade ou status */
+    get: operations['summary']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/expenses/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Detalhe do gasto com pagamentos */
+    get: operations['get_1']
+    /** Atualiza um gasto */
+    put: operations['update_1']
+    post?: never
+    /** Exclui o gasto e seus pagamentos */
+    delete: operations['delete_1']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/expenses/{id}/cancel': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Cancela o gasto (sai dos totais; histórico preservado) */
+    post: operations['cancel']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/expenses/{id}/payments': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Pagamentos do gasto */
+    get: operations['payments']
+    put?: never
+    /** Registra um pagamento (parcial ou total, em qualquer moeda) */
+    post: operations['addPayment']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/expenses/{id}/payments/{paymentId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /** Remove um pagamento */
+    delete: operations['deletePayment']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/expenses/{id}/restore': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Reativa um gasto cancelado */
+    post: operations['restore']
     delete?: never
     options?: never
     head?: never
@@ -124,10 +476,177 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/objectives': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Lista objetivos (principal primeiro) */
+    get: operations['list']
+    put?: never
+    /** Cria um objetivo (o primeiro vira o principal) */
+    post: operations['create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/objectives/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Detalhe do objetivo */
+    get: operations['get']
+    /** Atualiza o objetivo */
+    put: operations['update']
+    post?: never
+    /** Exclui o objetivo, seus gastos e ajustes (contas são desvinculadas) */
+    delete: operations['delete']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/objectives/{id}/adjustments': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Ajustes manuais da necessidade planejada (ex.: Sperrkonto) */
+    get: operations['adjustments']
+    put?: never
+    /** Cria um ajuste manual (valor com sinal) */
+    post: operations['createAdjustment']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/objectives/{id}/adjustments/{adjustmentId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Atualiza um ajuste manual */
+    put: operations['updateAdjustment']
+    post?: never
+    /** Remove um ajuste manual */
+    delete: operations['deleteAdjustment']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/objectives/{id}/primary': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Define como objetivo principal */
+    put: operations['makePrimary']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/objectives/{id}/progress': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Meta, mobilizado, faltam e economia mensal necessária */
+    get: operations['progress']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/onboarding': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Conclui o onboarding: cria o objetivo principal e a reserva inicial */
+    post: operations['complete']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
 export type webhooks = Record<string, never>
 export interface components {
   schemas: {
+    AccountRequest: {
+      archived?: boolean
+      currency: string
+      name: string
+      /** Format: uuid */
+      objectiveId?: string
+      /** @enum {string} */
+      type: 'CHECKING' | 'SAVINGS' | 'INVESTMENT' | 'CASH' | 'BLOCKED' | 'OTHER'
+    }
+    AccountResponse: {
+      archived: boolean
+      balance: components['schemas']['MoneyResponse']
+      /** Format: date */
+      balanceAsOf: string | null
+      currency: string
+      /** Format: uuid */
+      id: string
+      name: string
+      /** Format: uuid */
+      objectiveId: string | null
+      /** @enum {string} */
+      type: 'CHECKING' | 'SAVINGS' | 'INVESTMENT' | 'CASH' | 'BLOCKED' | 'OTHER'
+    }
+    AccountsSummaryResponse: {
+      /** Format: int32 */
+      accountCount: number
+      byCurrency: components['schemas']['MoneyResponse'][]
+      exchangeRates: components['schemas']['ExchangeRateResponse'][]
+      total: components['schemas']['MoneyResponse']
+    }
+    AdjustmentRequest: {
+      amount: number
+      currency: string
+      label: string
+    }
+    AdjustmentResponse: {
+      amount: components['schemas']['MoneyResponse']
+      /** Format: uuid */
+      id: string
+      label: string
+      /** Format: uuid */
+      objectiveId: string
+    }
     AuthResponse: {
       accessToken: string
       /** Format: int64 */
@@ -135,12 +654,156 @@ export interface components {
       tokenType: string
       user: components['schemas']['MeResponse']
     }
+    BalanceRequest: {
+      /** Format: date */
+      asOf?: string
+      balance: number
+    }
+    BalanceSnapshotResponse: {
+      /** Format: date */
+      asOf: string
+      balance: components['schemas']['MoneyResponse']
+      /** Format: uuid */
+      id: string
+    }
+    CatalogRef: {
+      color: string
+      icon: string
+      /** Format: uuid */
+      id: string
+      name: string
+    }
+    CatalogRequest: {
+      archived?: boolean
+      color: string
+      icon: string
+      name: string
+      /** Format: int32 */
+      sortOrder?: number
+    }
+    CatalogResponse: {
+      archived: boolean
+      color: string
+      icon: string
+      /** Format: uuid */
+      id: string
+      name: string
+      /** Format: int32 */
+      sortOrder: number
+    }
     CurrencyResponse: {
       code: string
       name: string
       /** Format: int32 */
       scale: number
       symbol: string
+    }
+    DashboardResponse: {
+      accounts: components['schemas']['AccountsSummaryResponse']
+      exchangeRate: components['schemas']['ExchangeRateResponse']
+      expenses: components['schemas']['ExpenseSummaryResponse'] | null
+      objective: components['schemas']['ObjectiveResponse'] | null
+      progress: components['schemas']['ObjectiveProgressResponse'] | null
+    }
+    ExchangeRateOverrideRequest: {
+      base: string
+      quote: string
+      rate: number
+    }
+    ExchangeRateResponse: {
+      base: string
+      /** Format: date */
+      effectiveDate: string | null
+      /** Format: date-time */
+      fetchedAt: string | null
+      manual: boolean
+      marketRate: number | null
+      quote: string
+      rate: number
+      source: string
+      stale: boolean
+    }
+    ExpenseDetailResponse: {
+      expense: components['schemas']['ExpenseResponse']
+      payments: components['schemas']['PaymentResponse'][]
+    }
+    ExpenseRequest: {
+      /** Format: uuid */
+      categoryId: string
+      currency: string
+      /** Format: uuid */
+      cycleId?: string
+      description?: string
+      /** Format: date */
+      dueDate?: string
+      /** Format: date */
+      endDate?: string
+      name: string
+      notes?: string
+      /** Format: uuid */
+      objectiveId: string
+      /** Format: int32 */
+      occurrences?: number
+      /** Format: int32 */
+      quantity?: number
+      /** @enum {string} */
+      recurrence: 'ONE_TIME' | 'MONTHLY' | 'SEMIANNUAL' | 'ANNUAL' | 'PER_UNIT' | 'CUSTOM'
+      refundable?: boolean
+      required?: boolean
+      unitPrice: number
+    }
+    ExpenseResponse: {
+      category: components['schemas']['CatalogRef']
+      currency: string
+      cycle: components['schemas']['CatalogRef'] | null
+      description: string | null
+      /** Format: date */
+      dueDate: string | null
+      /** Format: date */
+      endDate: string | null
+      /** Format: uuid */
+      id: string
+      name: string
+      notes: string | null
+      /** Format: uuid */
+      objectiveId: string
+      /** Format: int32 */
+      occurrences: number
+      paid: components['schemas']['MoneyResponse']
+      /** Format: int32 */
+      quantity: number
+      /** @enum {string} */
+      recurrence: 'ONE_TIME' | 'MONTHLY' | 'SEMIANNUAL' | 'ANNUAL' | 'PER_UNIT' | 'CUSTOM'
+      refundable: boolean
+      remaining: components['schemas']['MoneyResponse']
+      required: boolean
+      /** @enum {string} */
+      status: 'PENDING' | 'PARTIALLY_PAID' | 'PAID' | 'CANCELLED'
+      total: components['schemas']['MoneyResponse']
+      totalConverted: components['schemas']['MoneyResponse']
+      unitPrice: number
+    }
+    ExpenseSummaryResponse: {
+      currency: string
+      exchangeRates: components['schemas']['ExchangeRateResponse'][]
+      /** @enum {string} */
+      groupBy: 'CYCLE' | 'CATEGORY' | 'RECURRENCE' | 'STATUS'
+      groups: components['schemas']['Group'][]
+      /** Format: uuid */
+      objectiveId: string
+      totals: components['schemas']['Totals']
+    }
+    Group: {
+      color: string | null
+      /** Format: int32 */
+      count: number
+      icon: string | null
+      key: string
+      label: string
+      paid: components['schemas']['MoneyResponse']
+      remaining: components['schemas']['MoneyResponse']
+      required: components['schemas']['MoneyResponse']
+      total: components['schemas']['MoneyResponse']
     }
     LoginRequest: {
       email: string
@@ -154,11 +817,168 @@ export interface components {
       onboardingCompleted: boolean
       settings: components['schemas']['UserSettingsResponse']
     }
+    MoneyResponse: {
+      amount: number
+      currency: string
+    }
+    ObjectiveProgressResponse: {
+      accountsBalance: components['schemas']['MoneyResponse']
+      adjustments: components['schemas']['MoneyResponse']
+      currency: string
+      exchangeRates: components['schemas']['ExchangeRateResponse'][]
+      /** @enum {string} */
+      expenseScope: 'REQUIRED_ONLY' | 'ALL'
+      mobilized: components['schemas']['MoneyResponse']
+      monthlySavingNeeded: components['schemas']['MoneyResponse']
+      /** Format: int32 */
+      monthsRemaining: number
+      /** Format: uuid */
+      objectiveId: string
+      onTrack: boolean | null
+      overdue: boolean
+      paid: components['schemas']['MoneyResponse']
+      percentComplete: number
+      plannedExpenses: components['schemas']['MoneyResponse']
+      plannedMonthlySaving: components['schemas']['MoneyResponse'] | null
+      plannedNeed: components['schemas']['MoneyResponse']
+      ratio: number
+      remaining: components['schemas']['MoneyResponse']
+      target: components['schemas']['MoneyResponse']
+      /** Format: date */
+      targetDate: string
+      /** @enum {string} */
+      targetMode: 'MANUAL' | 'DERIVED'
+    }
+    ObjectiveRequest: {
+      city?: string
+      color?: string
+      countryCode?: string
+      currency: string
+      description?: string
+      /** @enum {string} */
+      expenseScope?: 'REQUIRED_ONLY' | 'ALL'
+      /** Format: int32 */
+      horizonMonths?: number
+      icon?: string
+      name: string
+      plannedMonthlySaving?: number
+      /** Format: date */
+      startDate?: string
+      /** @enum {string} */
+      status?: 'ACTIVE' | 'COMPLETED' | 'ARCHIVED'
+      targetAmount?: number
+      /** Format: date */
+      targetDate: string
+      /** @enum {string} */
+      targetMode: 'MANUAL' | 'DERIVED'
+    }
+    ObjectiveResponse: {
+      city: string | null
+      color: string | null
+      countryCode: string | null
+      currency: string
+      description: string | null
+      /** @enum {string} */
+      expenseScope: 'REQUIRED_ONLY' | 'ALL'
+      /** Format: int32 */
+      horizonMonths: number
+      icon: string | null
+      /** Format: uuid */
+      id: string
+      name: string
+      plannedMonthlySaving: number | null
+      primary: boolean
+      /** Format: date */
+      startDate: string | null
+      /** @enum {string} */
+      status: 'ACTIVE' | 'COMPLETED' | 'ARCHIVED'
+      targetAmount: number | null
+      /** Format: date */
+      targetDate: string
+      /** @enum {string} */
+      targetMode: 'MANUAL' | 'DERIVED'
+    }
+    OnboardingRequest: {
+      city?: string
+      countryCode: string
+      currency: string
+      currentSavings?: number
+      currentSavingsCurrency?: string
+      objectiveName: string
+      plannedMonthlySaving?: number
+      targetAmount?: number
+      /** Format: date */
+      targetDate: string
+    }
+    OnboardingResponse: {
+      objective: components['schemas']['ObjectiveResponse']
+      user: components['schemas']['MeResponse']
+    }
+    PaymentRequest: {
+      amount: number
+      currency: string
+      note?: string
+      /** Format: date */
+      paidOn: string
+      rateToExpenseCurrency?: number
+    }
+    PaymentResponse: {
+      amount: components['schemas']['MoneyResponse']
+      amountInExpenseCurrency: components['schemas']['MoneyResponse']
+      /** Format: uuid */
+      id: string
+      note: string | null
+      /** Format: date */
+      paidOn: string
+      rateToExpenseCurrency: number
+    }
+    PreviewTotalRequest: {
+      currency: string
+      /** Format: uuid */
+      objectiveId: string
+      /** Format: int32 */
+      occurrences?: number
+      /** Format: int32 */
+      quantity?: number
+      /** @enum {string} */
+      recurrence: 'ONE_TIME' | 'MONTHLY' | 'SEMIANNUAL' | 'ANNUAL' | 'PER_UNIT' | 'CUSTOM'
+      unitPrice: number
+    }
+    PreviewTotalResponse: {
+      /** Format: int32 */
+      horizonMonths: number
+      /** Format: int32 */
+      occurrences: number
+      /** Format: int32 */
+      suggestedOccurrences: number | null
+      total: components['schemas']['MoneyResponse']
+      totalConverted: components['schemas']['MoneyResponse']
+    }
+    RatePointResponse: {
+      /** Format: date */
+      date: string
+      rate: number
+    }
     RegisterRequest: {
       displayName: string
       /** Format: email */
       email: string
       password: string
+    }
+    Totals: {
+      adjustments: components['schemas']['MoneyResponse']
+      /** Format: int32 */
+      cancelledCount: number
+      /** Format: int32 */
+      count: number
+      monthlyRecurring: components['schemas']['MoneyResponse']
+      optional: components['schemas']['MoneyResponse']
+      paid: components['schemas']['MoneyResponse']
+      remaining: components['schemas']['MoneyResponse']
+      required: components['schemas']['MoneyResponse']
+      requiredAfterAdjustments: components['schemas']['MoneyResponse']
+      total: components['schemas']['MoneyResponse']
+      totalAfterAdjustments: components['schemas']['MoneyResponse']
     }
     UpdateSettingsRequest: {
       locale: string
@@ -185,6 +1005,164 @@ export interface components {
 }
 export type $defs = Record<string, never>
 export interface operations {
+  list_4: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['AccountResponse'][]
+        }
+      }
+    }
+  }
+  create_4: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AccountRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['AccountResponse']
+        }
+      }
+    }
+  }
+  summary_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['AccountsSummaryResponse']
+        }
+      }
+    }
+  }
+  update_4: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AccountRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['AccountResponse']
+        }
+      }
+    }
+  }
+  delete_4: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  history: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['BalanceSnapshotResponse'][]
+        }
+      }
+    }
+  }
+  recordBalance: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['BalanceRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['BalanceSnapshotResponse']
+        }
+      }
+    }
+  }
   login: {
     parameters: {
       query?: never
@@ -271,7 +1249,7 @@ export interface operations {
       }
     }
   }
-  list: {
+  list_5: {
     parameters: {
       query?: never
       header?: never
@@ -287,6 +1265,585 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['CurrencyResponse'][]
+        }
+      }
+    }
+  }
+  dashboard: {
+    parameters: {
+      query?: {
+        objectiveId?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['DashboardResponse']
+        }
+      }
+    }
+  }
+  current: {
+    parameters: {
+      query?: {
+        base?: string
+        quote?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ExchangeRateResponse']
+        }
+      }
+    }
+  }
+  history_1: {
+    parameters: {
+      query?: {
+        base?: string
+        quote?: string
+        from?: string
+        to?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RatePointResponse'][]
+        }
+      }
+    }
+  }
+  setOverride: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ExchangeRateOverrideRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ExchangeRateResponse']
+        }
+      }
+    }
+  }
+  clearOverride: {
+    parameters: {
+      query?: {
+        base?: string
+        quote?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  list_3: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CatalogResponse'][]
+        }
+      }
+    }
+  }
+  create_3: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CatalogRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CatalogResponse']
+        }
+      }
+    }
+  }
+  update_3: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CatalogRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CatalogResponse']
+        }
+      }
+    }
+  }
+  delete_3: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  list_2: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CatalogResponse'][]
+        }
+      }
+    }
+  }
+  create_2: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CatalogRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CatalogResponse']
+        }
+      }
+    }
+  }
+  update_2: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CatalogRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CatalogResponse']
+        }
+      }
+    }
+  }
+  delete_2: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  list_1: {
+    parameters: {
+      query?: {
+        objectiveId?: string
+        categoryId?: string
+        cycleId?: string
+        status?: 'PENDING' | 'PARTIALLY_PAID' | 'PAID' | 'CANCELLED'
+        required?: boolean
+        currency?: string
+        from?: string
+        to?: string
+        q?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ExpenseResponse'][]
+        }
+      }
+    }
+  }
+  create_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ExpenseRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ExpenseDetailResponse']
+        }
+      }
+    }
+  }
+  preview: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PreviewTotalRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PreviewTotalResponse']
+        }
+      }
+    }
+  }
+  summary: {
+    parameters: {
+      query?: {
+        objectiveId?: string
+        groupBy?: 'CYCLE' | 'CATEGORY' | 'RECURRENCE' | 'STATUS'
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ExpenseSummaryResponse']
+        }
+      }
+    }
+  }
+  get_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ExpenseDetailResponse']
+        }
+      }
+    }
+  }
+  update_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ExpenseRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ExpenseDetailResponse']
+        }
+      }
+    }
+  }
+  delete_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  cancel: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ExpenseDetailResponse']
+        }
+      }
+    }
+  }
+  payments: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PaymentResponse'][]
+        }
+      }
+    }
+  }
+  addPayment: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PaymentRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ExpenseDetailResponse']
+        }
+      }
+    }
+  }
+  deletePayment: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+        paymentId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ExpenseDetailResponse']
+        }
+      }
+    }
+  }
+  restore: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ExpenseDetailResponse']
         }
       }
     }
@@ -351,6 +1908,282 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['UserSettingsResponse']
+        }
+      }
+    }
+  }
+  list: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ObjectiveResponse'][]
+        }
+      }
+    }
+  }
+  create: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ObjectiveRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ObjectiveResponse']
+        }
+      }
+    }
+  }
+  get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ObjectiveResponse']
+        }
+      }
+    }
+  }
+  update: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ObjectiveRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ObjectiveResponse']
+        }
+      }
+    }
+  }
+  delete: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  adjustments: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['AdjustmentResponse'][]
+        }
+      }
+    }
+  }
+  createAdjustment: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AdjustmentRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['AdjustmentResponse']
+        }
+      }
+    }
+  }
+  updateAdjustment: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+        adjustmentId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AdjustmentRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['AdjustmentResponse']
+        }
+      }
+    }
+  }
+  deleteAdjustment: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+        adjustmentId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  makePrimary: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ObjectiveResponse']
+        }
+      }
+    }
+  }
+  progress: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ObjectiveProgressResponse']
+        }
+      }
+    }
+  }
+  complete: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['OnboardingRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['OnboardingResponse']
         }
       }
     }

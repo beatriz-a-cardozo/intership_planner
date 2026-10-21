@@ -92,3 +92,21 @@ app:
     allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:}
   jobs:
     enabled: ${APP_JOBS_ENABLED:true}
+  exchange:
+    # Ordem de tentativa: Frankfurter (BCE, diário) e AwesomeAPI (intradiário) como reserva
+    providers: ${EXCHANGE_PROVIDERS:frankfurter,awesomeapi}
+    refresh-cron: ${EXCHANGE_REFRESH_CRON:0 0 */6 * * *}
+    refresh-on-startup: true
+    # Sem atualização bem-sucedida há mais que isso => selo "desatualizada"
+    stale-after: ${EXCHANGE_STALE_AFTER:12h}
+    http-timeout: 5s
+    backfill-days: 180
+    pairs:
+      # Reserva usada apenas se nunca houve cotação gravada (mesmo valor fixo da planilha original)
+      - base: EUR
+        quote: BRL
+        fallback-rate: 6.0
+    frankfurter:
+      base-url: https://api.frankfurter.dev/v1
+    awesomeapi:
+      base-url: https://economia.awesomeapi.com.br/json

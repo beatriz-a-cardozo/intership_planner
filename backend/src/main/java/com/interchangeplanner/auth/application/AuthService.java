@@ -6,11 +6,13 @@ import com.interchangeplanner.auth.api.RegisterRequest;
 import com.interchangeplanner.shared.error.ConflictException;
 import com.interchangeplanner.user.application.UserService;
 import com.interchangeplanner.user.domain.AppUser;
+import com.interchangeplanner.user.domain.UserRegisteredEvent;
 import com.interchangeplanner.user.domain.UserRepository;
 import com.interchangeplanner.user.domain.UserSettings;
 import com.interchangeplanner.user.domain.UserSettingsRepository;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,12 +33,13 @@ public class AuthService {
     private final AccessTokenService accessTokens;
     private final RefreshTokenService refreshTokens;
     private final LoginAttemptService loginAttempts;
+    private final ApplicationEventPublisher events;
     /** Hash fixo usado quando o e-mail não existe, para o tempo de resposta não revelar contas cadastradas. */
     private final String dummyHash;
 
     public AuthService(UserRepository users, UserSettingsRepository settings, UserService userService,
             PasswordEncoder passwordEncoder, AccessTokenService accessTokens, RefreshTokenService refreshTokens,
-            LoginAttemptService loginAttempts) {
+            LoginAttemptService loginAttempts, ApplicationEventPublisher events) {
         this.users = users;
         this.settings = settings;
         this.userService = userService;
@@ -44,6 +47,7 @@ public class AuthService {
         this.accessTokens = accessTokens;
         this.refreshTokens = refreshTokens;
         this.loginAttempts = loginAttempts;
+        this.events = events;
         this.dummyHash = passwordEncoder.encode(UUID.randomUUID().toString());
     }
 
@@ -61,6 +65,7 @@ public class AuthService {
             throw emailTaken();
         }
         settings.save(UserSettings.defaultsFor(user.getId()));
+        events.publishEvent(new UserRegisteredEvent(user.getId()));
         return openSession(user.getId());
     }
 
