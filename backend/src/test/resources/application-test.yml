@@ -1,0 +1,11 @@
+app:
+  security:
+    jwt:
+      secret: test-secret-for-integration-tests-0123456789
+  jobs:
+    enabled: false
+
+logging:
+  structured:
+    format:
+      console: ""

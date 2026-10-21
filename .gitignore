@@ -1,0 +1,19 @@
+# Segredos
+.env
+*.local
+
+# Backend
+backend/target/
+*.iml
+.idea/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+
+# SO / editores
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json

@@ -1,0 +1,21 @@
+# Perfil de desenvolvimento local: SPRING_PROFILES_ACTIVE=dev
+# Nunca use estes valores em produção.
+
+spring:
+  datasource:
+    password: ${DB_PASSWORD:interchange}
+
+logging:
+  structured:
+    format:
+      console: ""
+  level:
+    com.interchangeplanner: DEBUG
+
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:dev-only-secret-change-me-0123456789abcdef}
+    refresh-token:
+      # http://localhost não usa HTTPS
+      cookie-secure: ${REFRESH_COOKIE_SECURE:false}

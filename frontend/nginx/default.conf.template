@@ -1,0 +1,39 @@
+server {
+  listen 80;
+  server_name _;
+  root /usr/share/nginx/html;
+  index index.html;
+
+  # Obs.: add_header dentro de um location substitui os herdados, por isso os
+  # cabeçalhos de segurança são repetidos em cada bloco que define cabeçalhos.
+
+  gzip on;
+  gzip_types text/css application/javascript application/json image/svg+xml;
+
+  # API no mesmo domínio: o cookie de refresh funciona sem CORS
+  location /api/ {
+    proxy_pass ${BACKEND_URL};
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+
+  # Arquivos com hash: cache longo
+  location /assets/ {
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+    add_header X-Frame-Options DENY always;
+    try_files $uri =404;
+  }
+
+  # SPA: rotas do React Router caem no index.html
+  location / {
+    add_header Cache-Control "no-cache";
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+    add_header X-Frame-Options DENY always;
+    try_files $uri /index.html;
+  }
+}

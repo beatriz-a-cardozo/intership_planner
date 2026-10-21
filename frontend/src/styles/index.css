@@ -1,0 +1,104 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/fraunces';
+
+/* Dark mode controlado por classe (.dark no <html>), para suportar LIGHT / DARK / SYSTEM. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Tokens de design. Cores semânticas: o código usa bg-surface, text-muted etc.,
+ * nunca valores crus — trocar a identidade visual = editar só este bloco.
+ */
+:root {
+  --background: #f6f5f1;
+  --surface: #ffffff;
+  --surface-2: #efede6;
+  --foreground: #1b1f1d;
+  --muted: #5f6662;
+  --subtle: #8a908c;
+  --border: #e3e0d7;
+  --primary: #1f4d3f; /* verde-pinho */
+  --primary-hover: #183e33;
+  --primary-foreground: #f6f5f1;
+  --primary-soft: #dfe9e3;
+  --accent: #b7791f; /* âmbar: atenção */
+  --accent-soft: #f6ead2;
+  --danger: #c2533f; /* coral: alerta/excesso */
+  --danger-soft: #f7e1dc;
+  --success: #2f7a52;
+  --ring: #2f6d5a;
+  --shadow: 0 1px 2px rgb(27 31 29 / 0.04), 0 4px 16px rgb(27 31 29 / 0.05);
+  color-scheme: light;
+}
+
+.dark {
+  --background: #0f1412;
+  --surface: #161d1a;
+  --surface-2: #1d2622;
+  --foreground: #e9ece8;
+  --muted: #a3aca7;
+  --subtle: #7b8580;
+  --border: #26302c;
+  --primary: #7cc4a6;
+  --primary-hover: #93d3b8;
+  --primary-foreground: #0f1412;
+  --primary-soft: #1f3a30;
+  --accent: #e9b44c;
+  --accent-soft: #3a3020;
+  --danger: #ec8a74;
+  --danger-soft: #3d2420;
+  --success: #6cc895;
+  --ring: #7cc4a6;
+  --shadow: none; /* no escuro, elevação vem da luminosidade, não de sombra */
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
+  --color-ring: var(--ring);
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Fraunces Variable', ui-serif, Georgia, serif;
+  --radius-card: 1.25rem;
+  --shadow-card: var(--shadow);
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  /* Números financeiros sempre tabulares para alinhar colunas. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
