@@ -19,6 +19,6 @@ COPY --from=build /app/target/extracted/application/ ./
 USER app
 EXPOSE 8080
 ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75 -XX:+ExitOnOutOfMemoryError"
-HEALTHCHECK --interval=15s --timeout=3s --start-period=40s --retries=5 \
+HEALTHCHECK --interval=15s --timeout=3s --start-period=180s --retries=5 \
   CMD wget -qO- http://localhost:8080/actuator/health/readiness | grep -q UP || exit 1
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]

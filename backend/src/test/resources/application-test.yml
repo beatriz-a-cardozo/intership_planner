@@ -4,6 +4,8 @@ app:
       secret: test-secret-for-integration-tests-0123456789
   jobs:
     enabled: false
+  internal:
+    job-token: token-de-teste
   exchange:
     # Testes nunca acessam a rede: cotações são gravadas pelos próprios testes
     providers: ""

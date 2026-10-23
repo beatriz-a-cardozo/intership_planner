@@ -80,18 +80,21 @@ export interface RequestOptions extends Omit<RequestInit, 'body'> {
   skipAuthRefresh?: boolean
 }
 
-export async function apiFetch<T>(path: string, options: RequestOptions = {}): Promise<T> {
+/** Executa com o token atual; em 401 renova a sessão uma vez e repete. */
+async function authorizedFetch(path: string, options: RequestOptions, accept: string): Promise<Response> {
   const { body, skipAuthRefresh, headers, ...rest } = options
+  const isForm = body instanceof FormData
 
   const doRequest = () => {
     const h = new Headers(headers)
-    h.set('Accept', 'application/json')
-    if (body !== undefined) h.set('Content-Type', 'application/json')
+    h.set('Accept', accept)
+    // FormData: o navegador define o Content-Type com o boundary
+    if (body !== undefined && !isForm) h.set('Content-Type', 'application/json')
     if (accessToken) h.set('Authorization', `Bearer ${accessToken}`)
     return rawFetch(path, {
       ...rest,
       headers: h,
-      body: body === undefined ? undefined : JSON.stringify(body),
+      body: body === undefined ? undefined : isForm ? body : JSON.stringify(body),
     })
   }
 
@@ -103,6 +106,11 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
   }
 
   if (!response.ok) throw new ApiError(await parseProblem(response))
+  return response
+}
+
+export async function apiFetch<T>(path: string, options: RequestOptions = {}): Promise<T> {
+  const response = await authorizedFetch(path, options, 'application/json')
   if (response.status === 204) return undefined as T
   return (await response.json()) as T
 }
@@ -116,4 +124,8 @@ export const api = {
   patch: <T>(path: string, body?: unknown, options?: RequestOptions) =>
     apiFetch<T>(path, { ...options, method: 'PATCH', body }),
   delete: <T>(path: string, options?: RequestOptions) => apiFetch<T>(path, { ...options, method: 'DELETE' }),
+  /** Envio multipart (o corpo é o FormData). */
+  upload: <T>(path: string, form: FormData) => apiFetch<T>(path, { method: 'POST', body: form }),
+  /** Arquivo binário autenticado (ex.: imagem), como Blob. */
+  blob: async (path: string) => (await authorizedFetch(path, { method: 'GET' }, '*/*')).blob(),
 }

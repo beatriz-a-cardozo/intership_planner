@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 class ObjectivesAndAccountsIT extends IntegrationTest {
 
-    static final String TARGET = LocalDate.now().plusMonths(8).toString();
+    static final String TARGET = LocalDate.now(USER_ZONE).plusMonths(8).toString();
 
     static String objectiveJson(String name, String mode, String target) {
         return """
@@ -129,7 +129,7 @@ class ObjectivesAndAccountsIT extends IntegrationTest {
                     .andExpect(status().isUnprocessableContent())
                     .andExpect(jsonPath("$.errors[0].field").value("currency"));
             postAs(bia, "/api/accounts/{id}/balances",
-                    "{\"asOf\":\"" + LocalDate.now().plusDays(3) + "\",\"balance\":10}", id)
+                    "{\"asOf\":\"" + LocalDate.now(USER_ZONE).plusDays(3) + "\",\"balance\":10}", id)
                     .andExpect(status().isUnprocessableContent());
             postAs(bia, "/api/accounts", accountJson("Dólar", "USD", "CASH", null))
                     .andExpect(status().isUnprocessableContent());
@@ -218,7 +218,7 @@ class ObjectivesAndAccountsIT extends IntegrationTest {
         @Test
         void onboardingExigeDataFutura() throws Exception {
             TestSession bia = registerUser("onbpast");
-            postAs(bia, "/api/onboarding", onboardingJson(LocalDate.now().minusDays(1).toString(), "null"))
+            postAs(bia, "/api/onboarding", onboardingJson(LocalDate.now(USER_ZONE).minusDays(1).toString(), "null"))
                     .andExpect(status().isUnprocessableContent())
                     .andExpect(jsonPath("$.errors[0].field").value("targetDate"));
             getAs(bia, "/api/objectives").andExpect(jsonPath("$", hasSize(0)));

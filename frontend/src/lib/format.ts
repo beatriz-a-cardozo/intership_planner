@@ -75,3 +75,39 @@ export function todayIso() {
 export function pluralize(count: number, singular: string, plural: string) {
   return `${count} ${count === 1 ? singular : plural}`
 }
+
+// ------------------------------------------------------------------ meses ("2026-11")
+
+export function currentMonth() {
+  return todayIso().slice(0, 7)
+}
+
+export function shiftMonth(month: string, delta: number) {
+  const [y, m] = month.split('-').map(Number)
+  const d = new Date(y!, m! - 1 + delta, 1)
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+}
+
+/** "2026-11" → "novembro de 2026" (long) ou "nov." (short) ou "nov. 2026" (medium). */
+export function formatMonth(month: string | null | undefined, style: 'short' | 'medium' | 'long' = 'long') {
+  if (!month) return '—'
+  const [y, m] = month.split('-').map(Number)
+  const date = new Date(y!, m! - 1, 1)
+  const options: Intl.DateTimeFormatOptions =
+    style === 'short'
+      ? { month: 'short' }
+      : style === 'medium'
+        ? { month: 'short', year: 'numeric' }
+        : { month: 'long', year: 'numeric' }
+  return new Intl.DateTimeFormat(LOCALE, options).format(date)
+}
+
+// ------------------------------------------------------------------ peso (gramas inteiros vindos da API)
+
+const kgFormatter = new Intl.NumberFormat(LOCALE, { minimumFractionDigits: 1, maximumFractionDigits: 2 })
+
+/** 450 → "450 g"; 5800 → "5,8 kg". */
+export function formatWeight(grams: number | null | undefined) {
+  if (grams == null) return '—'
+  return grams < 1000 ? `${grams} g` : `${kgFormatter.format(grams / 1000)} kg`
+}

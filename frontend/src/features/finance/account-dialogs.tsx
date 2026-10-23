@@ -3,7 +3,8 @@ import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
-import type { Account, AccountType } from '@/api/types'
+import type { Account, AccountType, Objective } from '@/api/types'
+import { DialogLoading } from '@/components/dialog-loading'
 import { Button } from '@/components/ui/button'
 import { Field } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
@@ -28,24 +29,37 @@ const accountSchema = z.object({
 })
 type AccountForm = z.infer<typeof accountSchema>
 
-/** Montado só quando aberto (o pai renderiza condicionalmente): o formulário nasce com os valores certos. */
-export function AccountDialog({
-  open,
-  onOpenChange,
-  account,
-}: {
+interface AccountDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   account?: Account
-}) {
-  const save = useSaveAccount()
+}
+
+/** Montado só quando aberto; o formulário espera a lista de objetivos (ver `DialogLoading`). */
+export function AccountDialog(props: AccountDialogProps) {
   const objectives = useObjectives()
+  if (objectives.data) return <AccountFormDialog {...props} objectives={objectives.data} />
+  return (
+    <DialogLoading
+      title={props.account ? 'Editar conta' : 'Nova conta'}
+      onClose={() => props.onOpenChange(false)}
+    />
+  )
+}
+
+function AccountFormDialog({
+  open,
+  onOpenChange,
+  account,
+  objectives,
+}: AccountDialogProps & { objectives: Objective[] }) {
+  const save = useSaveAccount()
   const [formError, setFormError] = useState('')
   const defaults = (): AccountForm => ({
     name: account?.name ?? '',
     currency: (account?.currency as 'BRL' | 'EUR') ?? 'BRL',
     type: account?.type ?? 'SAVINGS',
-    objectiveId: account ? (account.objectiveId ?? '') : (objectives.data?.find((o) => o.primary)?.id ?? ''),
+    objectiveId: account ? (account.objectiveId ?? '') : (objectives.find((o) => o.primary)?.id ?? ''),
     archived: account?.archived ?? false,
   })
   const {
@@ -146,7 +160,7 @@ export function AccountDialog({
         >
           <NativeSelect id="account-objective" {...register('objectiveId')}>
             <option value="">Nenhum (não entra no progresso)</option>
-            {objectives.data?.map((o) => (
+            {objectives.map((o) => (
               <option key={o.id} value={o.id}>
                 {o.name}
               </option>

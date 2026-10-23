@@ -18,6 +18,7 @@ import com.interchangeplanner.shared.error.BusinessRuleException;
 import com.interchangeplanner.shared.error.NotFoundException;
 import com.interchangeplanner.shared.money.Money;
 import com.interchangeplanner.shared.money.MoneyResponse;
+import com.interchangeplanner.user.application.UserClock;
 import com.interchangeplanner.user.application.UserService;
 import java.time.Clock;
 import java.time.LocalDate;
@@ -39,18 +40,18 @@ public class AccountService {
     private final CurrencyService currencies;
     private final ExchangeRateService exchange;
     private final UserService users;
-    private final Clock clock;
+    private final UserClock userClock;
 
     public AccountService(AccountRepository accounts, AccountBalanceSnapshotRepository snapshots,
             ObjectiveService objectives, CurrencyService currencies, ExchangeRateService exchange, UserService users,
-            Clock clock) {
+            UserClock userClock) {
         this.accounts = accounts;
         this.snapshots = snapshots;
         this.objectives = objectives;
         this.currencies = currencies;
         this.exchange = exchange;
         this.users = users;
-        this.clock = clock;
+        this.userClock = userClock;
     }
 
     /** Conta com o saldo mais recente já resolvido. */
@@ -95,8 +96,9 @@ public class AccountService {
     @Transactional
     public BalanceSnapshotResponse recordBalance(UUID userId, UUID accountId, BalanceRequest request) {
         Account account = require(userId, accountId);
-        LocalDate asOf = request.asOf() != null ? request.asOf() : LocalDate.now(clock);
-        if (asOf.isAfter(LocalDate.now(clock))) {
+        LocalDate today = userClock.today(userId);
+        LocalDate asOf = request.asOf() != null ? request.asOf() : today;
+        if (asOf.isAfter(today)) {
             throw new BusinessRuleException("A data do saldo não pode estar no futuro.", "asOf");
         }
         AccountBalanceSnapshot snapshot = snapshots.findByAccountIdAndAsOf(accountId, asOf)

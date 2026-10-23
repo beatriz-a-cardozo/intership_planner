@@ -1,10 +1,12 @@
 package com.interchangeplanner.exchange.application;
 
 import com.interchangeplanner.exchange.ExchangeProperties;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -18,16 +20,22 @@ public class ExchangeRateRefreshJob {
 
     private final ExchangeRateService service;
     private final ExchangeProperties properties;
+    private final ApplicationEventPublisher events;
 
-    public ExchangeRateRefreshJob(ExchangeRateService service, ExchangeProperties properties) {
+    public ExchangeRateRefreshJob(ExchangeRateService service, ExchangeProperties properties,
+            ApplicationEventPublisher events) {
         this.service = service;
         this.properties = properties;
+        this.events = events;
     }
+
+    @SchedulerLock(name = "exchangeRateRefresh")
 
     @Scheduled(cron = "${app.exchange.refresh-cron:0 0 */6 * * *}", zone = "UTC")
     public void refresh() {
         int updated = service.refreshAll();
         log.info("Cotações atualizadas: {}/{}", updated, properties.pairs().size());
+        events.publishEvent(new ExchangeRatesRefreshedEvent(updated));
     }
 
     /** Em thread virtual: a API sobe mesmo com o provedor lento ou fora do ar. */

@@ -1,0 +1,15 @@
+# Contexto da imagem de deploy (deploy/Dockerfile): só o código-fonte entra
+**/node_modules
+**/dist
+**/coverage
+**/target
+**/.idea
+**/*.iml
+**/.env
+**/.env.*
+**/test-results
+**/playwright-report
+.git
+.github
+docs
+backend/openapi

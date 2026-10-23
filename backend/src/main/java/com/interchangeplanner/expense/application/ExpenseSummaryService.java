@@ -32,8 +32,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ExpenseSummaryService {
 
-    /** Insumos para a meta/progresso do objetivo (moeda do objetivo, já no escopo configurado). */
-    public record ObjectiveExpenseTotals(Money plannedInScope, Money paidInScope, Money adjustments) {
+    /**
+     * Insumos para a meta/progresso do objetivo (moeda do objetivo). {@code *InScope} segue o escopo configurado
+     * no objetivo; {@code required*} e {@code all*} trazem os dois escopos, para exibir as duas metas lado a lado.
+     */
+    public record ObjectiveExpenseTotals(Money plannedInScope, Money paidInScope, Money adjustments,
+            Money plannedRequired, Money paidRequired, Money plannedAll, Money paidAll) {
     }
 
     static final String NO_CYCLE = "none";
@@ -104,21 +108,31 @@ public class ExpenseSummaryService {
                 ExchangeRateResponse.of(converter));
     }
 
-    /** Totais no escopo do objetivo (só obrigatórios ou todos), para o cálculo de meta e progresso. */
+    /** Totais dos dois escopos (só obrigatórios / todos) e do escopo configurado, para meta e progresso. */
     @Transactional(readOnly = true)
     public ObjectiveExpenseTotals totalsFor(UUID userId, Objective objective, CurrencyConverter converter) {
         String currency = objective.getCurrency();
-        boolean onlyRequired = objective.getExpenseScope() == ExpenseScope.REQUIRED_ONLY;
-        Money planned = Money.zero(currency);
-        Money paid = Money.zero(currency);
+        Money plannedRequired = Money.zero(currency);
+        Money paidRequired = Money.zero(currency);
+        Money plannedAll = Money.zero(currency);
+        Money paidAll = Money.zero(currency);
         for (ComputedExpense c : queries.forObjective(userId, objective.getId())) {
-            if (c.isCancelled() || (onlyRequired && !c.expense().isRequired())) {
+            if (c.isCancelled()) {
                 continue;
             }
-            planned = planned.plus(converter.convert(c.total(), currency));
-            paid = paid.plus(converter.convert(c.paid(), currency));
+            Money total = converter.convert(c.total(), currency);
+            Money paid = converter.convert(c.paid(), currency);
+            plannedAll = plannedAll.plus(total);
+            paidAll = paidAll.plus(paid);
+            if (c.expense().isRequired()) {
+                plannedRequired = plannedRequired.plus(total);
+                paidRequired = paidRequired.plus(paid);
+            }
         }
-        return new ObjectiveExpenseTotals(planned, paid, adjustmentsTotal(userId, objective, converter));
+        boolean onlyRequired = objective.getExpenseScope() == ExpenseScope.REQUIRED_ONLY;
+        return new ObjectiveExpenseTotals(onlyRequired ? plannedRequired : plannedAll,
+                onlyRequired ? paidRequired : paidAll, adjustmentsTotal(userId, objective, converter),
+                plannedRequired, paidRequired, plannedAll, paidAll);
     }
 
     private Money adjustmentsTotal(UUID userId, Objective objective, CurrencyConverter converter) {

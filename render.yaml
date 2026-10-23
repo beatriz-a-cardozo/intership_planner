@@ -1,0 +1,33 @@
+# Blueprint do Render (https://render.com/docs/blueprint-spec).
+# Um serviço web gratuito com a imagem única (API + frontend). O banco é o PostgreSQL do Neon (gratuito, sem prazo):
+# preencha DB_URL, DB_USERNAME e DB_PASSWORD ao criar o Blueprint. Passo a passo em docs/DEPLOY.md.
+services:
+  - type: web
+    name: intercambio-planner
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./deploy/Dockerfile
+    dockerContext: .
+    healthCheckPath: /actuator/health/readiness
+    # O deploy é disparado pelo GitHub Actions (deploy.yml) depois do CI verde, em cada tag v*
+    autoDeploy: false
+    envVars:
+      - key: DB_URL
+        sync: false # jdbc:postgresql://<host-do-neon>/<banco>?sslmode=require
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_POOL_SIZE
+        value: "5"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: INTERNAL_JOB_TOKEN
+        generateValue: true # copie para o segredo INTERNAL_JOB_TOKEN do GitHub (jobs agendados)
+      - key: REFRESH_COOKIE_SECURE
+        value: "true"
+      - key: APP_NAME
+        value: Interchange Planner
+      - key: VITE_APP_NAME
+        value: Interchange Planner

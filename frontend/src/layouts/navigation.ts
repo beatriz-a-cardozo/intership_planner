@@ -1,6 +1,7 @@
 import {
   Bell,
   CalendarRange,
+  ClipboardCheck,
   GraduationCap,
   LayoutDashboard,
   ListChecks,
@@ -24,7 +25,7 @@ export interface NavItem {
   description: string
 }
 
-export const CURRENT_PHASE = 3
+export const CURRENT_PHASE = 10
 
 export const NAV_ITEMS: NavItem[] = [
   {
@@ -57,7 +58,7 @@ export const NAV_ITEMS: NavItem[] = [
     icon: Wallet,
     phase: 2,
     mobilePrimary: true,
-    description: 'Contas e saldos em BRL e EUR; receitas, parcelas e assinaturas chegam na fase 4.',
+    description: 'Receitas, despesas, parcelas, assinaturas, contas e quanto sobra por mês.',
   },
   {
     to: '/universities',
@@ -66,7 +67,14 @@ export const NAV_ITEMS: NavItem[] = [
     icon: GraduationCap,
     phase: 5,
     mobilePrimary: true,
-    description: 'Universidades, programas, candidaturas e comparador.',
+    description: 'Universidades, programas e comparador.',
+  },
+  {
+    to: '/applications',
+    label: 'Candidaturas',
+    icon: ClipboardCheck,
+    phase: 5,
+    description: 'Quadro de candidaturas com status, prazos e respostas.',
   },
   {
     to: '/timeline',

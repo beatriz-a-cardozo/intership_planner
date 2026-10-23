@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.jayway.jsonpath.JsonPath;
 import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
+import java.time.ZoneId;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +33,8 @@ public abstract class IntegrationTest {
 
     public static final String REFRESH_COOKIE = "ip_refresh";
     public static final String PASSWORD = "senhaForte1";
+    /** Fuso padrão de um usuário novo: "hoje" nos testes é o mesmo "hoje" do servidor, em qualquer horário do CI. */
+    public static final ZoneId USER_ZONE = ZoneId.of("America/Sao_Paulo");
 
     @Autowired
     protected MockMvc mvc;
@@ -84,6 +87,13 @@ public abstract class IntegrationTest {
         MockHttpServletRequestBuilder req = MockMvcRequestBuilders.put(url, vars)
                 .header(HttpHeaders.AUTHORIZATION, s.bearer());
         return mvc.perform(body == null ? req : req.contentType(MediaType.APPLICATION_JSON).content(body));
+    }
+
+    protected ResultActions patchAs(TestSession s, String url, String body, Object... vars) throws Exception {
+        return mvc.perform(MockMvcRequestBuilders.patch(url, vars)
+                .header(HttpHeaders.AUTHORIZATION, s.bearer())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body));
     }
 
     protected ResultActions deleteAs(TestSession s, String url, Object... vars) throws Exception {

@@ -24,6 +24,7 @@ import java.util.UUID;
  * @param percentComplete     0–100 para a barra
  * @param monthlySavingNeeded quanto guardar por mês para atingir a meta na data alvo
  * @param onTrack             economia mensal planejada cobre a necessária (nulo se não planejada)
+ * @param scopeGoals          as duas metas derivadas lado a lado: só obrigatórios e obrigatórios + opcionais
  */
 public record ObjectiveProgressResponse(
         UUID objectiveId,
@@ -46,5 +47,26 @@ public record ObjectiveProgressResponse(
         @Schema(types = {"object", "null"}) MoneyResponse plannedMonthlySaving,
         @Schema(types = {"boolean", "null"}) Boolean onTrack,
         boolean overdue,
-        List<ExchangeRateResponse> exchangeRates) {
+        List<ExchangeRateResponse> exchangeRates,
+        List<ScopeGoal> scopeGoals) {
+
+    /**
+     * Meta derivada de um escopo de gastos (com os ajustes manuais), independente do modo configurado.
+     *
+     * @param plannedExpenses gastos do escopo (não cancelados)
+     * @param target          max(gastos + ajustes, 0)
+     * @param mobilized       já pago dos gastos do escopo + saldo das contas vinculadas
+     * @param configured      é o escopo configurado no objetivo (o que define a meta quando ela é derivada)
+     */
+    public record ScopeGoal(
+            ExpenseScope scope,
+            MoneyResponse plannedExpenses,
+            MoneyResponse target,
+            MoneyResponse mobilized,
+            MoneyResponse remaining,
+            BigDecimal ratio,
+            BigDecimal percentComplete,
+            MoneyResponse monthlySavingNeeded,
+            boolean configured) {
+    }
 }

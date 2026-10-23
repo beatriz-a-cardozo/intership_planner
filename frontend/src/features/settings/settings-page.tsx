@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Monitor, Moon, Sun } from 'lucide-react'
+import { FileSpreadsheet, Monitor, Moon, Sun } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { Link } from 'react-router'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { errorMessage } from '@/api/errors'
@@ -14,6 +15,8 @@ import { Field } from '@/components/ui/field'
 import { SegmentedControl } from '@/components/ui/segmented'
 import { NativeSelect } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
+import { ExchangeAlertsCard } from '@/features/notifications/exchange-alerts-card'
+import { NotificationPreferencesCard } from '@/features/notifications/preferences-card'
 import { useCurrencies, useUpdateSettings } from './api'
 import { CatalogCard } from './catalog-card'
 import { ExchangeRateCard } from './exchange-rate-card'
@@ -212,6 +215,24 @@ export function SettingsPage() {
         <ThemeCard settings={user.settings} />
         <PreferencesCard settings={user.settings} />
         <ExchangeRateCard />
+        <ExchangeAlertsCard />
+        <NotificationPreferencesCard />
+        <Card>
+          <CardHeader className="flex-col">
+            <CardTitle>Importar planilha</CardTitle>
+            <CardDescription>
+              Traga gastos, universidades e itens de mala do Excel. Você confere linha a linha antes de
+              importar.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild variant="outline">
+              <Link to="/import">
+                <FileSpreadsheet aria-hidden /> Importar .xlsx
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
         <CatalogCard />
       </div>
     </>

@@ -24,6 +24,7 @@ import com.interchangeplanner.shared.error.BusinessRuleException;
 import com.interchangeplanner.shared.error.NotFoundException;
 import com.interchangeplanner.shared.money.Money;
 import com.interchangeplanner.shared.money.MoneyResponse;
+import com.interchangeplanner.user.application.UserClock;
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.LocalDate;
@@ -58,10 +59,11 @@ public class ExpenseService {
     private final CurrencyService currencies;
     private final ExchangeRateService exchange;
     private final Clock clock;
+    private final UserClock userClock;
 
     public ExpenseService(ExpenseRepository expenses, ExpensePaymentRepository payments, ExpenseQueries queries,
             ObjectiveService objectives, ExpenseCategoryService categories, ExpenseCycleService cycles,
-            CurrencyService currencies, ExchangeRateService exchange, Clock clock) {
+            CurrencyService currencies, ExchangeRateService exchange, UserClock userClock) {
         this.expenses = expenses;
         this.payments = payments;
         this.queries = queries;
@@ -70,7 +72,8 @@ public class ExpenseService {
         this.cycles = cycles;
         this.currencies = currencies;
         this.exchange = exchange;
-        this.clock = clock;
+        this.clock = userClock.clock();
+        this.userClock = userClock;
     }
 
     // ------------------------------------------------------------------ leitura
@@ -164,7 +167,7 @@ public class ExpenseService {
         if (expense.isCancelled()) {
             throw new BusinessRuleException("Não é possível pagar um gasto cancelado. Reative-o primeiro.", "expenseId");
         }
-        if (request.paidOn().isAfter(LocalDate.now(clock))) {
+        if (request.paidOn().isAfter(userClock.today(userId))) {
             throw new BusinessRuleException("A data do pagamento não pode estar no futuro.", "paidOn");
         }
         requireCurrency(request.currency());
