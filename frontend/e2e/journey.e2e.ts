@@ -57,6 +57,17 @@ test('onboarding cria o objetivo e abre o dashboard', async () => {
   await expect(page.getByText('Mestrado E2E').first()).toBeVisible()
 })
 
+test('guarda dinheiro para o objetivo', async () => {
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Guardar dinheiro' }).click()
+  const dialog = page.getByRole('dialog', { name: 'Guardar dinheiro' })
+  await expectAccessible(page, 'diálogo guardar dinheiro')
+  await dialog.getByLabel('Valor', { exact: true }).fill('1.500')
+  await dialog.getByRole('button', { name: 'Guardar', exact: true }).click()
+  await expect(dialog).toBeHidden()
+  await expect(page.getByText('R$ 1.500,00').first()).toBeVisible()
+})
+
 test('cadastra um gasto', async () => {
   await page.goto('/expenses')
   await page.getByRole('button', { name: 'Novo gasto' }).click()

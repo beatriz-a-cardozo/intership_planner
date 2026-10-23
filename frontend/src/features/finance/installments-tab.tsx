@@ -70,8 +70,9 @@ export function InstallmentsTab() {
               const done = p.paidCount === p.installmentsCount
               return (
                 <li key={p.id} className="py-4">
-                  <div className="flex flex-wrap items-start gap-3">
-                    <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
+                    {/* largura mínima: no celular, valor e botões descem para a linha de baixo em vez de espremer o texto */}
+                    <div className="min-w-[min(100%,16rem)] flex-1">
                       <p className="flex flex-wrap items-center gap-2 font-medium">
                         {p.description}
                         {done ? (
@@ -92,8 +93,8 @@ export function InstallmentsTab() {
                           ` · ${p.paidBeforeCount} paga${p.paidBeforeCount > 1 ? 's' : ''} antes do app`}
                       </p>
                     </div>
-                    <p className="font-semibold tabular">{formatMoney(p.total)}</p>
-                    <div className="flex">
+                    <div className="ml-auto flex items-center gap-1">
+                      <p className="mr-1 font-semibold tabular">{formatMoney(p.total)}</p>
                       <Button
                         variant="ghost"
                         size="icon"

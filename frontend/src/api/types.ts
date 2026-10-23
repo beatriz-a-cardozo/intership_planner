@@ -154,6 +154,10 @@ export type SearchResponse = Schemas['SearchResponse']
 export type SearchResult = Schemas['SearchResult']
 export type SearchType = SearchResult['type']
 
+// ------------------------------------------------------------------ Ajustes 1.1: mapa e reserva
+export type MapLocation = Schemas['MapLocation']
+export type SavingsRequest = Schemas['SavingsRequest']
+
 /** RFC 9457 Problem Details, formato padrão de erro do backend. */
 export interface ProblemDetails {
   type?: string

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -116,8 +117,10 @@ public class ExpenseSummaryService {
         Money paidRequired = Money.zero(currency);
         Money plannedAll = Money.zero(currency);
         Money paidAll = Money.zero(currency);
+        // Só os ciclos marcados "entra na meta" (padrão: Preparação e Imigração); nenhum marcado = todos
+        Set<UUID> goalCycles = cycles.goalCycleIds(userId);
         for (ComputedExpense c : queries.forObjective(userId, objective.getId())) {
-            if (c.isCancelled()) {
+            if (c.isCancelled() || (!goalCycles.isEmpty() && !goalCycles.contains(c.expense().getCycleId()))) {
                 continue;
             }
             Money total = converter.convert(c.total(), currency);

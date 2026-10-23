@@ -6,6 +6,8 @@ app:
     enabled: false
   internal:
     job-token: token-de-teste
+  geocoding:
+    provider: ""
   exchange:
     # Testes nunca acessam a rede: cotações são gravadas pelos próprios testes
     providers: ""

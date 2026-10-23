@@ -53,6 +53,7 @@ public abstract class CatalogService<T extends CatalogItem> {
         }
         int order = request.sortOrder() != null ? request.sortOrder() : entities(userId).size() + 1;
         T item = factory.create(userId, request.name(), request.color().toLowerCase(), request.icon(), order);
+        applyExtras(item, request);
         return CatalogResponse.from(repository.save(item));
     }
 
@@ -65,6 +66,7 @@ public abstract class CatalogService<T extends CatalogItem> {
         item.update(request.name(), request.color().toLowerCase(), request.icon(),
                 request.sortOrder() != null ? request.sortOrder() : item.getSortOrder(),
                 Boolean.TRUE.equals(request.archived()));
+        applyExtras(item, request);
         return CatalogResponse.from(item);
     }
 
@@ -76,6 +78,10 @@ public abstract class CatalogService<T extends CatalogItem> {
             throw new ConflictException(label + " em uso por gastos. Arquive em vez de excluir.", "id");
         }
         repository.delete(item);
+    }
+
+    /** Campos próprios de um tipo de catálogo (ex.: "entra na meta" dos ciclos). */
+    protected void applyExtras(T item, CatalogRequest request) {
     }
 
     private ConflictException duplicate() {

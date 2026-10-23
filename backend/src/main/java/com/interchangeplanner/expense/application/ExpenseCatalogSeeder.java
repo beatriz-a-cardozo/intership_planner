@@ -6,6 +6,7 @@ import com.interchangeplanner.expense.domain.ExpenseCycle;
 import com.interchangeplanner.expense.domain.ExpenseCycleRepository;
 import com.interchangeplanner.user.domain.UserRegisteredEvent;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,9 @@ public class ExpenseCatalogSeeder {
             new Seed("Imigração", "#2f6d9a", "plane"),
             new Seed("Vivência", "#b7791f", "home"),
             new Seed("Emergência", "#c2533f", "life-buoy"));
+
+    /** Ciclos cujos gastos entram na meta: o que precisa estar pago antes de viajar (V12 faz o mesmo para os antigos). */
+    static final Set<String> GOAL_CYCLES = Set.of("Preparação", "Imigração");
 
     static final List<Seed> CATEGORIES = List.of(
             new Seed("Agência", "#5b5f97", "briefcase"),
@@ -65,7 +69,9 @@ public class ExpenseCatalogSeeder {
         if (!cycles.existsByUserId(userId)) {
             for (int i = 0; i < CYCLES.size(); i++) {
                 Seed s = CYCLES.get(i);
-                cycles.save(new ExpenseCycle(userId, s.name(), s.color(), s.icon(), i + 1));
+                ExpenseCycle cycle = new ExpenseCycle(userId, s.name(), s.color(), s.icon(), i + 1);
+                cycle.setInGoal(GOAL_CYCLES.contains(s.name()));
+                cycles.save(cycle);
             }
         }
         if (!categories.existsByUserId(userId)) {

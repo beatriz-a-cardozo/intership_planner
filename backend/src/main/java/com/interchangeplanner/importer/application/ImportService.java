@@ -445,7 +445,7 @@ public class ImportService {
             return id;
         }
         String clean = name.length() > 60 ? name.substring(0, 60) : name;
-        CatalogRequest req = new CatalogRequest(clean, DEFAULT_COLOR, category ? "tag" : "circle", null, null);
+        CatalogRequest req = new CatalogRequest(clean, DEFAULT_COLOR, category ? "tag" : "circle", null, null, null);
         id = (category ? categories.create(userId, req) : cycles.create(userId, req)).id();
         catalog.put(ImportText.norm(name), id);
         notes.add((category ? "Categoria" : "Ciclo") + " \"" + clean + "\" criad" + (category ? "a." : "o."));

@@ -156,6 +156,12 @@ class ExpensesIT extends IntegrationTest {
             getAs(bia, "/api/expenses/summary?objectiveId={id}&groupBy=RECURRENCE", objective)
                     .andExpect(jsonPath("$.groups[*].label").value(containsInAnyOrder("Único", "Mensal", "Por unidade")));
 
+            // A meta só soma os ciclos marcados (padrão: Preparação e Imigração); aqui a Vivência também entra.
+            // O curso, sem ciclo, fica de fora.
+            putAs(bia, "/api/expense-cycles/{id}", """
+                    {"name":"Vivência","color":"#b7791f","icon":"home","inGoal":true}""", cycleId(bia, "Vivência"))
+                    .andExpect(status().isOk());
+
             // meta derivada (só obrigatórios) = 94.500 − 75.000 = 19.500; pago no escopo = 900
             getAs(bia, "/api/objectives/{id}/progress", objective)
                     .andExpect(jsonPath("$.plannedExpenses.amount").value(94500.0))
@@ -163,16 +169,16 @@ class ExpensesIT extends IntegrationTest {
                     .andExpect(jsonPath("$.target.amount").value(19500.0))
                     .andExpect(jsonPath("$.paid.amount").value(900.0))
                     .andExpect(jsonPath("$.remaining.amount").value(18600.0))
-                    // as duas metas lado a lado: obrigatória (94.500 − 75.000) e completa (95.500 − 75.000)
+                    // as duas metas lado a lado: obrigatória e completa (o opcional sem ciclo não entra)
                     .andExpect(jsonPath("$.scopeGoals[0].scope").value("REQUIRED_ONLY"))
                     .andExpect(jsonPath("$.scopeGoals[0].configured").value(true))
                     .andExpect(jsonPath("$.scopeGoals[0].target.amount").value(19500.0))
                     .andExpect(jsonPath("$.scopeGoals[0].remaining.amount").value(18600.0))
                     .andExpect(jsonPath("$.scopeGoals[1].scope").value("ALL"))
                     .andExpect(jsonPath("$.scopeGoals[1].configured").value(false))
-                    .andExpect(jsonPath("$.scopeGoals[1].plannedExpenses.amount").value(95500.0))
-                    .andExpect(jsonPath("$.scopeGoals[1].target.amount").value(20500.0))
-                    .andExpect(jsonPath("$.scopeGoals[1].remaining.amount").value(19600.0));
+                    .andExpect(jsonPath("$.scopeGoals[1].plannedExpenses.amount").value(94500.0))
+                    .andExpect(jsonPath("$.scopeGoals[1].target.amount").value(19500.0))
+                    .andExpect(jsonPath("$.scopeGoals[1].remaining.amount").value(18600.0));
         }
 
         @Test

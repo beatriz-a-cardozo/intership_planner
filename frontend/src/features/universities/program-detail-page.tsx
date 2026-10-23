@@ -225,7 +225,7 @@ function OverviewTab({ program: p }: { program: Program }) {
 
 function RequirementsTab({ program: p }: { program: Program }) {
   return (
-    <div className="grid gap-5 lg:grid-cols-2">
+    <div className="grid gap-5 @4xl:grid-cols-2">
       <Card>
         <CardContent>
           <h2 className="mb-4 text-sm font-semibold">Exigências</h2>
@@ -331,7 +331,7 @@ function DeadlinesTab({ program: p }: { program: Program }) {
           <CardContent className="text-sm text-muted">Nenhuma janela de inscrição cadastrada.</CardContent>
         </Card>
       ) : (
-        <ul className="grid gap-4 md:grid-cols-2">
+        <ul className="grid gap-4 @2xl:grid-cols-2">
           {p.intakes.map((i) => {
             const w = i.nextWindow
             return (

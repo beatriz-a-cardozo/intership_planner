@@ -69,6 +69,13 @@ public class AccountController {
         return service.history(user.id(), id);
     }
 
+    @PostMapping("/savings/{objectiveId}")
+    @Operation(summary = "Guarda (ou retira, com valor negativo) dinheiro para o objetivo numa conta vinculada")
+    public AccountResponse addSavings(CurrentUser user, @PathVariable UUID objectiveId,
+            @Valid @RequestBody SavingsRequest request) {
+        return service.addSavings(user.id(), objectiveId, request);
+    }
+
     @GetMapping("/summary")
     @Operation(summary = "Saldos por moeda e total convertido para a moeda principal")
     public AccountsSummaryResponse summary(CurrentUser user) {

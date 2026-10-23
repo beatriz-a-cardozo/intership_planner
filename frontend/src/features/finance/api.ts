@@ -10,6 +10,7 @@ import type {
   ExchangeRate,
   ExchangeRateOverrideRequest,
   RatePoint,
+  SavingsRequest,
 } from '@/api/types'
 
 export function useAccounts() {
@@ -49,6 +50,13 @@ export function useDeleteAccount() {
 export function useRecordBalance() {
   return useMoneyMutation(({ accountId, body }: { accountId: string; body: BalanceRequest }) =>
     api.post<BalanceSnapshot>(`/api/accounts/${accountId}/balances`, body),
+  )
+}
+
+/** Guarda (ou retira, com valor negativo) dinheiro para o objetivo numa conta vinculada. */
+export function useAddSavings() {
+  return useMoneyMutation(({ objectiveId, body }: { objectiveId: string; body: SavingsRequest }) =>
+    api.post<Account>(`/api/accounts/savings/${objectiveId}`, body),
   )
 }
 

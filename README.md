@@ -118,6 +118,7 @@ npm run dev                 # http://localhost:5173
 | `APP_CORS_ALLOWED_ORIGINS` | backend | Origens extras no CORS, separadas por vírgula | `https://app.exemplo.com` |
 | `LOGIN_MAX_FAILED_ATTEMPTS` / `LOGIN_LOCK_DURATION` | backend | Bloqueio contra força bruta | `5` / `15m` |
 | `APP_JOBS_ENABLED` | backend | Liga/desliga jobs agendados | `true` |
+| `GEOCODING_PROVIDER` | backend | Coordenadas das cidades para o mapa: `nominatim` (OpenStreetMap) ou vazio para desligar | `nominatim` |
 | `EXCHANGE_PROVIDERS` | backend | Ordem dos provedores de câmbio (vazio = sem busca externa) | `frankfurter,awesomeapi` |
 | `EXCHANGE_REFRESH_CRON` | backend | Atualização das cotações (UTC) | `0 0 */6 * * *` |
 | `EXCHANGE_STALE_AFTER` | backend | Sem atualização por esse tempo = selo "desatualizada" | `12h` |
@@ -144,7 +145,7 @@ npm run lint && npm run typecheck
 E2E_BASE_URL=http://localhost:8080 npm run e2e   # Playwright + axe contra o app no ar (cria um usuário novo)
 ```
 
-Hoje: **102 testes unitários + 90 de integração** no backend (+ a regressão com a planilha real, opcional), **45** no frontend
+Hoje: **102 testes unitários + 94 de integração** no backend (+ a regressão com a planilha real, opcional), **45** no frontend
 e a jornada **E2E** (cadastro → onboarding → gasto → busca → 12 telas varridas pelo axe) no desktop e no celular.
 
 - **Fase 1:** JWT (expirado, assinatura inválida), bloqueio de login, UUIDv7, migrations e constraints, fluxo de
@@ -274,6 +275,8 @@ Os dois arquivos são versionados; o CI falha se algum estiver desatualizado.
 | POST | `/api/imports` | Bearer | Envia o .xlsx e devolve a prévia (nada é gravado) |
 | GET / POST | `/api/imports/{id}[/commit]` | Bearer | Prévia ou resumo / importa (abas, objetivo, duplicados) |
 | GET | `/api/search?q=&types=` | Bearer | Busca global (sem acento, até 6 por tipo, com a URL da tela) |
+| GET | `/api/universities/locations` | Bearer | Universidades dos programas escolhidos, com coordenadas (mapa do dashboard) |
+| POST | `/api/accounts/savings/{objectiveId}` | Bearer | Guarda (ou retira, com valor negativo) dinheiro para o objetivo |
 | POST | `/api/internal/jobs/{daily\|exchange}` | `X-Job-Token` | Dispara os jobs (usado pelo cron do GitHub no plano gratuito) |
 
 Documentação interativa: `/swagger-ui.html` · contrato: `/v3/api-docs`.
@@ -303,8 +306,9 @@ Todas no backend; o frontend só formata. Detalhes no [plano técnico, §2 e §4
 - Restante = Σ max(total − pago, 0) por gasto. Custo mensal recorrente = Σ preço × quantidade dos gastos mensais.
 
 **Meta e progresso**
-- Necessidade planejada = gastos no escopo (só obrigatórios, por padrão) + **ajustes manuais** com sinal, aplicados uma única vez (ex.: Sperrkonto −R$ 75.000).
+- Necessidade planejada = gastos no escopo (só obrigatórios, por padrão) **dos ciclos marcados "entra na meta"** (padrão: Preparação e Imigração, o que precisa estar pago antes de viajar; nenhum marcado = todos os gastos) + **ajustes manuais** com sinal, aplicados uma única vez (ex.: Sperrkonto −R$ 75.000).
 - Meta = valor fixo (MANUAL) ou max(necessidade, 0) (DERIVED). Mobilizado = já pago + saldo das contas vinculadas ao objetivo.
+- **Guardar dinheiro** soma (ou, com "Retirar", subtrai) do saldo de hoje de uma conta vinculada ao objetivo; sem conta, cria a "Reserva do intercâmbio" na moeda escolhida. Saldo nunca fica negativo.
 - Faltam = max(meta − mobilizado, 0). Meses restantes = do mês atual ao mês da data alvo, inclusive. Economia mensal necessária = faltam ÷ meses restantes.
 
 **Controle financeiro** ([ADR 0008](docs/adr/0008-lancamentos-materializados-e-projecao.md))

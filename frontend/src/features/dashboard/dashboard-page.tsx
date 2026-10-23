@@ -9,6 +9,7 @@ import {
   TrendingUp,
   Wallet,
 } from 'lucide-react'
+import { useState } from 'react'
 import { Link } from 'react-router'
 import type { ApplicationsOverview, Dashboard, ExchangeRate, TimelineItem } from '@/api/types'
 import { useAuth } from '@/app/providers/auth-provider'
@@ -26,11 +27,13 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useExchangeHistory } from '@/features/finance/api'
+import { SavingsDialog } from '@/features/finance/savings-dialog'
 import { useProjection } from '@/features/finance/ledger-api'
 import { useDashboard } from '@/features/objectives/api'
 import { ScopeGoalsCard } from '@/features/objectives/scope-goals-card'
 import { TimelineIcon } from '@/features/timeline/timeline-icon'
 import { itemLink } from '@/features/timeline/timeline-item'
+import { DestinationsCard } from './destinations-card'
 import { formatDate, formatMoney, formatMonth, formatRate, pluralize } from '@/lib/format'
 import { countryName } from '@/lib/labels'
 
@@ -67,6 +70,7 @@ export function DashboardPage() {
 
 function DashboardContent({ data }: { data: Dashboard }) {
   const { objective, progress, expenses, exchangeRate } = data
+  const [saving, setSaving] = useState(false)
 
   if (!objective || !progress) {
     return (
@@ -83,7 +87,7 @@ function DashboardContent({ data }: { data: Dashboard }) {
             }
           />
         </Card>
-        <div className="grid gap-5 lg:grid-cols-2">
+        <div className="grid gap-5 @4xl:grid-cols-2">
           <BalancesCard data={data} />
           <ExchangeCard rate={exchangeRate} />
         </div>
@@ -101,10 +105,17 @@ function DashboardContent({ data }: { data: Dashboard }) {
 
   return (
     <div className="grid gap-5">
+      {saving && (
+        <SavingsDialog
+          objectiveId={objective.id}
+          objectiveCurrency={progress.currency}
+          onClose={() => setSaving(false)}
+        />
+      )}
       {/* Hero do objetivo */}
       <Card className="overflow-hidden">
-        <div className="grid gap-6 p-5 sm:p-7 md:grid-cols-[auto_1fr] md:items-center md:gap-10">
-          <ProgressRing percent={emptyTarget ? 0 : progress.percentComplete} className="mx-auto md:mx-0" />
+        <div className="grid gap-6 p-5 sm:p-7 @2xl:grid-cols-[auto_1fr] @2xl:items-center @2xl:gap-10">
+          <ProgressRing percent={emptyTarget ? 0 : progress.percentComplete} className="mx-auto @2xl:mx-0" />
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <Link to={`/objectives/${objective.id}`} className="font-semibold hover:underline">
@@ -122,8 +133,8 @@ function DashboardContent({ data }: { data: Dashboard }) {
                   Sua meta ainda está vazia
                 </p>
                 <p className="mt-2 text-sm text-muted">
-                  A meta é a soma dos gastos do objetivo. Cadastre os principais (passagem, visto, aluguel)
-                  para ver quanto falta.
+                  A meta é a soma dos gastos dos ciclos Preparação e Imigração (ajustável em Configurações).
+                  Cadastre os principais (passagem, visto, seguro) para ver quanto falta.
                 </p>
                 <Button asChild size="sm" className="mt-4">
                   <Link to="/expenses">Cadastrar gastos</Link>
@@ -158,13 +169,16 @@ function DashboardContent({ data }: { data: Dashboard }) {
                 <ProjectionLine objectiveId={objective.id} />
               </>
             )}
+            <Button size="sm" variant="outline" className="mt-4" onClick={() => setSaving(true)}>
+              <PiggyBank aria-hidden /> Guardar dinheiro
+            </Button>
           </div>
         </div>
         <div className="grid grid-cols-2 border-t border-border sm:grid-cols-4">
           <HeroStat
             label="Meta"
             value={formatMoney(progress.target)}
-            hint={progress.targetMode === 'MANUAL' ? 'valor fixo' : 'pelos gastos'}
+            hint={progress.targetMode === 'MANUAL' ? 'valor fixo' : 'pelos ciclos na meta'}
           />
           <HeroStat label="Mobilizado" value={formatMoney(progress.mobilized)} hint="pago + contas" />
           <HeroStat label="Já pago" value={formatMoney(progress.paid)} />
@@ -174,7 +188,9 @@ function DashboardContent({ data }: { data: Dashboard }) {
 
       {expenses && expenses.totals.count > 0 && <ScopeGoalsCard progress={progress} />}
 
-      <div className="grid gap-5 lg:grid-cols-[1.4fr_1fr]">
+      <DestinationsCard />
+
+      <div className="grid gap-5 @4xl:grid-cols-[1.4fr_1fr]">
         {/* Gastos */}
         <Card>
           <CardHeader>
@@ -423,7 +439,7 @@ function DashboardSkeleton() {
   return (
     <div className="grid gap-5" aria-busy>
       <Skeleton className="h-72 rounded-card" />
-      <div className="grid gap-5 lg:grid-cols-[1.4fr_1fr]">
+      <div className="grid gap-5 @4xl:grid-cols-[1.4fr_1fr]">
         <Skeleton className="h-80 rounded-card" />
         <Skeleton className="h-80 rounded-card" />
       </div>

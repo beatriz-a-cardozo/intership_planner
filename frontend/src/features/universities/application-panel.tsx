@@ -117,7 +117,7 @@ export function ApplicationPanel({ applicationId }: { applicationId: string }) {
   const a = application.data
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="grid gap-6 @4xl:grid-cols-2">
       <Card>
         <CardHeader className="items-center">
           <CardTitle>
@@ -431,7 +431,7 @@ function RequestsCard({ applicationId }: { applicationId: string }) {
     )
 
   return (
-    <Card className="lg:col-span-2">
+    <Card className="@4xl:col-span-2">
       <CardHeader className="items-center">
         <div>
           <CardTitle>Solicitações da universidade</CardTitle>

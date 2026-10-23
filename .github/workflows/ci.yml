@@ -18,6 +18,7 @@ jobs:
   backend:
     name: Backend (mvn verify + Testcontainers)
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: backend
@@ -48,6 +49,7 @@ jobs:
   frontend:
     name: Frontend (lint, typecheck, test, build)
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     needs: backend
     defaults:
       run:
@@ -76,6 +78,8 @@ jobs:
   e2e:
     name: E2E (Playwright + axe) na imagem de deploy
     runs-on: ubuntu-latest
+    # sem limite, um passo travado (ex.: apt do --with-deps) segura o job por até 6 h
+    timeout-minutes: 30
     needs: frontend
     services:
       postgres:
@@ -111,6 +115,7 @@ jobs:
         working-directory: frontend
       - run: npx playwright install --with-deps chromium
         working-directory: frontend
+        timeout-minutes: 10
       - run: npm run e2e
         working-directory: frontend
         env:

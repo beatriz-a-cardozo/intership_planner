@@ -173,7 +173,7 @@ export function AppShell() {
         </header>
         <main
           id="conteudo"
-          className="mx-auto w-full max-w-6xl flex-1 px-4 pb-28 pt-6 sm:px-6 lg:px-10 lg:pb-12 lg:pt-10"
+          className="@container mx-auto w-full max-w-6xl flex-1 px-4 pb-28 pt-6 sm:px-6 lg:px-10 lg:pb-12 lg:pt-10"
         >
           <Outlet />
         </main>

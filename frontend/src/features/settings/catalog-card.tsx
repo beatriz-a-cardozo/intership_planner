@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Archive, Pencil, Plus, Trash2 } from 'lucide-react'
+import { Archive, Pencil, Plus, Target, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -27,9 +27,9 @@ import {
 import { CATALOG_COLORS, CATALOG_ICONS } from '@/lib/catalog'
 import { cn } from '@/lib/utils'
 
-const LABELS: Record<CatalogKind, { singular: string; plural: string }> = {
-  categories: { singular: 'categoria', plural: 'Categorias' },
-  cycles: { singular: 'ciclo', plural: 'Ciclos' },
+const LABELS: Record<CatalogKind, { singular: string; plural: string; novo: string }> = {
+  categories: { singular: 'categoria', plural: 'Categorias', novo: 'Nova' },
+  cycles: { singular: 'ciclo', plural: 'Ciclos', novo: 'Novo' },
 }
 
 /** Categorias e ciclos de gasto: tudo editável; o que está em uso pode ser arquivado. */
@@ -45,7 +45,11 @@ export function CatalogCard() {
       <CardHeader className="flex-col gap-3 sm:flex-row sm:items-center">
         <div className="flex-1">
           <CardTitle>Categorias e ciclos de gasto</CardTitle>
-          <CardDescription>Ajuste nomes, cores e ícones. Itens em uso podem ser arquivados.</CardDescription>
+          <CardDescription>
+            {kind === 'cycles'
+              ? 'Os ciclos marcados “Na meta” formam o valor necessário do objetivo (padrão: Preparação e Imigração).'
+              : 'Ajuste nomes, cores e ícones. Itens em uso podem ser arquivados.'}
+          </CardDescription>
         </div>
         <SegmentedControl
           ariaLabel="Tipo de catálogo"
@@ -75,6 +79,11 @@ export function CatalogCard() {
                 >
                   <CatalogIcon icon={item.icon} color={item.color} size="sm" />
                   <span className="min-w-0 flex-1 truncate text-sm">{item.name}</span>
+                  {item.inGoal && (
+                    <Badge tone="primary">
+                      <Target className="size-3" aria-hidden /> Na meta
+                    </Badge>
+                  )}
                   {item.archived && (
                     <Badge>
                       <Archive className="size-3" aria-hidden /> Arquivado
@@ -100,7 +109,7 @@ export function CatalogCard() {
               ))}
             </ul>
             <Button variant="outline" className="mt-4" onClick={() => setEditing('new')}>
-              <Plus aria-hidden /> Nova {LABELS[kind].singular}
+              <Plus aria-hidden /> {LABELS[kind].novo} {LABELS[kind].singular}
             </Button>
           </>
         )}
@@ -142,6 +151,7 @@ const schema = z.object({
   color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
   icon: z.string().min(1),
   archived: z.boolean(),
+  inGoal: z.boolean(),
 })
 type Form = z.infer<typeof schema>
 
@@ -171,6 +181,7 @@ function CatalogItemDialog({
       color: item?.color ?? CATALOG_COLORS[0]!,
       icon: item?.icon ?? 'tag',
       archived: item?.archived ?? false,
+      inGoal: item?.inGoal ?? false,
     },
   })
 
@@ -184,6 +195,7 @@ function CatalogItemDialog({
           icon: v.icon,
           archived: v.archived,
           sortOrder: item?.sortOrder ?? nextOrder,
+          inGoal: kind === 'cycles' ? v.inGoal : undefined,
         },
       },
       {
@@ -197,7 +209,7 @@ function CatalogItemDialog({
     <ResponsiveDialog
       open
       onOpenChange={onOpenChange}
-      title={item ? `Editar ${LABELS[kind].singular}` : `Nova ${LABELS[kind].singular}`}
+      title={item ? `Editar ${LABELS[kind].singular}` : `${LABELS[kind].novo} ${LABELS[kind].singular}`}
       footer={
         <>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
@@ -271,6 +283,21 @@ function CatalogItemDialog({
             </fieldset>
           )}
         />
+        {kind === 'cycles' && (
+          <Controller
+            control={control}
+            name="inGoal"
+            render={({ field }) => (
+              <SwitchField
+                id="catalog-in-goal"
+                label="Entra na meta"
+                hint="Os gastos deste ciclo somam no valor necessário do objetivo."
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
+            )}
+          />
+        )}
         {item && (
           <Controller
             control={control}

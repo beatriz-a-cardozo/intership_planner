@@ -104,6 +104,12 @@ app:
     # geração diária (deduplicada: rodar de novo não repete avisos)
     cron: ${NOTIFICATIONS_CRON:0 0 8 * * *}
     zone: ${NOTIFICATIONS_ZONE:America/Sao_Paulo}
+  geocoding:
+    # Coordenadas das cidades das universidades para o mapa (OpenStreetMap Nominatim; vazio = desligado)
+    provider: ${GEOCODING_PROVIDER:nominatim}
+    user-agent: "InterchangePlanner/1.0 (+https://github.com/beatriz-a-cardozo/intership_planner)"
+    nominatim:
+      base-url: https://nominatim.openstreetmap.org
   exchange:
     # Ordem de tentativa: Frankfurter (BCE, diário) e AwesomeAPI (intradiário) como reserva
     providers: ${EXCHANGE_PROVIDERS:frankfurter,awesomeapi}
