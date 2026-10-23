@@ -8,7 +8,7 @@ import { EmptyState } from '@/components/empty-state'
 import { ErrorState } from '@/components/error-state'
 import { PageHeader } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { formatMoney } from '@/lib/format'
 import { countryName, EMPLOYABILITY_LABELS, INSTITUTION_TYPE_LABELS, NATURE_LABELS } from '@/lib/labels'
@@ -81,12 +81,15 @@ export function UniversityDetailPage() {
         />
       )}
 
-      <div className="grid gap-6 lg:grid-cols-[20rem_1fr]">
-        <div className="grid content-start gap-6">
+      <div className="grid gap-6 @4xl:grid-cols-[20rem_1fr]">
+        <section aria-labelledby="about-title" className="grid content-start gap-6">
+          {/* cabeçalho da mesma altura do de "Programas": os cards das duas colunas começam no mesmo nível */}
+          <div className="-mb-3 flex min-h-9 items-center">
+            <h2 id="about-title" className="font-semibold">
+              Sobre
+            </h2>
+          </div>
           <Card>
-            <CardHeader>
-              <CardTitle>Sobre</CardTitle>
-            </CardHeader>
             <CardContent>
               <dl className="grid gap-3 text-sm">
                 {facts.map(([label, value]) => (
@@ -114,10 +117,10 @@ export function UniversityDetailPage() {
             </CardContent>
           </Card>
           <ImageGallery universityId={u.id} universityName={u.name} />
-        </div>
+        </section>
 
         <section aria-labelledby="programs-title">
-          <div className="mb-3 flex items-center justify-between gap-3">
+          <div className="mb-3 flex min-h-9 items-center justify-between gap-3">
             <h2 id="programs-title" className="font-semibold">
               Programas
             </h2>
@@ -134,7 +137,7 @@ export function UniversityDetailPage() {
               />
             </Card>
           ) : (
-            <ul className="grid gap-4 xl:grid-cols-2">
+            <ul className="grid gap-4 @5xl:grid-cols-2">
               {programs.map((p) => (
                 <li key={p.id}>
                   <ProgramCard program={p} />

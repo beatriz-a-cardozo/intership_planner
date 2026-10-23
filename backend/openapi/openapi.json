@@ -61,6 +61,44 @@
         "tags" : [ "Contas e saldos" ]
       }
     },
+    "/api/accounts/savings/{objectiveId}" : {
+      "post" : {
+        "operationId" : "addSavings",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "objectiveId",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SavingsRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccountResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Guarda (ou retira, com valor negativo) dinheiro para o objetivo numa conta vinculada",
+        "tags" : [ "Contas e saldos" ]
+      }
+    },
     "/api/accounts/summary" : {
       "get" : {
         "operationId" : "summary_3",
@@ -1018,15 +1056,7 @@
     "/api/expense-categories/{id}" : {
       "delete" : {
         "operationId" : "delete_5",
-        "parameters" : [ {
-          "in" : "path",
-          "name" : "id",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "format" : "uuid"
-          }
-        } ],
+        "parameters" : [ ],
         "responses" : {
           "200" : {
             "description" : "OK"
@@ -1037,15 +1067,7 @@
       },
       "put" : {
         "operationId" : "update_5",
-        "parameters" : [ {
-          "in" : "path",
-          "name" : "id",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "format" : "uuid"
-          }
-        } ],
+        "parameters" : [ ],
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -1124,15 +1146,7 @@
     "/api/expense-cycles/{id}" : {
       "delete" : {
         "operationId" : "delete_4",
-        "parameters" : [ {
-          "in" : "path",
-          "name" : "id",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "format" : "uuid"
-          }
-        } ],
+        "parameters" : [ ],
         "responses" : {
           "200" : {
             "description" : "OK"
@@ -1143,15 +1157,7 @@
       },
       "put" : {
         "operationId" : "update_4",
-        "parameters" : [ {
-          "in" : "path",
-          "name" : "id",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "format" : "uuid"
-          }
-        } ],
+        "parameters" : [ ],
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -4205,6 +4211,28 @@
         "tags" : [ "Universidades e programas" ]
       }
     },
+    "/api/universities/locations" : {
+      "get" : {
+        "operationId" : "locations",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/MapLocation"
+                  }
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Localidades das universidades com programas escolhidos (mapa do dashboard)",
+        "tags" : [ "Universidades e programas" ]
+      }
+    },
     "/api/universities/{id}" : {
       "delete" : {
         "operationId" : "deleteUniversity",
@@ -5124,6 +5152,9 @@
             "minLength" : 1,
             "pattern" : "[a-z0-9-]{1,40}"
           },
+          "inGoal" : {
+            "type" : "boolean"
+          },
           "name" : {
             "type" : "string",
             "maxLength" : 60,
@@ -5152,6 +5183,10 @@
             "type" : "string",
             "format" : "uuid"
           },
+          "inGoal" : {
+            "type" : [ "boolean", "null" ],
+            "description" : "Só ciclos: os gastos do ciclo entram na meta"
+          },
           "name" : {
             "type" : "string"
           },
@@ -5160,7 +5195,7 @@
             "format" : "int32"
           }
         },
-        "required" : [ "archived", "color", "icon", "id", "name", "sortOrder" ]
+        "required" : [ "archived", "color", "icon", "id", "inGoal", "name", "sortOrder" ]
       },
       "CategoryRef" : {
         "type" : "object",
@@ -6284,6 +6319,57 @@
           }
         },
         "required" : [ "bags", "packedItems", "requiredNotPacked", "totalItems", "totalWeightG", "unallocatedCount", "unallocatedWeightG" ]
+      },
+      "MapLocation" : {
+        "type" : "object",
+        "description" : "Universidade com programas escolhidos; sem coordenadas se a cidade não foi encontrada",
+        "properties" : {
+          "city" : {
+            "type" : [ "string", "null" ]
+          },
+          "countryCode" : {
+            "type" : [ "string", "null" ]
+          },
+          "latitude" : {
+            "type" : [ "number", "null" ]
+          },
+          "longitude" : {
+            "type" : [ "number", "null" ]
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "programs" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MapProgram"
+            }
+          },
+          "region" : {
+            "type" : [ "string", "null" ]
+          },
+          "universityId" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        },
+        "required" : [ "city", "countryCode", "latitude", "longitude", "name", "programs", "region", "universityId" ]
+      },
+      "MapProgram" : {
+        "type" : "object",
+        "properties" : {
+          "degree" : {
+            "type" : [ "string", "null" ]
+          },
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "degree", "id", "name" ]
       },
       "MeResponse" : {
         "type" : "object",
@@ -7600,6 +7686,23 @@
           }
         },
         "required" : [ "amount", "month" ]
+      },
+      "SavingsRequest" : {
+        "type" : "object",
+        "properties" : {
+          "accountId" : {
+            "type" : [ "string", "null" ],
+            "format" : "uuid"
+          },
+          "amount" : {
+            "type" : "number"
+          },
+          "currency" : {
+            "type" : [ "string", "null" ],
+            "pattern" : "[A-Z]{3}"
+          }
+        },
+        "required" : [ "amount" ]
       },
       "ScopeGoal" : {
         "type" : "object",

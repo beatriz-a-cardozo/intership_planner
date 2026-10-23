@@ -11,6 +11,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -94,17 +95,30 @@ public class University extends BaseEntity {
         this.ranking = d.ranking();
         this.institutionType = d.institutionType();
         this.nature = d.nature();
-        this.city = blankToNull(d.city());
-        this.region = blankToNull(d.region());
-        this.countryCode = blankToNull(d.countryCode());
+        String city = blankToNull(d.city());
+        String region = blankToNull(d.region());
+        String countryCode = blankToNull(d.countryCode());
+        // Sem coordenadas no pedido: mantém as já descobertas se o lugar não mudou (o mapa procura de novo se mudou)
+        if (d.latitude() != null && d.longitude() != null) {
+            setCoordinates(d.latitude(), d.longitude());
+        } else if (!Objects.equals(city, this.city) || !Objects.equals(region, this.region)
+                || !Objects.equals(countryCode, this.countryCode)) {
+            setCoordinates(null, null);
+        }
+        this.city = city;
+        this.region = region;
+        this.countryCode = countryCode;
         this.population = d.population();
-        this.latitude = d.latitude();
-        this.longitude = d.longitude();
         this.costOfLivingAmount = d.costOfLiving() == null ? null : d.costOfLiving().amount();
         this.costOfLivingCurrency = d.costOfLiving() == null ? null : d.costOfLiving().currency();
         this.employability = d.employability();
         this.website = blankToNull(d.website());
         this.notes = blankToNull(d.notes());
+    }
+
+    public void setCoordinates(BigDecimal latitude, BigDecimal longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     static String blankToNull(String v) {

@@ -9,10 +9,13 @@ import com.interchangeplanner.finance.account.api.AccountResponse;
 import com.interchangeplanner.finance.account.api.AccountsSummaryResponse;
 import com.interchangeplanner.finance.account.api.BalanceRequest;
 import com.interchangeplanner.finance.account.api.BalanceSnapshotResponse;
+import com.interchangeplanner.finance.account.api.SavingsRequest;
 import com.interchangeplanner.finance.account.domain.Account;
 import com.interchangeplanner.finance.account.domain.AccountBalanceSnapshot;
 import com.interchangeplanner.finance.account.domain.AccountBalanceSnapshotRepository;
 import com.interchangeplanner.finance.account.domain.AccountRepository;
+import com.interchangeplanner.finance.account.domain.AccountType;
+import com.interchangeplanner.objective.domain.Objective;
 import com.interchangeplanner.objective.application.ObjectiveService;
 import com.interchangeplanner.shared.error.BusinessRuleException;
 import com.interchangeplanner.shared.error.NotFoundException;
@@ -33,6 +36,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AccountService {
+
+    /** Conta criada no onboarding e ao guardar dinheiro sem escolher conta. */
+    public static final String SAVINGS_ACCOUNT_NAME = "Reserva do intercâmbio";
 
     private final AccountRepository accounts;
     private final AccountBalanceSnapshotRepository snapshots;
@@ -108,6 +114,48 @@ public class AccountService {
                 })
                 .orElseGet(() -> snapshots.save(new AccountBalanceSnapshot(accountId, asOf, request.balance())));
         return toResponse(snapshot, account.getCurrency());
+    }
+
+    /**
+     * "Guardar para o intercâmbio": soma o valor (ou subtrai, se negativo) ao saldo de hoje de uma conta vinculada ao
+     * objetivo. Sem conta escolhida, usa a primeira ativa na moeda ou cria a {@value #SAVINGS_ACCOUNT_NAME}.
+     */
+    @Transactional
+    public AccountResponse addSavings(UUID userId, UUID objectiveId, SavingsRequest request) {
+        Objective objective = objectives.requireOwned(userId, objectiveId);
+        if (request.amount().signum() == 0) {
+            throw new BusinessRuleException("Informe um valor diferente de zero.", "amount");
+        }
+        Account account = request.accountId() != null
+                ? linkedAccount(userId, objectiveId, request.accountId())
+                : savingsAccountFor(userId, objective,
+                        request.currency() != null ? request.currency() : objective.getCurrency());
+        AccountWithBalance current = withBalances(List.of(account)).getFirst();
+        Money updated = current.balance().plus(Money.of(request.amount(), account.getCurrency()));
+        if (updated.amount().signum() < 0) {
+            throw new BusinessRuleException("A retirada é maior que o saldo da conta.", "amount");
+        }
+        recordBalance(userId, account.getId(), new BalanceRequest(null, updated.amount()));
+        return toResponse(withBalances(List.of(account)).getFirst());
+    }
+
+    private Account linkedAccount(UUID userId, UUID objectiveId, UUID accountId) {
+        Account account = require(userId, accountId);
+        if (account.isArchived() || !objectiveId.equals(account.getObjectiveId())) {
+            throw new BusinessRuleException("Escolha uma conta ativa vinculada a este objetivo.", "accountId");
+        }
+        return account;
+    }
+
+    private Account savingsAccountFor(UUID userId, Objective objective, String currency) {
+        if (!currencies.isSupported(currency)) {
+            throw new BusinessRuleException("Moeda não suportada.", "currency");
+        }
+        return accounts.findByUserIdAndObjectiveIdAndArchivedFalse(userId, objective.getId()).stream()
+                .filter(a -> a.getCurrency().equals(currency))
+                .findFirst()
+                .orElseGet(() -> accounts.save(new Account(userId, SAVINGS_ACCOUNT_NAME, currency, AccountType.SAVINGS,
+                        objective.getId())));
     }
 
     @Transactional(readOnly = true)

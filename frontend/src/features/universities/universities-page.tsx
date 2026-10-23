@@ -185,7 +185,7 @@ function ProgramsTab({ onCreate }: { onCreate: () => void }) {
       </div>
 
       {programs.isPending ? (
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 @2xl:grid-cols-2">
           <Skeleton className="h-48 rounded-card" />
           <Skeleton className="h-48 rounded-card" />
         </div>
@@ -211,7 +211,7 @@ function ProgramsTab({ onCreate }: { onCreate: () => void }) {
           )}
         </Card>
       ) : layout === 'cards' ? (
-        <ul className="grid gap-4 md:grid-cols-2">
+        <ul className="grid gap-4 @2xl:grid-cols-2">
           {programs.data.map((p) => (
             <li key={p.id}>
               <ProgramCard
@@ -227,7 +227,7 @@ function ProgramsTab({ onCreate }: { onCreate: () => void }) {
       )}
 
       {selected.length > 0 && (
-        <div className="sticky bottom-20 z-20 mt-5 flex items-center justify-between gap-3 rounded-card border border-border bg-surface p-3 shadow-card md:bottom-4">
+        <div className="sticky bottom-20 z-20 mt-5 flex items-center justify-between gap-3 rounded-card border border-border bg-surface p-3 shadow-card lg:bottom-4">
           <p className="text-sm">
             <span className="font-medium">{selected.length}</span> de {MAX_COMPARE} selecionados
             {selected.length < 2 && <span className="text-muted"> · escolha ao menos 2</span>}

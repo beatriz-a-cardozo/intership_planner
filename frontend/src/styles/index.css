@@ -92,6 +92,15 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-feature-settings: 'cv11', 'ss01';
+    /* palavras longas sem espaço ("Diploma/Certificado", URLs) quebram em vez de invadir o vizinho */
+    overflow-wrap: break-word;
+  }
+  /*
+   * Itens de grid não encolhem abaixo do próprio conteúdo por padrão (min-width: auto): um texto com `truncate`
+   * empurrava listas e tabelas para fora dos cards. :where() mantém especificidade zero (min-w-* ainda vence).
+   */
+  :where(.grid) > * {
+    min-width: 0;
   }
   /* Números financeiros sempre tabulares para alinhar colunas. */
   .tabular {
@@ -109,4 +118,19 @@
       transition-duration: 0.01ms !important;
     }
   }
+}
+
+/* Mapa (Leaflet): os z-index internos (até 1000) ficam presos ao card, sem cobrir cabeçalho e diálogos */
+.locations-map {
+  isolation: isolate;
+  z-index: 0;
+  font: inherit;
+}
+.locations-map .leaflet-tooltip {
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+/* No escuro, os tiles claros do OpenStreetMap viram um mapa escuro sem trocar de provedor */
+.dark .locations-map .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9);
 }

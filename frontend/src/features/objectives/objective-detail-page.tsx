@@ -1,4 +1,4 @@
-import { ArrowLeft, MapPin, Pencil, Star, Trash2 } from 'lucide-react'
+import { ArrowLeft, MapPin, Pencil, PiggyBank, Star, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
+import { SavingsDialog } from '@/features/finance/savings-dialog'
 import { formatDate, formatMoney, pluralize } from '@/lib/format'
 import { countryName, EXPENSE_SCOPE_LABELS } from '@/lib/labels'
 import { AdjustmentsCard } from './adjustments-card'
@@ -29,6 +30,7 @@ export function ObjectiveDetailPage() {
   const navigate = useNavigate()
   const [editing, setEditing] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   if (objective.isPending) return <Skeleton className="h-96 rounded-card" />
   if (objective.isError) {
@@ -55,6 +57,9 @@ export function ObjectiveDetailPage() {
         description={o.description ?? undefined}
         actions={
           <>
+            <Button onClick={() => setSaving(true)}>
+              <PiggyBank aria-hidden /> Guardar dinheiro
+            </Button>
             {!o.primary && (
               <Button
                 variant="outline"
@@ -103,7 +108,7 @@ export function ObjectiveDetailPage() {
         <span>· {pluralize(o.horizonMonths, 'mês', 'meses')} de duração</span>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[1.2fr_1fr]">
+      <div className="grid gap-5 @4xl:grid-cols-[1.2fr_1fr]">
         <Card>
           <CardHeader className="flex-col">
             <CardTitle>Progresso</CardTitle>
@@ -135,6 +140,9 @@ export function ObjectiveDetailPage() {
       )}
 
       {editing && <ObjectiveFormDialog open onOpenChange={setEditing} objective={o} />}
+      {saving && (
+        <SavingsDialog objectiveId={o.id} objectiveCurrency={o.currency} onClose={() => setSaving(false)} />
+      )}
       <ConfirmDialog
         open={deleting}
         onOpenChange={setDeleting}

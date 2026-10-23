@@ -117,7 +117,7 @@ export function TimelinePage() {
               >
                 {formatMonth(month)}
               </h2>
-              <ol className="relative grid gap-4 before:absolute before:top-2 before:bottom-2 before:left-[1.6rem] before:w-0.5 before:rounded-full before:bg-primary/25 lg:before:left-1/2 lg:before:-translate-x-1/2">
+              <ol className="relative grid gap-4 before:absolute before:top-2 before:bottom-2 before:left-[1.6rem] before:w-0.5 before:rounded-full before:bg-primary/25 @4xl:before:left-1/2 @4xl:before:-translate-x-1/2">
                 {list.map((item, i) => (
                   <TimelineRow
                     key={item.id}
@@ -219,7 +219,7 @@ function TimelineRow({
     <li
       className={cn(
         'relative grid grid-cols-[3.25rem_1fr] items-start gap-3',
-        'lg:grid-cols-[1fr_4rem_1fr] lg:gap-6',
+        '@4xl:grid-cols-[1fr_4rem_1fr] @4xl:gap-6',
       )}
     >
       {/* data em numeral grande, na espinha */}
@@ -227,7 +227,7 @@ function TimelineRow({
         className={cn(
           'relative z-10 grid place-items-center rounded-2xl border-2 bg-background py-1.5 text-center',
           isToday ? 'border-primary' : 'border-transparent',
-          'lg:col-start-2 lg:row-start-1',
+          '@4xl:col-start-2 @4xl:row-start-1',
         )}
       >
         <span className="font-display text-2xl leading-none font-semibold tabular">{d}</span>
@@ -235,7 +235,7 @@ function TimelineRow({
           {WEEKDAY.format(new Date(y!, m! - 1, d!)).replace('.', '')}
         </span>
       </div>
-      <div className={cn('min-w-0 lg:row-start-1', side === 'left' ? 'lg:col-start-1' : 'lg:col-start-3')}>
+      <div className={cn('min-w-0 @4xl:row-start-1', side === 'left' ? '@4xl:col-start-1' : '@4xl:col-start-3')}>
         {item.source === 'EVENT' ? (
           <button type="button" className={cn(cardClass, 'w-full')} onClick={onEdit}>
             {body}

@@ -55,7 +55,7 @@ export function ApplicationsPage() {
       />
 
       {applications.isPending ? (
-        <div className="grid gap-4 lg:grid-cols-4">
+        <div className="grid gap-4 @4xl:grid-cols-4">
           {COLUMNS.map((c) => (
             <Skeleton key={c.key} className="h-48 rounded-card" />
           ))}
@@ -78,14 +78,14 @@ export function ApplicationsPage() {
           />
         </Card>
       ) : (
-        <div className="grid gap-6 lg:grid-cols-4 lg:gap-4">
+        <div className="grid gap-6 @4xl:grid-cols-4 @4xl:gap-4">
           {COLUMNS.map((col) => {
             const items = applications.data.filter((a) => col.statuses.includes(a.status))
             return (
               <section
                 key={col.key}
                 aria-labelledby={`col-${col.key}`}
-                className="min-w-0 lg:rounded-card lg:bg-surface-2/60 lg:p-3"
+                className="min-w-0 @4xl:rounded-card @4xl:bg-surface-2/60 @4xl:p-3"
               >
                 <header className="mb-3 flex items-baseline justify-between gap-2 px-1">
                   <h2 id={`col-${col.key}`} className="text-sm font-semibold">

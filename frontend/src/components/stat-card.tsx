@@ -15,7 +15,7 @@ interface StatCardProps {
 /** Indicador único: rótulo, número grande e uma linha de contexto. */
 export function StatCard({ label, value, hint, icon: Icon, tone = 'default', className }: StatCardProps) {
   return (
-    <Card className={cn('p-4 sm:p-5', className)}>
+    <Card className={cn('@container p-4 sm:p-5', className)}>
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs font-medium uppercase tracking-[0.1em] text-muted">{label}</p>
         {Icon && (
@@ -33,7 +33,10 @@ export function StatCard({ label, value, hint, icon: Icon, tone = 'default', cla
           </span>
         )}
       </div>
-      <p className="mt-2 text-2xl font-semibold tabular tracking-tight">{value}</p>
+      {/* o tamanho acompanha a largura do card: em 2 colunas no celular, "R$ 347.893,28" ainda cabe inteiro */}
+      <p className="mt-2 text-base font-semibold tabular tracking-tight [overflow-wrap:anywhere] @[9rem]:text-lg @[11rem]:text-xl @[14rem]:text-2xl">
+        {value}
+      </p>
       {hint && <div className="mt-1 text-xs text-muted">{hint}</div>}
     </Card>
   )

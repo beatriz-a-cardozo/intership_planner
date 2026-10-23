@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OnboardingService {
 
-    static final String SAVINGS_ACCOUNT_NAME = "Reserva do intercâmbio";
+    static final String SAVINGS_ACCOUNT_NAME = AccountService.SAVINGS_ACCOUNT_NAME;
 
     private final ObjectiveService objectives;
     private final AccountService accounts;

@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/api/client'
 import { invalidateUniversities, qk } from '@/api/query-keys'
 import type {
+  MapLocation,
   Application,
   ApplicationCreateRequest,
   ApplicationStatus,
@@ -35,6 +36,15 @@ function useUniMutation<TVars, TResult>(fn: (vars: TVars) => Promise<TResult>) {
 }
 
 // ------------------------------------------------------------------ universidades
+
+/** Universidades com programas escolhidos, para o mapa do dashboard (coordenadas descobertas pelo backend). */
+export function useUniversityLocations() {
+  return useQuery({
+    queryKey: qk.universityLocations,
+    queryFn: () => api.get<MapLocation[]>('/api/universities/locations'),
+    staleTime: 5 * 60_000,
+  })
+}
 
 export function useUniversities(params: { q?: string } = {}) {
   return useQuery({

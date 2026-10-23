@@ -11,5 +11,7 @@ public record CatalogRequest(
         String color,
         @NotBlank(message = "Escolha um ícone.") @Pattern(regexp = "[a-z0-9-]{1,40}", message = "Ícone inválido.") String icon,
         Integer sortOrder,
-        Boolean archived) {
+        Boolean archived,
+        /** Só para ciclos: os gastos do ciclo entram na meta. Nulo mantém o valor atual (ou falso ao criar). */
+        Boolean inGoal) {
 }

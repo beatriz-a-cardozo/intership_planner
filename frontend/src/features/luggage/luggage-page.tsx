@@ -121,7 +121,7 @@ export function LuggagePage() {
               />
             </div>
 
-            <div className="grid gap-5 lg:grid-cols-2">
+            <div className="grid gap-5 @4xl:grid-cols-2">
               {s.bags.map((bag) => (
                 <BagCard
                   key={bag.id}

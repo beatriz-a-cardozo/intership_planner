@@ -2,6 +2,30 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões por fase do plano.
 
+## [1.1.0] — Ajustes: meta por ciclos, mapa, guardar dinheiro e responsividade — 2026-10-23
+
+### Adicionado
+- **Mapa dos destinos** no dashboard: universidades dos programas marcados como "Escolhida" (Leaflet + OpenStreetMap,
+  tiles escuros no tema escuro) com a lista ao lado. As coordenadas são descobertas pela cidade (Nominatim, no
+  máximo 1 consulta/s) e gravadas; editar a universidade sem mudar a cidade mantém as coordenadas.
+- **Guardar dinheiro** no dashboard e no objetivo: soma (ou retira) do saldo de hoje de uma conta vinculada, criando
+  a "Reserva do intercâmbio" quando não há conta na moeda.
+- Migration `V12__goal_cycles`: ciclos com "entra na meta".
+
+### Alterado
+- **Meta só com os ciclos de Preparação e Imigração** (configurável por ciclo em Configurações → Ciclos). Vale para a
+  meta derivada e para as metas obrigatória e completa.
+- **Responsividade:** os layouts das páginas reagem à largura da área de conteúdo (container queries), não da janela:
+  com a barra lateral aberta, telas de 1024 px ficam em uma coluna em vez de duas colunas espremidas. Itens de grid
+  podem encolher (listas e nomes longos não saem mais dos cards), palavras longas quebram, cabeçalhos com ações
+  quebram linha, valores dos indicadores se ajustam ao card e as parcelas descem valor e ações para a linha de baixo
+  no celular.
+- Página da universidade: "Sobre" e "Programas" com cabeçalhos da mesma altura, cards alinhados.
+
+### Corrigido
+- Barra de comparação de programas não cobre mais a navegação inferior entre 768 e 1024 px.
+- "Novo ciclo" (era "Nova ciclo") em Configurações.
+
 ## [1.0.0] — Fase 10: Polimento e deploy — 2026-10-22
 
 ### Adicionado

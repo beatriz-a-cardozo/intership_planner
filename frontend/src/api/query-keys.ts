@@ -35,6 +35,7 @@ export const qk = {
   applicationHistory: (id: string) => ['applications', 'history', id] as const,
   applicationRequests: (id: string) => ['applications', 'requests', id] as const,
   universityImages: (id: string) => ['universities', 'images', id] as const,
+  universityLocations: ['universities', 'locations'] as const,
   imageContent: (universityId: string, imageId: string) => ['image-content', universityId, imageId] as const,
   tasks: (params: object) => ['tasks', params] as const,
   timeline: (params: object) => ['timeline', params] as const,

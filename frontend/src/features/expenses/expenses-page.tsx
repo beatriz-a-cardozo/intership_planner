@@ -190,14 +190,14 @@ function ExpensesView({
 
       {/* Indicadores */}
       {summary.isPending ? (
-        <div className="mb-5 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="mb-5 grid grid-cols-2 gap-4 @4xl:grid-cols-4">
           {[0, 1, 2, 3].map((i) => (
             <Skeleton key={i} className="h-28 rounded-card" />
           ))}
         </div>
       ) : (
         totals && (
-          <div className="mb-5 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div className="mb-5 grid grid-cols-2 gap-4 @4xl:grid-cols-4">
             <StatCard
               label="Total"
               value={formatMoney(totals.total, { compact: totals.total.amount >= 1_000_000 })}
@@ -219,8 +219,8 @@ function ExpensesView({
         )
       )}
 
-      <div className="grid gap-5 lg:grid-cols-[1fr_1.5fr]">
-        <Card className="lg:sticky lg:top-6 lg:self-start">
+      <div className="grid gap-5 @4xl:grid-cols-[1fr_1.5fr]">
+        <Card className="@4xl:sticky @4xl:top-6 @4xl:self-start">
           <CardHeader className="flex-col gap-3">
             <CardTitle>Distribuição</CardTitle>
             <SegmentedControl

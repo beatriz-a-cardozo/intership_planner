@@ -110,7 +110,7 @@ export function MonthTab() {
       </div>
 
       {summary.isPending ? (
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 @4xl:grid-cols-4">
           {[0, 1, 2, 3].map((i) => (
             <Skeleton key={i} className="h-28 rounded-card" />
           ))}
@@ -137,7 +137,7 @@ export function MonthTab() {
         </div>
       )}
 
-      <div className="grid gap-5 lg:grid-cols-[1.4fr_1fr]">
+      <div className="grid gap-5 @4xl:grid-cols-[1.4fr_1fr]">
         <Card>
           <CardHeader className="flex-col">
             <CardTitle>Receitas × despesas</CardTitle>
@@ -262,7 +262,7 @@ export function MonthTab() {
 
 function SummaryCards({ s, onEditGoal }: { s: MonthlySummary; onEditGoal: () => void }) {
   return (
-    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-4 @4xl:grid-cols-4">
       <StatCard
         label="Receitas"
         value={formatMoney(s.income.total)}

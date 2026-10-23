@@ -22,6 +22,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/accounts/savings/{objectiveId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Guarda (ou retira, com valor negativo) dinheiro para o objetivo numa conta vinculada */
+    post: operations['addSavings']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/accounts/summary': {
     parameters: {
       query?: never
@@ -1547,6 +1564,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/universities/locations': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Localidades das universidades com programas escolhidos (mapa do dashboard) */
+    get: operations['locations']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/universities/{id}': {
     parameters: {
       query?: never
@@ -1896,6 +1930,7 @@ export interface components {
       archived?: boolean
       color: string
       icon: string
+      inGoal?: boolean
       name: string
       /** Format: int32 */
       sortOrder?: number
@@ -1906,6 +1941,8 @@ export interface components {
       icon: string
       /** Format: uuid */
       id: string
+      /** @description Só ciclos: os gastos do ciclo entram na meta */
+      inGoal: boolean | null
       name: string
       /** Format: int32 */
       sortOrder: number
@@ -2306,6 +2343,24 @@ export interface components {
       unallocatedCount: number
       /** Format: int32 */
       unallocatedWeightG: number
+    }
+    /** @description Universidade com programas escolhidos; sem coordenadas se a cidade não foi encontrada */
+    MapLocation: {
+      city: string | null
+      countryCode: string | null
+      latitude: number | null
+      longitude: number | null
+      name: string
+      programs: components['schemas']['MapProgram'][]
+      region: string | null
+      /** Format: uuid */
+      universityId: string
+    }
+    MapProgram: {
+      degree: string | null
+      /** Format: uuid */
+      id: string
+      name: string
     }
     MeResponse: {
       displayName: string
@@ -2753,6 +2808,12 @@ export interface components {
       amount: components['schemas']['MoneyResponse']
       month: string
     }
+    SavingsRequest: {
+      /** Format: uuid */
+      accountId?: string | null
+      amount: number
+      currency?: string | null
+    }
     ScopeGoal: {
       configured: boolean
       mobilized: components['schemas']['MoneyResponse']
@@ -3131,6 +3192,32 @@ export interface operations {
     responses: {
       /** @description Created */
       201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['AccountResponse']
+        }
+      }
+    }
+  }
+  addSavings: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        objectiveId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SavingsRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
         headers: {
           [name: string]: unknown
         }
@@ -3883,9 +3970,7 @@ export interface operations {
     parameters: {
       query?: never
       header?: never
-      path: {
-        id: string
-      }
+      path?: never
       cookie?: never
     }
     requestBody: {
@@ -3909,9 +3994,7 @@ export interface operations {
     parameters: {
       query?: never
       header?: never
-      path: {
-        id: string
-      }
+      path?: never
       cookie?: never
     }
     requestBody?: never
@@ -3973,9 +4056,7 @@ export interface operations {
     parameters: {
       query?: never
       header?: never
-      path: {
-        id: string
-      }
+      path?: never
       cookie?: never
     }
     requestBody: {
@@ -3999,9 +4080,7 @@ export interface operations {
     parameters: {
       query?: never
       header?: never
-      path: {
-        id: string
-      }
+      path?: never
       cookie?: never
     }
     requestBody?: never
@@ -6232,6 +6311,26 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['UniversityResponse']
+        }
+      }
+    }
+  }
+  locations: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['MapLocation'][]
         }
       }
     }

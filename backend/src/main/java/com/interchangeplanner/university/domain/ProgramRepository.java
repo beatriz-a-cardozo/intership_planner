@@ -15,4 +15,6 @@ public interface ProgramRepository extends JpaRepository<Program, UUID> {
     List<Program> findByUserIdAndUniversityIdOrderByNameAsc(UUID userId, UUID universityId);
 
     List<Program> findByUserIdAndIdIn(UUID userId, Collection<UUID> ids);
+
+    List<Program> findByUserIdAndChosenTrueOrderByNameAsc(UUID userId);
 }

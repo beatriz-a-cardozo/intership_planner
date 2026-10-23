@@ -140,7 +140,7 @@ function PreviewStep({
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[1fr_20rem]">
+    <div className="grid gap-5 @4xl:grid-cols-[1fr_20rem]">
       <Card className="min-w-0">
         <CardHeader className="flex-col">
           <CardTitle>Prévia de {preview.fileName}</CardTitle>

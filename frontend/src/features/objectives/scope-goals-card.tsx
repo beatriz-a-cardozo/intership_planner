@@ -21,7 +21,7 @@ export function ScopeGoalsCard({ progress }: { progress: ObjectiveProgress }) {
         <CardTitle>Metas pelos gastos</CardTitle>
         <CardDescription>
           {derived
-            ? 'Quanto você precisa só com o obrigatório e quanto com os opcionais também.'
+            ? 'Só os ciclos que entram na meta (padrão: Preparação e Imigração): o obrigatório e com os opcionais.'
             : 'Sua meta é um valor fixo; estas são as referências calculadas pelos gastos.'}
         </CardDescription>
       </CardHeader>
