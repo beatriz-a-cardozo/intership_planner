@@ -1056,7 +1056,15 @@
     "/api/expense-categories/{id}" : {
       "delete" : {
         "operationId" : "delete_5",
-        "parameters" : [ ],
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
         "responses" : {
           "200" : {
             "description" : "OK"
@@ -1067,7 +1075,15 @@
       },
       "put" : {
         "operationId" : "update_5",
-        "parameters" : [ ],
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -1146,7 +1162,15 @@
     "/api/expense-cycles/{id}" : {
       "delete" : {
         "operationId" : "delete_4",
-        "parameters" : [ ],
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
         "responses" : {
           "200" : {
             "description" : "OK"
@@ -1157,7 +1181,15 @@
       },
       "put" : {
         "operationId" : "update_4",
-        "parameters" : [ ],
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
         "requestBody" : {
           "content" : {
             "application/json" : {

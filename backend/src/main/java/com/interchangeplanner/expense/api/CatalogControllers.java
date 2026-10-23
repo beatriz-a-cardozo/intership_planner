@@ -27,7 +27,11 @@ public final class CatalogControllers {
     private CatalogControllers() {
     }
 
-    abstract static class Base {
+    /**
+     * Pública de propósito: com a base não pública, o javac gera métodos-ponte sintéticos (sem as anotações dos
+     * parâmetros) nas subclasses, e o springdoc documentava ou não o {@code {id}} conforme a ordem da reflexão da JVM.
+     */
+    public abstract static class Base {
 
         private final CatalogService<?> service;
 
