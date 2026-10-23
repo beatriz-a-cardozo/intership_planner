@@ -9,7 +9,7 @@ ARG VITE_API_BASE_URL=""
 ENV VITE_APP_NAME=$VITE_APP_NAME VITE_API_BASE_URL=$VITE_API_BASE_URL
 RUN npm run build
 
-FROM nginx:1.29-alpine
+FROM nginx:1.31-alpine
 # Template processado pelo entrypoint oficial do nginx (envsubst) => BACKEND_URL configurável em runtime
 COPY nginx/default.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build /app/dist /usr/share/nginx/html
