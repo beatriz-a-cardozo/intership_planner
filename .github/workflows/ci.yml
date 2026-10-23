@@ -34,11 +34,11 @@ jobs:
       - run: ./mvnw -B verify
       - name: Contrato OpenAPI versionado está atualizado
         run: git diff --exit-code -- openapi/openapi.json || (echo "::error::openapi.json desatualizado. Rode ./mvnw verify e versione o arquivo." && exit 1)
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         with:
           name: openapi
           path: backend/openapi/openapi.json
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: backend-test-reports
@@ -120,7 +120,7 @@ jobs:
         working-directory: frontend
         env:
           E2E_BASE_URL: http://localhost:8080
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: playwright-report
