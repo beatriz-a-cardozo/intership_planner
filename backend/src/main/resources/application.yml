@@ -27,6 +27,11 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+  servlet:
+    multipart:
+      # imagens de universidades: o serviço limita a 5 MB com mensagem própria; acima disso o servidor recusa (413)
+      max-file-size: 6MB
+      max-request-size: 7MB
 
 server:
   port: ${PORT:8080}
@@ -92,6 +97,13 @@ app:
     allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:}
   jobs:
     enabled: ${APP_JOBS_ENABLED:true}
+  internal:
+    # Token do endpoint /api/internal/jobs/* (cron externo quando a hospedagem "dorme"). Vazio = endpoint desligado.
+    job-token: ${INTERNAL_JOB_TOKEN:}
+  notifications:
+    # geração diária (deduplicada: rodar de novo não repete avisos)
+    cron: ${NOTIFICATIONS_CRON:0 0 8 * * *}
+    zone: ${NOTIFICATIONS_ZONE:America/Sao_Paulo}
   exchange:
     # Ordem de tentativa: Frankfurter (BCE, diário) e AwesomeAPI (intradiário) como reserva
     providers: ${EXCHANGE_PROVIDERS:frankfurter,awesomeapi}

@@ -1,6 +1,6 @@
 import { Filter, Plus, Receipt, Search, Target } from 'lucide-react'
 import { useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useSearchParams } from 'react-router'
 import type { Expense, ExpenseGroupBy, ExpenseStatus, Objective } from '@/api/types'
 import { SplitBarList } from '@/components/charts/split-bar-list'
 import { SplitMeter } from '@/components/charts/split-meter'
@@ -87,7 +87,9 @@ function ExpensesView({
   onObjectiveChange: (id: string) => void
 }) {
   const [groupBy, setGroupBy] = useState<Exclude<ExpenseGroupBy, 'STATUS'>>('CYCLE')
-  const [search, setSearch] = useState('')
+  // a busca global abre /expenses?q=<nome do gasto>
+  const [params] = useSearchParams()
+  const [search, setSearch] = useState(params.get('q') ?? '')
   const [filters, setFilters] = useState<Omit<ExpenseFilters, 'objectiveId' | 'q'>>({})
   const [formFor, setFormFor] = useState<Expense | 'new' | null>(null)
   const [detailId, setDetailId] = useState<string | null>(null)

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 class ExpensesIT extends IntegrationTest {
 
-    static final String TODAY = LocalDate.now().toString();
+    static final String TODAY = LocalDate.now(USER_ZONE).toString();
 
     TestSession bia;
     String objective;
@@ -33,7 +33,7 @@ class ExpensesIT extends IntegrationTest {
     String objectiveFor(TestSession s) throws Exception {
         return read(postAs(s, "/api/objectives", """
                 {"name":"Mestrado","targetDate":"%s","currency":"BRL","targetMode":"DERIVED"}"""
-                .formatted(LocalDate.now().plusMonths(12))).andExpect(status().isCreated()), "$.id");
+                .formatted(LocalDate.now(USER_ZONE).plusMonths(12))).andExpect(status().isCreated()), "$.id");
     }
 
     static String expenseJson(String objective, String category, String cycle, String name, String currency,
@@ -162,7 +162,17 @@ class ExpensesIT extends IntegrationTest {
                     .andExpect(jsonPath("$.adjustments.amount").value(-75000.0))
                     .andExpect(jsonPath("$.target.amount").value(19500.0))
                     .andExpect(jsonPath("$.paid.amount").value(900.0))
-                    .andExpect(jsonPath("$.remaining.amount").value(18600.0));
+                    .andExpect(jsonPath("$.remaining.amount").value(18600.0))
+                    // as duas metas lado a lado: obrigatória (94.500 − 75.000) e completa (95.500 − 75.000)
+                    .andExpect(jsonPath("$.scopeGoals[0].scope").value("REQUIRED_ONLY"))
+                    .andExpect(jsonPath("$.scopeGoals[0].configured").value(true))
+                    .andExpect(jsonPath("$.scopeGoals[0].target.amount").value(19500.0))
+                    .andExpect(jsonPath("$.scopeGoals[0].remaining.amount").value(18600.0))
+                    .andExpect(jsonPath("$.scopeGoals[1].scope").value("ALL"))
+                    .andExpect(jsonPath("$.scopeGoals[1].configured").value(false))
+                    .andExpect(jsonPath("$.scopeGoals[1].plannedExpenses.amount").value(95500.0))
+                    .andExpect(jsonPath("$.scopeGoals[1].target.amount").value(20500.0))
+                    .andExpect(jsonPath("$.scopeGoals[1].remaining.amount").value(19600.0));
         }
 
         @Test

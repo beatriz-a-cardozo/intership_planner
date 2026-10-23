@@ -4,9 +4,11 @@ on:
   push:
     branches: [main]
   pull_request:
+  # reutilizado pelo deploy.yml (o deploy só acontece com o CI verde)
+  workflow_call:
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -70,3 +72,53 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+
+  e2e:
+    name: E2E (Playwright + axe) na imagem de deploy
+    runs-on: ubuntu-latest
+    needs: frontend
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: interchange_planner
+          POSTGRES_USER: e2e
+          POSTGRES_PASSWORD: e2e
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U e2e" --health-interval 5s --health-timeout 3s --health-retries 10
+    steps:
+      - uses: actions/checkout@v5
+      # a mesma imagem que vai para o Render (deploy/Dockerfile), não um ambiente de desenvolvimento
+      - name: Build da imagem única
+        run: docker build -f deploy/Dockerfile -t interchange-planner:e2e .
+      - name: Sobe a aplicação
+        run: |
+          docker run -d --name app --network host -m 512m \
+            -e DB_URL=jdbc:postgresql://localhost:5432/interchange_planner -e DB_USERNAME=e2e -e DB_PASSWORD=e2e \
+            -e JWT_SECRET="$(openssl rand -hex 32)" interchange-planner:e2e
+          for i in $(seq 1 60); do
+            curl -fsS localhost:8080/actuator/health/readiness | grep -q UP && exit 0
+            sleep 3
+          done
+          docker logs app; exit 1
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+        working-directory: frontend
+      - run: npx playwright install --with-deps chromium
+        working-directory: frontend
+      - run: npm run e2e
+        working-directory: frontend
+        env:
+          E2E_BASE_URL: http://localhost:8080
+      - uses: actions/upload-artifact@v5
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            frontend/playwright-report
+            frontend/test-results

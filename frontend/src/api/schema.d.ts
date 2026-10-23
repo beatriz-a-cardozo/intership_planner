@@ -12,10 +12,10 @@ export interface paths {
       cookie?: never
     }
     /** Lista as contas com o saldo mais recente */
-    get: operations['list_4']
+    get: operations['list_7']
     put?: never
     /** Cria uma conta */
-    post: operations['create_4']
+    post: operations['create_7']
     delete?: never
     options?: never
     head?: never
@@ -30,7 +30,7 @@ export interface paths {
       cookie?: never
     }
     /** Saldos por moeda e total convertido para a moeda principal */
-    get: operations['summary_1']
+    get: operations['summary_3']
     put?: never
     post?: never
     delete?: never
@@ -48,10 +48,10 @@ export interface paths {
     }
     get?: never
     /** Atualiza uma conta (a moeda não muda) */
-    put: operations['update_4']
+    put: operations['update_7']
     post?: never
     /** Exclui a conta e seu histórico de saldos */
-    delete: operations['delete_4']
+    delete: operations['delete_7']
     options?: never
     head?: never
     patch?: never
@@ -73,6 +73,113 @@ export interface paths {
     options?: never
     head?: never
     patch?: never
+    trace?: never
+  }
+  '/api/applications': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Lista candidaturas (ativas por padrão) */
+    get: operations['list_6']
+    put?: never
+    /** Cria candidatura (padrão: próximo ciclo do programa) */
+    post: operations['create_6']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/applications/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Detalhe da candidatura */
+    get: operations['get_3']
+    /** Edita datas, estimativa de resposta e observações */
+    put: operations['update_6']
+    post?: never
+    /** Exclui a candidatura e seu histórico */
+    delete: operations['delete_6']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/applications/{id}/history': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Histórico de status */
+    get: operations['history_2']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/applications/{id}/requests': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Solicitações da universidade */
+    get: operations['requests']
+    put?: never
+    /** Registra uma solicitação (pendente => status "Solicitado item") */
+    post: operations['createRequest']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/applications/{id}/requests/{requestId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Atualiza (ex.: marca como atendida) */
+    put: operations['updateRequest']
+    post?: never
+    /** Remove a solicitação */
+    delete: operations['deleteRequest']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/applications/{id}/status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    /** Muda o status (registra no histórico) */
+    patch: operations['changeStatus_1']
     trace?: never
   }
   '/api/auth/login': {
@@ -119,7 +226,7 @@ export interface paths {
     get?: never
     put?: never
     /** Renova o access token usando o cookie de refresh (rotativo) */
-    post: operations['refresh']
+    post: operations['refresh_1']
     delete?: never
     options?: never
     head?: never
@@ -151,7 +258,7 @@ export interface paths {
       cookie?: never
     }
     /** Lista as moedas suportadas */
-    get: operations['list_5']
+    get: operations['list_9']
     put?: never
     post?: never
     delete?: never
@@ -172,6 +279,42 @@ export interface paths {
     put?: never
     post?: never
     delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/exchange-rate-alerts': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Alertas de câmbio */
+    get: operations['alerts']
+    put?: never
+    /** Cria alerta de câmbio (avaliado na hora e a cada atualização de cotação) */
+    post: operations['createAlert']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/exchange-rate-alerts/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Edita alerta (rearma) */
+    put: operations['updateAlert']
+    post?: never
+    /** Exclui alerta */
+    delete: operations['deleteAlert']
     options?: never
     head?: never
     patch?: never
@@ -237,10 +380,10 @@ export interface paths {
       cookie?: never
     }
     /** Lista (inclui arquivados) */
-    get: operations['list_3']
+    get: operations['list_5']
     put?: never
     /** Cria */
-    post: operations['create_3']
+    post: operations['create_5']
     delete?: never
     options?: never
     head?: never
@@ -256,10 +399,10 @@ export interface paths {
     }
     get?: never
     /** Atualiza (inclusive arquivar) */
-    put: operations['update_3']
+    put: operations['update_5']
     post?: never
     /** Exclui (409 se estiver em uso) */
-    delete: operations['delete_3']
+    delete: operations['delete_5']
     options?: never
     head?: never
     patch?: never
@@ -273,10 +416,10 @@ export interface paths {
       cookie?: never
     }
     /** Lista (inclui arquivados) */
-    get: operations['list_2']
+    get: operations['list_4']
     put?: never
     /** Cria */
-    post: operations['create_2']
+    post: operations['create_4']
     delete?: never
     options?: never
     head?: never
@@ -292,10 +435,10 @@ export interface paths {
     }
     get?: never
     /** Atualiza (inclusive arquivar) */
-    put: operations['update_2']
+    put: operations['update_4']
     post?: never
     /** Exclui (409 se estiver em uso) */
-    delete: operations['delete_2']
+    delete: operations['delete_4']
     options?: never
     head?: never
     patch?: never
@@ -309,10 +452,10 @@ export interface paths {
       cookie?: never
     }
     /** Lista gastos do objetivo (padrão: principal), com filtros */
-    get: operations['list_1']
+    get: operations['list_3']
     put?: never
     /** Cria um gasto */
-    post: operations['create_1']
+    post: operations['create_3']
     delete?: never
     options?: never
     head?: never
@@ -329,7 +472,7 @@ export interface paths {
     get?: never
     put?: never
     /** Calcula ocorrências e total sem salvar (formulário em tempo real) */
-    post: operations['preview']
+    post: operations['preview_1']
     delete?: never
     options?: never
     head?: never
@@ -344,7 +487,7 @@ export interface paths {
       cookie?: never
     }
     /** Totais e agrupamento por ciclo, categoria, periodicidade ou status */
-    get: operations['summary']
+    get: operations['summary_2']
     put?: never
     post?: never
     delete?: never
@@ -361,12 +504,12 @@ export interface paths {
       cookie?: never
     }
     /** Detalhe do gasto com pagamentos */
-    get: operations['get_1']
+    get: operations['get_2']
     /** Atualiza um gasto */
-    put: operations['update_1']
+    put: operations['update_3']
     post?: never
     /** Exclui o gasto e seus pagamentos */
-    delete: operations['delete_1']
+    delete: operations['delete_3']
     options?: never
     head?: never
     patch?: never
@@ -441,6 +584,428 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/finance/categories': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Categorias de receita e despesa */
+    get: operations['categories']
+    put?: never
+    /** Cria categoria */
+    post: operations['createCategory']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/finance/categories/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Atualiza categoria (inclusive arquivar) */
+    put: operations['updateCategory']
+    post?: never
+    /** Exclui categoria (409 se em uso) */
+    delete: operations['deleteCategory']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/finance/commitments': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Parcelas e recorrências previstas nos próximos meses */
+    get: operations['commitments']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/finance/installment-plans': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Parcelamentos com parcelas e situação */
+    get: operations['installmentPlans']
+    put?: never
+    /** Cria parcelamento e gera as parcelas previstas */
+    post: operations['createInstallmentPlan']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/finance/installment-plans/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Detalhe do parcelamento */
+    get: operations['installmentPlan']
+    /** Edita (regenera só as parcelas em aberto) */
+    put: operations['updateInstallmentPlan']
+    post?: never
+    /** Exclui (parcelas confirmadas ficam como histórico) */
+    delete: operations['deleteInstallmentPlan']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/finance/overview': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Série mensal para gráficos (padrão: 5 meses atrás até 6 à frente) */
+    get: operations['overview']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/finance/recurring': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Assinaturas e recorrências */
+    get: operations['recurring']
+    put?: never
+    /** Cria recorrência e gera as próximas ocorrências */
+    post: operations['createRecurring']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/finance/recurring/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Edita (regenera ocorrências futuras em aberto) */
+    put: operations['updateRecurring']
+    post?: never
+    /** Exclui (ocorrências confirmadas ficam como histórico) */
+    delete: operations['deleteRecurring']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/finance/recurring/{id}/active': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    /** Pausa ou retoma */
+    patch: operations['setActive']
+    trace?: never
+  }
+  '/api/finance/saving-goals': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Metas de economia por mês (padrão: ano corrente) */
+    get: operations['savingGoals']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/finance/saving-goals/{month}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Define a meta de economia do mês (yyyy-MM) */
+    put: operations['setSavingGoal']
+    post?: never
+    /** Remove a meta do mês */
+    delete: operations['deleteSavingGoal']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/finance/summary': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Visão do mês: receitas, despesas, sobra, meta, por categoria, lançamentos */
+    get: operations['summary_1']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/finance/transactions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Lançamentos de um período (padrão: mês atual) */
+    get: operations['transactions']
+    put?: never
+    /** Cria lançamento avulso */
+    post: operations['createTransaction']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/finance/transactions/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Edita lançamento */
+    put: operations['updateTransaction']
+    post?: never
+    /** Exclui lançamento (parcelas: via parcelamento) */
+    delete: operations['deleteTransaction']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/finance/transactions/{id}/status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    /** Confirma ou volta para previsto */
+    patch: operations['setStatus']
+    trace?: never
+  }
+  '/api/imports': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Envia a planilha (.xlsx, até 5 MB) e devolve a prévia linha a linha (nada é gravado ainda) */
+    post: operations['preview']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/imports/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Prévia (ou resumo, se já importada) */
+    get: operations['get_4']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/imports/{id}/commit': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Importa (abas escolhidas, objetivo de destino, duplicados: pular ou atualizar) */
+    post: operations['commit']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/luggage/bags': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Lista malas com o peso calculado */
+    get: operations['bags']
+    put?: never
+    /** Cria mala */
+    post: operations['createBag']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/luggage/bags/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Edita mala */
+    put: operations['updateBag']
+    post?: never
+    /** Exclui mala (os itens voltam para não alocados) */
+    delete: operations['deleteBag']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/luggage/items': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Lista itens (bagId, unallocated=true, category, packed) */
+    get: operations['items']
+    put?: never
+    /** Cria item */
+    post: operations['createItem']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/luggage/items/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Edita item (inclui mudar de mala) */
+    put: operations['updateItem']
+    post?: never
+    /** Exclui item */
+    delete: operations['deleteItem']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/luggage/items/{id}/packed': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    /** Marca como embalado / não embalado */
+    patch: operations['packed']
+    trace?: never
+  }
+  '/api/luggage/summary': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Malas com peso e alertas, não alocados e checklist */
+    get: operations['summary']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/me': {
     parameters: {
       query?: never
@@ -476,6 +1041,142 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/notification-preferences': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Preferências por categoria (padrões quando nunca alteradas) */
+    get: operations['preferences']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/notification-preferences/{category}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Ativa/desativa a categoria e define as antecedências */
+    put: operations['updatePreference']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/notifications': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Notificações, mais recentes primeiro (unread=true só as não lidas) */
+    get: operations['list_8']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/notifications/read-all': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Marca todas como lidas */
+    post: operations['readAll']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/notifications/refresh': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Gera agora as notificações da pessoa (idempotente: não repete avisos) */
+    post: operations['refresh']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/notifications/unread-count': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Quantidade de não lidas (badge do sino) */
+    get: operations['unreadCount']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/notifications/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /** Exclui a notificação */
+    delete: operations['delete_9']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/notifications/{id}/read': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    /** Marca como lida */
+    patch: operations['read']
+    trace?: never
+  }
   '/api/objectives': {
     parameters: {
       query?: never
@@ -484,10 +1185,10 @@ export interface paths {
       cookie?: never
     }
     /** Lista objetivos (principal primeiro) */
-    get: operations['list']
+    get: operations['list_2']
     put?: never
     /** Cria um objetivo (o primeiro vira o principal) */
-    post: operations['create']
+    post: operations['create_2']
     delete?: never
     options?: never
     head?: never
@@ -502,12 +1203,12 @@ export interface paths {
       cookie?: never
     }
     /** Detalhe do objetivo */
-    get: operations['get']
+    get: operations['get_1']
     /** Atualiza o objetivo */
-    put: operations['update']
+    put: operations['update_2']
     post?: never
     /** Exclui o objetivo, seus gastos e ajustes (contas são desvinculadas) */
-    delete: operations['delete']
+    delete: operations['delete_2']
     options?: never
     head?: never
     patch?: never
@@ -583,6 +1284,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/objectives/{id}/projection': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Previsão de quando a meta é atingida, com base no controle financeiro */
+    get: operations['projection']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/api/onboarding': {
     parameters: {
       query?: never
@@ -598,6 +1316,324 @@ export interface paths {
     options?: never
     head?: never
     patch?: never
+    trace?: never
+  }
+  '/api/programs': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Lista programas com filtros (requisitos, chance, prazo, taxa em EUR, status da candidatura) */
+    get: operations['programs']
+    put?: never
+    /** Cria programa (com requisitos de idioma e intakes) */
+    post: operations['createProgram']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/programs/compare': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Compara 2 a 5 programas lado a lado, com o melhor valor de cada linha */
+    get: operations['compare']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/programs/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Detalhe do programa */
+    get: operations['program']
+    /** Atualiza programa (requisitos e intakes são substituídos) */
+    put: operations['updateProgram']
+    post?: never
+    /** Exclui programa e suas candidaturas */
+    delete: operations['deleteProgram']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/programs/{id}/chosen': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    /** Marca/desmarca como "Escolhida" (cria ou arquiva a candidatura) */
+    patch: operations['choose']
+    trace?: never
+  }
+  '/api/search': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Busca em objetivos, gastos, universidades, programas, tarefas, eventos, mala e parcelamentos (sem acento; mínimo 2 letras; até 6 por tipo) */
+    get: operations['search']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/tasks': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Lista tarefas (abertas primeiro, por prazo e prioridade) */
+    get: operations['list_1']
+    put?: never
+    /** Cria tarefa */
+    post: operations['create_1']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/tasks/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Detalhe da tarefa */
+    get: operations['get']
+    /** Edita tarefa */
+    put: operations['update_1']
+    post?: never
+    /** Exclui tarefa */
+    delete: operations['delete_1']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/tasks/{id}/status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    /** Muda o status (concluir registra a data) */
+    patch: operations['changeStatus']
+    trace?: never
+  }
+  '/api/timeline': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Itens da timeline no período (padrão: mês anterior até 12 meses à frente; máx. 3 anos) */
+    get: operations['timeline']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/timeline/events': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Cria evento manual */
+    post: operations['create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/timeline/events/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Edita evento manual */
+    put: operations['update']
+    post?: never
+    /** Exclui evento manual */
+    delete: operations['delete']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/timeline/events/{id}/done': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    /** Marca evento manual como feito / não feito */
+    patch: operations['done']
+    trace?: never
+  }
+  '/api/universities': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Lista universidades com filtros */
+    get: operations['universities']
+    put?: never
+    /** Cria universidade */
+    post: operations['createUniversity']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/universities/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Universidade com seus programas */
+    get: operations['university']
+    /** Atualiza universidade */
+    put: operations['updateUniversity']
+    post?: never
+    /** Exclui universidade, programas e candidaturas */
+    delete: operations['deleteUniversity']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/universities/{universityId}/images': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Lista as imagens da universidade (metadados; a capa vem marcada) */
+    get: operations['list']
+    put?: never
+    /** Envia uma imagem (JPEG, PNG ou WebP, até 5 MB; a primeira vira a capa) */
+    post: operations['upload']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/universities/{universityId}/images/{imageId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /** Exclui a imagem (a capa passa para a mais antiga) */
+    delete: operations['delete_8']
+    options?: never
+    head?: never
+    /** Edita a legenda */
+    patch: operations['caption']
+    trace?: never
+  }
+  '/api/universities/{universityId}/images/{imageId}/content': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Conteúdo da imagem (imutável: o id muda se a imagem mudar) */
+    get: operations['content']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/universities/{universityId}/images/{imageId}/cover': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    /** Define a imagem de capa */
+    patch: operations['setCover']
     trace?: never
   }
 }
@@ -634,6 +1670,9 @@ export interface components {
       exchangeRates: components['schemas']['ExchangeRateResponse'][]
       total: components['schemas']['MoneyResponse']
     }
+    ActiveRequest: {
+      active: boolean
+    }
     AdjustmentRequest: {
       amount: number
       currency: string
@@ -647,12 +1686,192 @@ export interface components {
       /** Format: uuid */
       objectiveId: string
     }
+    AlertRequest: {
+      active?: boolean
+      base: string
+      /** @enum {string} */
+      condition: 'BELOW' | 'ABOVE'
+      quote: string
+      threshold: number
+    }
+    AlertResponse: {
+      active: boolean
+      base: string
+      /** @enum {string} */
+      condition: 'BELOW' | 'ABOVE'
+      /** Format: uuid */
+      id: string
+      lastRate: number | null
+      /** Format: date-time */
+      lastTriggeredAt: string | null
+      quote: string
+      /** @enum {string} */
+      state: 'ARMED' | 'TRIGGERED'
+      threshold: number
+      /** Format: int32 */
+      triggerCount: number
+    }
+    Amounts: {
+      confirmed: components['schemas']['MoneyResponse']
+      planned: components['schemas']['MoneyResponse']
+      total: components['schemas']['MoneyResponse']
+    }
+    ApplicationCreateRequest: {
+      /** Format: date */
+      deadline?: string
+      /** Format: int32 */
+      intakeYear?: number
+      notes?: string
+      /** Format: uuid */
+      objectiveId?: string
+      /** Format: uuid */
+      programId: string
+      /** @enum {string} */
+      term?: 'WINTER' | 'SUMMER' | 'OTHER'
+    }
+    ApplicationResponse: {
+      /** Format: date */
+      actualResponseDate: string | null
+      archived: boolean
+      /** Format: date */
+      deadline: string | null
+      /** Format: uuid */
+      id: string
+      /** Format: int32 */
+      intakeYear: number
+      /** Format: date */
+      nextRequestDue: string | null
+      notes: string | null
+      /** Format: uuid */
+      objectiveId: string | null
+      /** Format: int32 */
+      pendingRequests: number
+      program: components['schemas']['ProgramRef']
+      /** @enum {string|null} */
+      responseConfidence: 'LOW' | 'MEDIUM' | 'HIGH' | null
+      responseEstimateBasis: string | null
+      /** Format: date */
+      responseLikelyDate: string | null
+      /** Format: date */
+      responseMaxDate: string | null
+      /** Format: date */
+      responseMinDate: string | null
+      /** @enum {string} */
+      result: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'WAITLISTED'
+      /** @enum {string} */
+      status:
+        | 'AWAITING_OPENING'
+        | 'DOCUMENTS_UNDER_REVIEW'
+        | 'EXAM_REQUESTED'
+        | 'INTERVIEW_REQUESTED'
+        | 'ITEM_REQUESTED'
+        | 'WAITLISTED'
+        | 'AWAITING_RESULT'
+        | 'ACCEPTED'
+        | 'REJECTED'
+        | 'ENROLLED'
+      /** Format: date */
+      submittedAt: string | null
+      /** @enum {string} */
+      term: 'WINTER' | 'SUMMER' | 'OTHER'
+      window: components['schemas']['CycleWindow'] | null
+    }
+    ApplicationSummary: {
+      /** Format: uuid */
+      id: string
+      /** Format: int32 */
+      intakeYear: number
+      /** @enum {string} */
+      result: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'WAITLISTED'
+      /** @enum {string} */
+      status:
+        | 'AWAITING_OPENING'
+        | 'DOCUMENTS_UNDER_REVIEW'
+        | 'EXAM_REQUESTED'
+        | 'INTERVIEW_REQUESTED'
+        | 'ITEM_REQUESTED'
+        | 'WAITLISTED'
+        | 'AWAITING_RESULT'
+        | 'ACCEPTED'
+        | 'REJECTED'
+        | 'ENROLLED'
+      /** @enum {string} */
+      term: 'WINTER' | 'SUMMER' | 'OTHER'
+    }
+    ApplicationUpdateRequest: {
+      /** Format: date */
+      actualResponseDate?: string
+      /** Format: date */
+      deadline?: string
+      /** Format: int32 */
+      intakeYear: number
+      notes?: string
+      /** Format: uuid */
+      objectiveId?: string
+      /** @enum {string} */
+      responseConfidence?: 'LOW' | 'MEDIUM' | 'HIGH'
+      responseEstimateBasis?: string
+      /** Format: date */
+      responseLikelyDate?: string
+      /** Format: date */
+      responseMaxDate?: string
+      /** Format: date */
+      responseMinDate?: string
+      /** Format: date */
+      submittedAt?: string
+      /** @enum {string} */
+      term: 'WINTER' | 'SUMMER' | 'OTHER'
+    }
+    ApplicationsOverview: {
+      /** Format: int32 */
+      accepted: number
+      /** Format: int32 */
+      active: number
+      /** Format: int32 */
+      pending: number
+      /** Format: int32 */
+      rejected: number
+      upcoming: components['schemas']['Upcoming'][]
+      /** Format: int32 */
+      waitlisted: number
+    }
     AuthResponse: {
       accessToken: string
       /** Format: int64 */
       expiresIn: number
       tokenType: string
       user: components['schemas']['MeResponse']
+    }
+    BagRequest: {
+      /** Format: int32 */
+      maxWeightG?: number
+      name: string
+      /** @enum {string} */
+      type?: 'CARRY_ON' | 'CHECKED' | 'PERSONAL_ITEM' | 'OTHER'
+    }
+    BagResponse: {
+      /** Format: int32 */
+      excessG: number
+      /** Format: uuid */
+      id: string
+      /** Format: int32 */
+      itemCount: number
+      /** Format: int32 */
+      itemsWithoutWeight: number
+      /** Format: int32 */
+      maxWeightG: number | null
+      name: string
+      /** Format: int32 */
+      packedCount: number
+      percent: number | null
+      /** Format: int32 */
+      remainingG: number | null
+      /** @enum {string} */
+      state: 'NO_LIMIT' | 'OK' | 'WARNING' | 'OVER'
+      /** @enum {string} */
+      type: 'CARRY_ON' | 'CHECKED' | 'PERSONAL_ITEM' | 'OTHER'
+      /** Format: int32 */
+      weightG: number
     }
     BalanceRequest: {
       /** Format: date */
@@ -691,6 +1910,52 @@ export interface components {
       /** Format: int32 */
       sortOrder: number
     }
+    CategoryRef: {
+      color: string
+      icon: string
+      /** Format: uuid */
+      id: string
+      name: string
+    }
+    CategoryTotal: {
+      category: components['schemas']['CategoryRef']
+      /** Format: int32 */
+      count: number
+      total: components['schemas']['MoneyResponse']
+    }
+    ChosenRequest: {
+      chosen: boolean
+    }
+    CommitRequest: {
+      /** @enum {string} */
+      duplicates?: 'SKIP' | 'UPDATE'
+      /** Format: uuid */
+      objectiveId?: string
+      sheets?: ('EXPENSES' | 'UNIVERSITIES' | 'LUGGAGE')[]
+      sperrkontoAdjustment?: boolean
+    }
+    CommitSummary: {
+      notes: string[]
+      sheets: components['schemas']['SheetSummary'][]
+    }
+    CommitmentMonth: {
+      installments: components['schemas']['MoneyResponse']
+      month: string
+      recurring: components['schemas']['MoneyResponse']
+      total: components['schemas']['MoneyResponse']
+    }
+    CommitmentsResponse: {
+      currency: string
+      months: components['schemas']['CommitmentMonth'][]
+      total: components['schemas']['MoneyResponse']
+      upcoming: components['schemas']['TransactionResponse'][]
+    }
+    CompareResponse: {
+      highlights: {
+        [key: string]: string[]
+      }
+      programs: components['schemas']['ProgramResponse'][]
+    }
     CurrencyResponse: {
       code: string
       name: string
@@ -698,12 +1963,42 @@ export interface components {
       scale: number
       symbol: string
     }
+    CycleWindow: {
+      /** Format: date */
+      closesOn: string | null
+      /** Format: date */
+      opensOn: string | null
+      /** Format: date */
+      startsOn: string
+      /** @enum {string} */
+      state: 'NOT_OPEN_YET' | 'OPEN' | 'CLOSED'
+    }
     DashboardResponse: {
       accounts: components['schemas']['AccountsSummaryResponse']
+      applications: components['schemas']['ApplicationsOverview']
       exchangeRate: components['schemas']['ExchangeRateResponse']
       expenses: components['schemas']['ExpenseSummaryResponse'] | null
       objective: components['schemas']['ObjectiveResponse'] | null
       progress: components['schemas']['ObjectiveProgressResponse'] | null
+      upcoming: components['schemas']['TimelineItem'][]
+    }
+    EventDoneRequest: {
+      done: boolean
+    }
+    EventRequest: {
+      description?: string
+      done?: boolean
+      /** Format: date */
+      endDate?: string
+      /** Format: uuid */
+      objectiveId?: string
+      /** @enum {string} */
+      priority?: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
+      /** Format: date */
+      startDate: string
+      title: string
+      /** @enum {string} */
+      type?: 'MILESTONE' | 'TRAVEL' | 'EXAM' | 'DOCUMENT' | 'APPOINTMENT' | 'PAYMENT' | 'OTHER'
     }
     ExchangeRateOverrideRequest: {
       base: string
@@ -722,6 +2017,14 @@ export interface components {
       rate: number
       source: string
       stale: boolean
+    }
+    ExpenseAmounts: {
+      confirmed: components['schemas']['MoneyResponse']
+      installments: components['schemas']['MoneyResponse']
+      oneOff: components['schemas']['MoneyResponse']
+      planned: components['schemas']['MoneyResponse']
+      recurring: components['schemas']['MoneyResponse']
+      total: components['schemas']['MoneyResponse']
     }
     ExpenseDetailResponse: {
       expense: components['schemas']['ExpenseResponse']
@@ -793,6 +2096,28 @@ export interface components {
       objectiveId: string
       totals: components['schemas']['Totals']
     }
+    FinanceCategoryRequest: {
+      archived?: boolean
+      color: string
+      icon: string
+      /** @enum {string} */
+      kind: 'INCOME' | 'EXPENSE'
+      name: string
+      /** Format: int32 */
+      sortOrder?: number
+    }
+    FinanceCategoryResponse: {
+      archived: boolean
+      color: string
+      icon: string
+      /** Format: uuid */
+      id: string
+      /** @enum {string} */
+      kind: 'INCOME' | 'EXPENSE'
+      name: string
+      /** Format: int32 */
+      sortOrder: number
+    }
     Group: {
       color: string | null
       /** Format: int32 */
@@ -805,9 +2130,182 @@ export interface components {
       required: components['schemas']['MoneyResponse']
       total: components['schemas']['MoneyResponse']
     }
+    ImageCaptionRequest: {
+      caption?: string
+    }
+    ImportPreview: {
+      /** Format: date-time */
+      expiresAt: string
+      fileName: string
+      /** Format: uuid */
+      id: string
+      ignoredSheets: string[]
+      /** Format: uuid */
+      objectiveId: string | null
+      sheets: components['schemas']['SheetPreview'][]
+      status: string
+      summary: components['schemas']['CommitSummary'] | null
+    }
+    InstallmentItem: {
+      amount: components['schemas']['MoneyResponse']
+      /** Format: date */
+      dueDate: string
+      /** Format: int32 */
+      number: number
+      /** @enum {string} */
+      status: 'PLANNED' | 'CONFIRMED'
+      /** Format: uuid */
+      transactionId: string
+    }
+    InstallmentPlanRequest: {
+      /** Format: uuid */
+      accountId?: string
+      /** Format: uuid */
+      categoryId: string
+      currency: string
+      description: string
+      /** Format: date */
+      firstDueDate: string
+      installmentAmount?: number
+      /** Format: int32 */
+      installmentsCount: number
+      notes?: string
+      /** Format: int32 */
+      paidBeforeCount?: number
+      /** @enum {string} */
+      paymentMethod?: 'CREDIT_CARD' | 'BOLETO' | 'PIX' | 'DEBIT' | 'BANK_TRANSFER' | 'OTHER'
+      totalAmount?: number
+    }
+    InstallmentPlanResponse: {
+      /** Format: uuid */
+      accountId: string | null
+      category: components['schemas']['CategoryRef']
+      description: string
+      /** Format: date */
+      firstDueDate: string
+      /** Format: uuid */
+      id: string
+      installmentAmount: components['schemas']['MoneyResponse']
+      installments: components['schemas']['InstallmentItem'][]
+      /** Format: int32 */
+      installmentsCount: number
+      /** Format: date */
+      lastDueDate: string
+      /** Format: date */
+      nextDueDate: string | null
+      notes: string | null
+      paid: components['schemas']['MoneyResponse']
+      /** Format: int32 */
+      paidBeforeCount: number
+      /** Format: int32 */
+      paidCount: number
+      /** @enum {string} */
+      paymentMethod: 'CREDIT_CARD' | 'BOLETO' | 'PIX' | 'DEBIT' | 'BANK_TRANSFER' | 'OTHER'
+      remaining: components['schemas']['MoneyResponse']
+      /** Format: int32 */
+      remainingCount: number
+      total: components['schemas']['MoneyResponse']
+    }
+    IntakeDto: {
+      /** Format: int32 */
+      closeDay: number | null
+      /** Format: int32 */
+      closeMonth: number | null
+      /** Format: int32 */
+      openDay: number | null
+      /** Format: int32 */
+      openMonth: number | null
+      /** Format: int32 */
+      startMonth: number
+      /** @enum {string} */
+      term: 'WINTER' | 'SUMMER' | 'OTHER'
+    }
+    IntakeResponse: {
+      /** Format: int32 */
+      closeDay: number | null
+      /** Format: int32 */
+      closeMonth: number | null
+      nextWindow: components['schemas']['NextWindow']
+      /** Format: int32 */
+      openDay: number | null
+      /** Format: int32 */
+      openMonth: number | null
+      /** Format: int32 */
+      startMonth: number
+      /** @enum {string} */
+      term: 'WINTER' | 'SUMMER' | 'OTHER'
+    }
+    ItemRequest: {
+      /** Format: uuid */
+      bagId?: string
+      /** @enum {string} */
+      category?:
+        'DOCUMENTS' | 'CLOTHING' | 'ELECTRONICS' | 'HYGIENE' | 'HEALTH' | 'ACCESSORIES' | 'FOOD' | 'OTHER'
+      name: string
+      notes?: string
+      packed?: boolean
+      /** @enum {string} */
+      priority?: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
+      /** Format: int32 */
+      quantity?: number
+      required?: boolean
+      /** Format: int32 */
+      unitWeightG?: number
+    }
+    ItemResponse: {
+      /** Format: uuid */
+      bagId: string | null
+      /** @enum {string} */
+      category:
+        'DOCUMENTS' | 'CLOTHING' | 'ELECTRONICS' | 'HYGIENE' | 'HEALTH' | 'ACCESSORIES' | 'FOOD' | 'OTHER'
+      /** Format: uuid */
+      id: string
+      name: string
+      notes: string | null
+      packed: boolean
+      /** @enum {string} */
+      priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
+      /** Format: int32 */
+      quantity: number
+      required: boolean
+      /** Format: int32 */
+      totalWeightG: number | null
+      /** Format: int32 */
+      unitWeightG: number | null
+    }
+    LanguageRequirementDto: {
+      language: string
+      /** @enum {string|null} */
+      minCefr: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2' | null
+      minScore: number | null
+      rawText: string | null
+      testName: string | null
+    }
+    LinkRef: {
+      /** Format: uuid */
+      id: string
+      label: string
+      /** Format: uuid */
+      parentId: string | null
+    }
     LoginRequest: {
       email: string
       password: string
+    }
+    LuggageSummary: {
+      bags: components['schemas']['BagResponse'][]
+      /** Format: int32 */
+      packedItems: number
+      /** Format: int32 */
+      requiredNotPacked: number
+      /** Format: int32 */
+      totalItems: number
+      /** Format: int32 */
+      totalWeightG: number
+      /** Format: int32 */
+      unallocatedCount: number
+      /** Format: int32 */
+      unallocatedWeightG: number
     }
     MeResponse: {
       displayName: string
@@ -820,6 +2318,63 @@ export interface components {
     MoneyResponse: {
       amount: number
       currency: string
+    }
+    MonthPoint: {
+      cumulativeSurplus: components['schemas']['MoneyResponse']
+      expenses: components['schemas']['MoneyResponse']
+      income: components['schemas']['MoneyResponse']
+      month: string
+      savingGoal: components['schemas']['MoneyResponse'] | null
+      surplus: components['schemas']['MoneyResponse']
+    }
+    MonthlySummaryResponse: {
+      committedNext12: components['schemas']['MoneyResponse']
+      currency: string
+      exchangeRates: components['schemas']['ExchangeRateResponse'][]
+      expenses: components['schemas']['ExpenseAmounts']
+      expensesByCategory: components['schemas']['CategoryTotal'][]
+      goalRatio: number | null
+      income: components['schemas']['Amounts']
+      incomeByCategory: components['schemas']['CategoryTotal'][]
+      month: string
+      /** Format: int32 */
+      pendingCount: number
+      projectedSurplus: components['schemas']['MoneyResponse']
+      realizedSurplus: components['schemas']['MoneyResponse']
+      savingGoal: components['schemas']['MoneyResponse'] | null
+      transactions: components['schemas']['TransactionResponse'][]
+    }
+    NextWindow: {
+      /** Format: date */
+      closesOn: string | null
+      /** Format: int32 */
+      intakeYear: number
+      /** Format: date */
+      opensOn: string | null
+      /** Format: date */
+      startsOn: string
+      /** @enum {string} */
+      state: 'NOT_OPEN_YET' | 'OPEN' | 'CLOSED'
+    }
+    NotificationPage: {
+      hasMore: boolean
+      items: components['schemas']['NotificationResponse'][]
+      /** Format: int64 */
+      unreadCount: number
+    }
+    NotificationResponse: {
+      actionUrl: string | null
+      body: string | null
+      /** @enum {string} */
+      category: 'DEADLINES' | 'PAYMENTS' | 'RESPONSES' | 'TASKS' | 'EXCHANGE' | 'MOTIVATIONAL'
+      /** Format: date-time */
+      createdAt: string
+      /** Format: uuid */
+      id: string
+      read: boolean
+      /** @enum {string} */
+      severity: 'INFO' | 'WARNING' | 'CRITICAL'
+      title: string
     }
     ObjectiveProgressResponse: {
       accountsBalance: components['schemas']['MoneyResponse']
@@ -843,6 +2398,7 @@ export interface components {
       plannedNeed: components['schemas']['MoneyResponse']
       ratio: number
       remaining: components['schemas']['MoneyResponse']
+      scopeGoals: components['schemas']['ScopeGoal'][]
       target: components['schemas']['MoneyResponse']
       /** Format: date */
       targetDate: string
@@ -914,6 +2470,13 @@ export interface components {
       objective: components['schemas']['ObjectiveResponse']
       user: components['schemas']['MeResponse']
     }
+    OverviewResponse: {
+      currency: string
+      months: components['schemas']['MonthPoint'][]
+    }
+    PackedRequest: {
+      packed: boolean
+    }
     PaymentRequest: {
       amount: number
       currency: string
@@ -931,6 +2494,26 @@ export interface components {
       /** Format: date */
       paidOn: string
       rateToExpenseCurrency: number
+    }
+    PreferenceRequest: {
+      enabled: boolean
+      leadDays?: number[]
+    }
+    PreferenceResponse: {
+      /** @enum {string} */
+      category: 'DEADLINES' | 'PAYMENTS' | 'RESPONSES' | 'TASKS' | 'EXCHANGE' | 'MOTIVATIONAL'
+      defaultLeadDays: number[]
+      enabled: boolean
+      leadDays: number[]
+      usesLeadDays: boolean
+    }
+    PreviewRow: {
+      label: string
+      messages: string[]
+      /** Format: int32 */
+      row: number
+      /** @enum {string} */
+      status: 'VALID' | 'WARNING' | 'ERROR' | 'DUPLICATE'
     }
     PreviewTotalRequest: {
       currency: string
@@ -954,16 +2537,385 @@ export interface components {
       total: components['schemas']['MoneyResponse']
       totalConverted: components['schemas']['MoneyResponse']
     }
+    ProgramRef: {
+      city: string | null
+      countryCode: string | null
+      /** Format: uuid */
+      id: string
+      name: string
+      /** Format: uuid */
+      universityId: string
+      universityName: string
+    }
+    ProgramRequest: {
+      /** @enum {string} */
+      admissionChance?: 'LOW' | 'LOW_MEDIUM' | 'MEDIUM' | 'MEDIUM_HIGH' | 'HIGH'
+      /** @enum {string} */
+      applicationChannel?: 'DIRECT' | 'UNI_ASSIST' | 'VPD' | 'PORTAL'
+      applicationDeadlineText?: string
+      /** @enum {string} */
+      aptitudeAssessment?: 'REQUIRED' | 'NOT_REQUIRED' | 'CONDITIONAL' | 'UNKNOWN'
+      area?: string
+      degree?: string
+      description?: string
+      /** @enum {string} */
+      documentSubmission?: 'ONLINE' | 'PHYSICAL' | 'BOTH'
+      /** Format: int32 */
+      durationSemesters?: number
+      /** @enum {string} */
+      gre?: 'REQUIRED' | 'NOT_REQUIRED' | 'CONDITIONAL' | 'UNKNOWN'
+      intakes?: components['schemas']['IntakeDto'][]
+      /** @enum {string} */
+      interview?: 'REQUIRED' | 'NOT_REQUIRED' | 'CONDITIONAL' | 'UNKNOWN'
+      languageRequirements?: components['schemas']['LanguageRequirementDto'][]
+      languageSummary?: string
+      name: string
+      /** @enum {string} */
+      nc?: 'REQUIRED' | 'NOT_REQUIRED' | 'CONDITIONAL' | 'UNKNOWN'
+      nonEuTuitionAmount?: number
+      nonEuTuitionCurrency?: string
+      /** @enum {string} */
+      nonEuTuitionPeriod?: 'SEMESTER' | 'YEAR' | 'TOTAL'
+      notes?: string
+      officialUrl?: string
+      portalName?: string
+      scholarshipAvailable?: boolean
+      /** @enum {string} */
+      scholarshipChance?: 'LOW' | 'LOW_MEDIUM' | 'MEDIUM' | 'MEDIUM_HIGH' | 'HIGH'
+      scholarshipDetails?: string
+      semesterFeeAmount?: number
+      semesterFeeCurrency?: string
+      /** Format: uuid */
+      universityId: string
+    }
+    ProgramResponse: {
+      /** @enum {string|null} */
+      admissionChance: 'LOW' | 'LOW_MEDIUM' | 'MEDIUM' | 'MEDIUM_HIGH' | 'HIGH' | null
+      application: components['schemas']['ApplicationSummary'] | null
+      /** @enum {string|null} */
+      applicationChannel: 'DIRECT' | 'UNI_ASSIST' | 'VPD' | 'PORTAL' | null
+      applicationDeadlineText: string | null
+      /** @enum {string} */
+      aptitudeAssessment: 'REQUIRED' | 'NOT_REQUIRED' | 'CONDITIONAL' | 'UNKNOWN'
+      area: string | null
+      chosen: boolean
+      degree: string | null
+      description: string | null
+      /** @enum {string|null} */
+      documentSubmission: 'ONLINE' | 'PHYSICAL' | 'BOTH' | null
+      /** Format: int32 */
+      durationSemesters: number | null
+      /** @enum {string} */
+      gre: 'REQUIRED' | 'NOT_REQUIRED' | 'CONDITIONAL' | 'UNKNOWN'
+      /** Format: uuid */
+      id: string
+      intakes: components['schemas']['IntakeResponse'][]
+      /** @enum {string} */
+      interview: 'REQUIRED' | 'NOT_REQUIRED' | 'CONDITIONAL' | 'UNKNOWN'
+      languageRequirements: components['schemas']['LanguageRequirementDto'][]
+      languageSummary: string | null
+      name: string
+      /** @enum {string} */
+      nc: 'REQUIRED' | 'NOT_REQUIRED' | 'CONDITIONAL' | 'UNKNOWN'
+      /** Format: date */
+      nextDeadline: string | null
+      nonEuTuition: components['schemas']['MoneyResponse'] | null
+      /** @enum {string|null} */
+      nonEuTuitionPeriod: 'SEMESTER' | 'YEAR' | 'TOTAL' | null
+      notes: string | null
+      officialUrl: string | null
+      portalName: string | null
+      scholarshipAvailable: boolean | null
+      /** @enum {string|null} */
+      scholarshipChance: 'LOW' | 'LOW_MEDIUM' | 'MEDIUM' | 'MEDIUM_HIGH' | 'HIGH' | null
+      scholarshipDetails: string | null
+      semesterFee: components['schemas']['MoneyResponse'] | null
+      university: components['schemas']['UniversitySummary']
+    }
+    ProjectionMonth: {
+      cumulative: components['schemas']['MoneyResponse']
+      expectedSaving: components['schemas']['MoneyResponse']
+      month: string
+      plannedExpenses: components['schemas']['MoneyResponse']
+      plannedIncome: components['schemas']['MoneyResponse']
+    }
+    ProjectionResponse: {
+      baselineMonthlySaving: components['schemas']['MoneyResponse']
+      basisMonths: string[]
+      currency: string
+      deficitAtTarget: components['schemas']['MoneyResponse']
+      exchangeRates: components['schemas']['ExchangeRateResponse'][]
+      hasHistory: boolean
+      mobilized: components['schemas']['MoneyResponse']
+      months: components['schemas']['ProjectionMonth'][]
+      /** Format: uuid */
+      objectiveId: string
+      reachMonth: string | null
+      reachesByTarget: boolean
+      target: components['schemas']['MoneyResponse']
+    }
     RatePointResponse: {
       /** Format: date */
       date: string
       rate: number
+    }
+    RecurringEntryRequest: {
+      /** Format: uuid */
+      accountId?: string
+      amount: number
+      autoConfirm?: boolean
+      /** Format: int32 */
+      billingDay?: number
+      /** Format: uuid */
+      categoryId: string
+      currency: string
+      /** Format: date */
+      endDate?: string
+      /** @enum {string} */
+      frequency: 'WEEKLY' | 'MONTHLY' | 'YEARLY' | 'EVERY_N_MONTHS'
+      /** Format: int32 */
+      intervalMonths?: number
+      /** @enum {string} */
+      kind: 'INCOME' | 'EXPENSE'
+      name: string
+      notes?: string
+      /** Format: date */
+      startDate: string
+    }
+    RecurringEntryResponse: {
+      /** Format: uuid */
+      accountId: string | null
+      active: boolean
+      amount: components['schemas']['MoneyResponse']
+      autoConfirm: boolean
+      /** Format: int32 */
+      billingDay: number | null
+      category: components['schemas']['CategoryRef']
+      /** Format: date */
+      endDate: string | null
+      /** @enum {string} */
+      frequency: 'WEEKLY' | 'MONTHLY' | 'YEARLY' | 'EVERY_N_MONTHS'
+      /** Format: uuid */
+      id: string
+      /** Format: int32 */
+      intervalMonths: number | null
+      /** @enum {string} */
+      kind: 'INCOME' | 'EXPENSE'
+      monthlyEquivalent: components['schemas']['MoneyResponse']
+      name: string
+      /** Format: date */
+      nextOccurrence: string | null
+      notes: string | null
+      /** Format: date */
+      startDate: string
+    }
+    RefreshResult: {
+      /** Format: int32 */
+      created: number
     }
     RegisterRequest: {
       displayName: string
       /** Format: email */
       email: string
       password: string
+    }
+    RequestRequest: {
+      description: string
+      /** Format: date */
+      dueDate?: string
+      /** Format: date */
+      fulfilledOn?: string
+      /** Format: date */
+      requestedOn?: string
+      /** @enum {string} */
+      type: 'DOCUMENT' | 'EXAM' | 'INTERVIEW' | 'LETTER' | 'RECOMMENDATION' | 'TEST' | 'PAYMENT' | 'OTHER'
+    }
+    RequestResponse: {
+      description: string
+      /** Format: date */
+      dueDate: string | null
+      /** Format: date */
+      fulfilledOn: string | null
+      /** Format: uuid */
+      id: string
+      overdue: boolean
+      pending: boolean
+      /** Format: date */
+      requestedOn: string
+      /** @enum {string} */
+      type: 'DOCUMENT' | 'EXAM' | 'INTERVIEW' | 'LETTER' | 'RECOMMENDATION' | 'TEST' | 'PAYMENT' | 'OTHER'
+    }
+    SavingGoalRequest: {
+      amount: number
+      currency: string
+    }
+    SavingGoalResponse: {
+      amount: components['schemas']['MoneyResponse']
+      month: string
+    }
+    ScopeGoal: {
+      configured: boolean
+      mobilized: components['schemas']['MoneyResponse']
+      monthlySavingNeeded: components['schemas']['MoneyResponse']
+      percentComplete: number
+      plannedExpenses: components['schemas']['MoneyResponse']
+      ratio: number
+      remaining: components['schemas']['MoneyResponse']
+      /** @enum {string} */
+      scope: 'REQUIRED_ONLY' | 'ALL'
+      target: components['schemas']['MoneyResponse']
+    }
+    SearchResponse: {
+      query: string
+      results: components['schemas']['SearchResult'][]
+    }
+    SearchResult: {
+      /** Format: uuid */
+      id: string
+      subtitle: string | null
+      title: string
+      /** @enum {string} */
+      type: 'OBJECTIVE' | 'EXPENSE' | 'UNIVERSITY' | 'PROGRAM' | 'TASK' | 'EVENT' | 'LUGGAGE' | 'INSTALLMENT'
+      url: string
+    }
+    SheetPreview: {
+      /** Format: int32 */
+      duplicates: number
+      /** Format: int32 */
+      errors: number
+      rows: components['schemas']['PreviewRow'][]
+      /** @enum {string} */
+      sheet: 'EXPENSES' | 'UNIVERSITIES' | 'LUGGAGE'
+      title: string
+      /** Format: int32 */
+      valid: number
+      /** Format: int32 */
+      warnings: number
+    }
+    SheetSummary: {
+      /** Format: int32 */
+      created: number
+      /** @enum {string} */
+      sheet: 'EXPENSES' | 'UNIVERSITIES' | 'LUGGAGE'
+      /** Format: int32 */
+      skipped: number
+      /** Format: int32 */
+      updated: number
+    }
+    StatusChangeRequest: {
+      /** Format: date */
+      changedOn?: string
+      note?: string
+      /** @enum {string} */
+      status:
+        | 'AWAITING_OPENING'
+        | 'DOCUMENTS_UNDER_REVIEW'
+        | 'EXAM_REQUESTED'
+        | 'INTERVIEW_REQUESTED'
+        | 'ITEM_REQUESTED'
+        | 'WAITLISTED'
+        | 'AWAITING_RESULT'
+        | 'ACCEPTED'
+        | 'REJECTED'
+        | 'ENROLLED'
+    }
+    StatusHistoryResponse: {
+      /** Format: date */
+      changedOn: string
+      /** Format: uuid */
+      id: string
+      note: string | null
+      /** @enum {string} */
+      status:
+        | 'AWAITING_OPENING'
+        | 'DOCUMENTS_UNDER_REVIEW'
+        | 'EXAM_REQUESTED'
+        | 'INTERVIEW_REQUESTED'
+        | 'ITEM_REQUESTED'
+        | 'WAITLISTED'
+        | 'AWAITING_RESULT'
+        | 'ACCEPTED'
+        | 'REJECTED'
+        | 'ENROLLED'
+    }
+    TaskRequest: {
+      /** Format: uuid */
+      applicationId?: string
+      category?: string
+      description?: string
+      /** Format: date */
+      dueDate?: string
+      /** Format: uuid */
+      expenseId?: string
+      /** Format: uuid */
+      objectiveId?: string
+      /** @enum {string} */
+      priority?: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
+      /** @enum {string} */
+      status?: 'TODO' | 'IN_PROGRESS' | 'DONE'
+      title: string
+      /** Format: uuid */
+      universityId?: string
+    }
+    TaskResponse: {
+      application: components['schemas']['LinkRef'] | null
+      category: string | null
+      /** Format: date-time */
+      completedAt: string | null
+      /** Format: date-time */
+      createdAt: string
+      description: string | null
+      /** Format: date */
+      dueDate: string | null
+      expense: components['schemas']['LinkRef'] | null
+      /** Format: uuid */
+      id: string
+      objective: components['schemas']['LinkRef'] | null
+      overdue: boolean
+      /** @enum {string} */
+      priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
+      /** @enum {string} */
+      status: 'TODO' | 'IN_PROGRESS' | 'DONE'
+      title: string
+      university: components['schemas']['LinkRef'] | null
+    }
+    TaskStatusRequest: {
+      /** @enum {string} */
+      status: 'TODO' | 'IN_PROGRESS' | 'DONE'
+    }
+    TimelineItem: {
+      amount: components['schemas']['MoneyResponse'] | null
+      /** Format: date */
+      date: string
+      description: string | null
+      /** Format: date */
+      endDate: string | null
+      /** @enum {string|null} */
+      eventType: 'MILESTONE' | 'TRAVEL' | 'EXAM' | 'DOCUMENT' | 'APPOINTMENT' | 'PAYMENT' | 'OTHER' | null
+      id: string
+      /** @enum {string} */
+      kind: 'DEADLINE' | 'PAYMENT_DUE' | 'WINDOW_OPENS' | 'RESPONSE' | 'TASK' | 'MILESTONE' | 'EVENT'
+      /** Format: uuid */
+      parentId: string | null
+      /** @enum {string|null} */
+      priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT' | null
+      /** @enum {string} */
+      source: 'EVENT' | 'EXPENSE' | 'APPLICATION' | 'REQUEST' | 'TASK'
+      /** Format: uuid */
+      sourceId: string
+      /** @enum {string} */
+      status: 'DONE' | 'PENDING' | 'OVERDUE'
+      subtitle: string | null
+      title: string
+    }
+    TimelineResponse: {
+      /** Format: date */
+      from: string
+      items: components['schemas']['TimelineItem'][]
+      /** Format: date */
+      to: string
+      /** Format: date */
+      today: string
     }
     Totals: {
       adjustments: components['schemas']['MoneyResponse']
@@ -979,6 +2931,145 @@ export interface components {
       requiredAfterAdjustments: components['schemas']['MoneyResponse']
       total: components['schemas']['MoneyResponse']
       totalAfterAdjustments: components['schemas']['MoneyResponse']
+    }
+    TransactionRequest: {
+      /** Format: uuid */
+      accountId?: string
+      amount: number
+      /** Format: uuid */
+      categoryId: string
+      currency: string
+      description: string
+      /** @enum {string} */
+      kind: 'INCOME' | 'EXPENSE'
+      /** Format: date */
+      occurredOn: string
+      /** @enum {string} */
+      status?: 'PLANNED' | 'CONFIRMED'
+    }
+    TransactionResponse: {
+      /** Format: uuid */
+      accountId: string | null
+      amount: components['schemas']['MoneyResponse']
+      category: components['schemas']['CategoryRef']
+      description: string
+      /** Format: uuid */
+      id: string
+      /** Format: uuid */
+      installmentPlanId: string | null
+      /** @enum {string} */
+      kind: 'INCOME' | 'EXPENSE'
+      /** Format: date */
+      occurredOn: string
+      /** Format: uuid */
+      recurringEntryId: string | null
+      /** @enum {string} */
+      source: 'MANUAL' | 'INSTALLMENT' | 'RECURRING'
+      sourceLabel: string | null
+      /** @enum {string} */
+      status: 'PLANNED' | 'CONFIRMED'
+    }
+    TransactionStatusRequest: {
+      /** @enum {string} */
+      status: 'PLANNED' | 'CONFIRMED'
+    }
+    UniversityDetailResponse: {
+      programs: components['schemas']['ProgramResponse'][]
+      university: components['schemas']['UniversityResponse']
+    }
+    UniversityImageResponse: {
+      caption: string | null
+      contentType: string
+      cover: boolean
+      /** Format: date-time */
+      createdAt: string
+      /** Format: uuid */
+      id: string
+      /** Format: int32 */
+      sizeBytes: number
+    }
+    UniversityRequest: {
+      city?: string
+      costOfLivingAmount?: number
+      costOfLivingCurrency?: string
+      countryCode?: string
+      /** @enum {string} */
+      employability?: 'LOW' | 'LOW_MEDIUM' | 'MEDIUM' | 'MEDIUM_HIGH' | 'HIGH' | 'EXCELLENT'
+      /** @enum {string} */
+      institutionType?: 'PUBLIC' | 'PRIVATE'
+      latitude?: number
+      longitude?: number
+      name: string
+      /** @enum {string} */
+      nature?: 'UNIVERSITY' | 'TU' | 'HOCHSCHULE' | 'OTHER'
+      notes?: string
+      /** Format: int32 */
+      population?: number
+      /** Format: int32 */
+      ranking?: number
+      region?: string
+      website?: string
+    }
+    UniversityResponse: {
+      /** Format: int32 */
+      chosenCount: number
+      city: string | null
+      costOfLiving: components['schemas']['MoneyResponse'] | null
+      countryCode: string | null
+      /** Format: uuid */
+      coverImageId: string | null
+      /** @enum {string|null} */
+      employability: 'LOW' | 'LOW_MEDIUM' | 'MEDIUM' | 'MEDIUM_HIGH' | 'HIGH' | 'EXCELLENT' | null
+      /** Format: uuid */
+      id: string
+      /** @enum {string|null} */
+      institutionType: 'PUBLIC' | 'PRIVATE' | null
+      latitude: number | null
+      longitude: number | null
+      name: string
+      /** @enum {string|null} */
+      nature: 'UNIVERSITY' | 'TU' | 'HOCHSCHULE' | 'OTHER' | null
+      notes: string | null
+      /** Format: int32 */
+      population: number | null
+      /** Format: int32 */
+      programCount: number
+      /** Format: int32 */
+      ranking: number | null
+      region: string | null
+      website: string | null
+    }
+    UniversitySummary: {
+      city: string | null
+      costOfLiving: components['schemas']['MoneyResponse'] | null
+      countryCode: string | null
+      /** Format: uuid */
+      coverImageId: string | null
+      /** @enum {string|null} */
+      employability: 'LOW' | 'LOW_MEDIUM' | 'MEDIUM' | 'MEDIUM_HIGH' | 'HIGH' | 'EXCELLENT' | null
+      /** Format: uuid */
+      id: string
+      /** @enum {string|null} */
+      institutionType: 'PUBLIC' | 'PRIVATE' | null
+      name: string
+      /** @enum {string|null} */
+      nature: 'UNIVERSITY' | 'TU' | 'HOCHSCHULE' | 'OTHER' | null
+      /** Format: int32 */
+      ranking: number | null
+    }
+    UnreadCount: {
+      /** Format: int64 */
+      count: number
+    }
+    Upcoming: {
+      /** Format: uuid */
+      applicationId: string
+      /** Format: date */
+      date: string
+      /** @enum {string} */
+      kind: 'DEADLINE' | 'RESPONSE' | 'REQUEST'
+      programName: string
+      universityName: string
     }
     UpdateSettingsRequest: {
       locale: string
@@ -1005,7 +3096,7 @@ export interface components {
 }
 export type $defs = Record<string, never>
 export interface operations {
-  list_4: {
+  list_7: {
     parameters: {
       query?: never
       header?: never
@@ -1025,7 +3116,7 @@ export interface operations {
       }
     }
   }
-  create_4: {
+  create_7: {
     parameters: {
       query?: never
       header?: never
@@ -1049,7 +3140,7 @@ export interface operations {
       }
     }
   }
-  summary_1: {
+  summary_3: {
     parameters: {
       query?: never
       header?: never
@@ -1069,7 +3160,7 @@ export interface operations {
       }
     }
   }
-  update_4: {
+  update_7: {
     parameters: {
       query?: never
       header?: never
@@ -1095,7 +3186,7 @@ export interface operations {
       }
     }
   }
-  delete_4: {
+  delete_7: {
     parameters: {
       query?: never
       header?: never
@@ -1163,6 +3254,276 @@ export interface operations {
       }
     }
   }
+  list_6: {
+    parameters: {
+      query?: {
+        status?:
+          | 'AWAITING_OPENING'
+          | 'DOCUMENTS_UNDER_REVIEW'
+          | 'EXAM_REQUESTED'
+          | 'INTERVIEW_REQUESTED'
+          | 'ITEM_REQUESTED'
+          | 'WAITLISTED'
+          | 'AWAITING_RESULT'
+          | 'ACCEPTED'
+          | 'REJECTED'
+          | 'ENROLLED'
+        objectiveId?: string
+        includeArchived?: boolean
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ApplicationResponse'][]
+        }
+      }
+    }
+  }
+  create_6: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ApplicationCreateRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ApplicationResponse']
+        }
+      }
+    }
+  }
+  get_3: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ApplicationResponse']
+        }
+      }
+    }
+  }
+  update_6: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ApplicationUpdateRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ApplicationResponse']
+        }
+      }
+    }
+  }
+  delete_6: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  history_2: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['StatusHistoryResponse'][]
+        }
+      }
+    }
+  }
+  requests: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RequestResponse'][]
+        }
+      }
+    }
+  }
+  createRequest: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RequestRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RequestResponse']
+        }
+      }
+    }
+  }
+  updateRequest: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+        requestId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RequestRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RequestResponse']
+        }
+      }
+    }
+  }
+  deleteRequest: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+        requestId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  changeStatus_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['StatusChangeRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ApplicationResponse']
+        }
+      }
+    }
+  }
   login: {
     parameters: {
       query?: never
@@ -1205,7 +3566,7 @@ export interface operations {
       }
     }
   }
-  refresh: {
+  refresh_1: {
     parameters: {
       query?: never
       header?: never
@@ -1249,7 +3610,7 @@ export interface operations {
       }
     }
   }
-  list_5: {
+  list_9: {
     parameters: {
       query?: never
       header?: never
@@ -1288,6 +3649,96 @@ export interface operations {
         content: {
           '*/*': components['schemas']['DashboardResponse']
         }
+      }
+    }
+  }
+  alerts: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['AlertResponse'][]
+        }
+      }
+    }
+  }
+  createAlert: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AlertRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['AlertResponse']
+        }
+      }
+    }
+  }
+  updateAlert: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AlertRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['AlertResponse']
+        }
+      }
+    }
+  }
+  deleteAlert: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
@@ -1384,187 +3835,187 @@ export interface operations {
       }
     }
   }
+  list_5: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CatalogResponse'][]
+        }
+      }
+    }
+  }
+  create_5: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CatalogRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CatalogResponse']
+        }
+      }
+    }
+  }
+  update_5: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CatalogRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CatalogResponse']
+        }
+      }
+    }
+  }
+  delete_5: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  list_4: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CatalogResponse'][]
+        }
+      }
+    }
+  }
+  create_4: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CatalogRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CatalogResponse']
+        }
+      }
+    }
+  }
+  update_4: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CatalogRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CatalogResponse']
+        }
+      }
+    }
+  }
+  delete_4: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   list_3: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CatalogResponse'][]
-        }
-      }
-    }
-  }
-  create_3: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CatalogRequest']
-      }
-    }
-    responses: {
-      /** @description Created */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CatalogResponse']
-        }
-      }
-    }
-  }
-  update_3: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CatalogRequest']
-      }
-    }
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CatalogResponse']
-        }
-      }
-    }
-  }
-  delete_3: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  list_2: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CatalogResponse'][]
-        }
-      }
-    }
-  }
-  create_2: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CatalogRequest']
-      }
-    }
-    responses: {
-      /** @description Created */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CatalogResponse']
-        }
-      }
-    }
-  }
-  update_2: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CatalogRequest']
-      }
-    }
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CatalogResponse']
-        }
-      }
-    }
-  }
-  delete_2: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  list_1: {
     parameters: {
       query?: {
         objectiveId?: string
@@ -1594,7 +4045,7 @@ export interface operations {
       }
     }
   }
-  create_1: {
+  create_3: {
     parameters: {
       query?: never
       header?: never
@@ -1618,7 +4069,7 @@ export interface operations {
       }
     }
   }
-  preview: {
+  preview_1: {
     parameters: {
       query?: never
       header?: never
@@ -1642,7 +4093,7 @@ export interface operations {
       }
     }
   }
-  summary: {
+  summary_2: {
     parameters: {
       query?: {
         objectiveId?: string
@@ -1665,7 +4116,7 @@ export interface operations {
       }
     }
   }
-  get_1: {
+  get_2: {
     parameters: {
       query?: never
       header?: never
@@ -1687,7 +4138,7 @@ export interface operations {
       }
     }
   }
-  update_1: {
+  update_3: {
     parameters: {
       query?: never
       header?: never
@@ -1713,7 +4164,7 @@ export interface operations {
       }
     }
   }
-  delete_1: {
+  delete_3: {
     parameters: {
       query?: never
       header?: never
@@ -1848,6 +4299,889 @@ export interface operations {
       }
     }
   }
+  categories: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['FinanceCategoryResponse'][]
+        }
+      }
+    }
+  }
+  createCategory: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['FinanceCategoryRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['FinanceCategoryResponse']
+        }
+      }
+    }
+  }
+  updateCategory: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['FinanceCategoryRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['FinanceCategoryResponse']
+        }
+      }
+    }
+  }
+  deleteCategory: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  commitments: {
+    parameters: {
+      query?: {
+        months?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CommitmentsResponse']
+        }
+      }
+    }
+  }
+  installmentPlans: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['InstallmentPlanResponse'][]
+        }
+      }
+    }
+  }
+  createInstallmentPlan: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['InstallmentPlanRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['InstallmentPlanResponse']
+        }
+      }
+    }
+  }
+  installmentPlan: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['InstallmentPlanResponse']
+        }
+      }
+    }
+  }
+  updateInstallmentPlan: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['InstallmentPlanRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['InstallmentPlanResponse']
+        }
+      }
+    }
+  }
+  deleteInstallmentPlan: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  overview: {
+    parameters: {
+      query?: {
+        from?: string
+        to?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['OverviewResponse']
+        }
+      }
+    }
+  }
+  recurring: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RecurringEntryResponse'][]
+        }
+      }
+    }
+  }
+  createRecurring: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RecurringEntryRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RecurringEntryResponse']
+        }
+      }
+    }
+  }
+  updateRecurring: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RecurringEntryRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RecurringEntryResponse']
+        }
+      }
+    }
+  }
+  deleteRecurring: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  setActive: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ActiveRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RecurringEntryResponse']
+        }
+      }
+    }
+  }
+  savingGoals: {
+    parameters: {
+      query?: {
+        from?: string
+        to?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['SavingGoalResponse'][]
+        }
+      }
+    }
+  }
+  setSavingGoal: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        month: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SavingGoalRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['SavingGoalResponse']
+        }
+      }
+    }
+  }
+  deleteSavingGoal: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        month: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  summary_1: {
+    parameters: {
+      query?: {
+        month?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['MonthlySummaryResponse']
+        }
+      }
+    }
+  }
+  transactions: {
+    parameters: {
+      query?: {
+        from?: string
+        to?: string
+        kind?: 'INCOME' | 'EXPENSE'
+        categoryId?: string
+        status?: 'PLANNED' | 'CONFIRMED'
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TransactionResponse'][]
+        }
+      }
+    }
+  }
+  createTransaction: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['TransactionRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TransactionResponse']
+        }
+      }
+    }
+  }
+  updateTransaction: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['TransactionRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TransactionResponse']
+        }
+      }
+    }
+  }
+  deleteTransaction: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  setStatus: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['TransactionStatusRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TransactionResponse']
+        }
+      }
+    }
+  }
+  preview: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: {
+      content: {
+        'multipart/form-data': {
+          /** Format: binary */
+          file: string
+        }
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ImportPreview']
+        }
+      }
+    }
+  }
+  get_4: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ImportPreview']
+        }
+      }
+    }
+  }
+  commit: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: {
+      content: {
+        'application/json': components['schemas']['CommitRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ImportPreview']
+        }
+      }
+    }
+  }
+  bags: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['BagResponse'][]
+        }
+      }
+    }
+  }
+  createBag: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['BagRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['BagResponse']
+        }
+      }
+    }
+  }
+  updateBag: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['BagRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['BagResponse']
+        }
+      }
+    }
+  }
+  deleteBag: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  items: {
+    parameters: {
+      query?: {
+        bagId?: string
+        unallocated?: boolean
+        category?:
+          'DOCUMENTS' | 'CLOTHING' | 'ELECTRONICS' | 'HYGIENE' | 'HEALTH' | 'ACCESSORIES' | 'FOOD' | 'OTHER'
+        packed?: boolean
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ItemResponse'][]
+        }
+      }
+    }
+  }
+  createItem: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ItemRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ItemResponse']
+        }
+      }
+    }
+  }
+  updateItem: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ItemRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ItemResponse']
+        }
+      }
+    }
+  }
+  deleteItem: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  packed: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PackedRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ItemResponse']
+        }
+      }
+    }
+  }
+  summary: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['LuggageSummary']
+        }
+      }
+    }
+  }
   me: {
     parameters: {
       query?: never
@@ -1912,7 +5246,179 @@ export interface operations {
       }
     }
   }
-  list: {
+  preferences: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PreferenceResponse'][]
+        }
+      }
+    }
+  }
+  updatePreference: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        category: 'DEADLINES' | 'PAYMENTS' | 'RESPONSES' | 'TASKS' | 'EXCHANGE' | 'MOTIVATIONAL'
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PreferenceRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PreferenceResponse']
+        }
+      }
+    }
+  }
+  list_8: {
+    parameters: {
+      query?: {
+        unread?: boolean
+        page?: number
+        size?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['NotificationPage']
+        }
+      }
+    }
+  }
+  readAll: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UnreadCount']
+        }
+      }
+    }
+  }
+  refresh: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RefreshResult']
+        }
+      }
+    }
+  }
+  unreadCount: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UnreadCount']
+        }
+      }
+    }
+  }
+  delete_9: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  read: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['NotificationResponse']
+        }
+      }
+    }
+  }
+  list_2: {
     parameters: {
       query?: never
       header?: never
@@ -1932,7 +5438,7 @@ export interface operations {
       }
     }
   }
-  create: {
+  create_2: {
     parameters: {
       query?: never
       header?: never
@@ -1956,7 +5462,7 @@ export interface operations {
       }
     }
   }
-  get: {
+  get_1: {
     parameters: {
       query?: never
       header?: never
@@ -1978,7 +5484,7 @@ export interface operations {
       }
     }
   }
-  update: {
+  update_2: {
     parameters: {
       query?: never
       header?: never
@@ -2004,7 +5510,7 @@ export interface operations {
       }
     }
   }
-  delete: {
+  delete_2: {
     parameters: {
       query?: never
       header?: never
@@ -2164,6 +5670,28 @@ export interface operations {
       }
     }
   }
+  projection: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ProjectionResponse']
+        }
+      }
+    }
+  }
   complete: {
     parameters: {
       query?: never
@@ -2184,6 +5712,741 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['OnboardingResponse']
+        }
+      }
+    }
+  }
+  programs: {
+    parameters: {
+      query?: {
+        universityId?: string
+        chosen?: boolean
+        applicationStatus?:
+          | 'AWAITING_OPENING'
+          | 'DOCUMENTS_UNDER_REVIEW'
+          | 'EXAM_REQUESTED'
+          | 'INTERVIEW_REQUESTED'
+          | 'ITEM_REQUESTED'
+          | 'WAITLISTED'
+          | 'AWAITING_RESULT'
+          | 'ACCEPTED'
+          | 'REJECTED'
+          | 'ENROLLED'
+        language?: string
+        gre?: 'REQUIRED' | 'NOT_REQUIRED' | 'CONDITIONAL' | 'UNKNOWN'
+        interview?: 'REQUIRED' | 'NOT_REQUIRED' | 'CONDITIONAL' | 'UNKNOWN'
+        nc?: 'REQUIRED' | 'NOT_REQUIRED' | 'CONDITIONAL' | 'UNKNOWN'
+        minAdmissionChance?: 'LOW' | 'LOW_MEDIUM' | 'MEDIUM' | 'MEDIUM_HIGH' | 'HIGH'
+        deadlineBefore?: string
+        maxSemesterFee?: number
+        q?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ProgramResponse'][]
+        }
+      }
+    }
+  }
+  createProgram: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ProgramRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ProgramResponse']
+        }
+      }
+    }
+  }
+  compare: {
+    parameters: {
+      query: {
+        ids: string[]
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CompareResponse']
+        }
+      }
+    }
+  }
+  program: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ProgramResponse']
+        }
+      }
+    }
+  }
+  updateProgram: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ProgramRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ProgramResponse']
+        }
+      }
+    }
+  }
+  deleteProgram: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  choose: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ChosenRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ProgramResponse']
+        }
+      }
+    }
+  }
+  search: {
+    parameters: {
+      query?: {
+        q?: string
+        types?: (
+          'OBJECTIVE' | 'EXPENSE' | 'UNIVERSITY' | 'PROGRAM' | 'TASK' | 'EVENT' | 'LUGGAGE' | 'INSTALLMENT'
+        )[]
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['SearchResponse']
+        }
+      }
+    }
+  }
+  list_1: {
+    parameters: {
+      query?: {
+        status?: 'TODO' | 'IN_PROGRESS' | 'DONE'
+        priority?: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
+        dueBefore?: string
+        objectiveId?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TaskResponse'][]
+        }
+      }
+    }
+  }
+  create_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['TaskRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TaskResponse']
+        }
+      }
+    }
+  }
+  get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TaskResponse']
+        }
+      }
+    }
+  }
+  update_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['TaskRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TaskResponse']
+        }
+      }
+    }
+  }
+  delete_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  changeStatus: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['TaskStatusRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TaskResponse']
+        }
+      }
+    }
+  }
+  timeline: {
+    parameters: {
+      query?: {
+        from?: string
+        to?: string
+        sources?: ('EVENT' | 'EXPENSE' | 'APPLICATION' | 'REQUEST' | 'TASK')[]
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TimelineResponse']
+        }
+      }
+    }
+  }
+  create: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['EventRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TimelineItem']
+        }
+      }
+    }
+  }
+  update: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['EventRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TimelineItem']
+        }
+      }
+    }
+  }
+  delete: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  done: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['EventDoneRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TimelineItem']
+        }
+      }
+    }
+  }
+  universities: {
+    parameters: {
+      query?: {
+        country?: string
+        city?: string
+        type?: 'PUBLIC' | 'PRIVATE'
+        nature?: 'UNIVERSITY' | 'TU' | 'HOCHSCHULE' | 'OTHER'
+        q?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UniversityResponse'][]
+        }
+      }
+    }
+  }
+  createUniversity: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UniversityRequest']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UniversityResponse']
+        }
+      }
+    }
+  }
+  university: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UniversityDetailResponse']
+        }
+      }
+    }
+  }
+  updateUniversity: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UniversityRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UniversityResponse']
+        }
+      }
+    }
+  }
+  deleteUniversity: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  list: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        universityId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UniversityImageResponse'][]
+        }
+      }
+    }
+  }
+  upload: {
+    parameters: {
+      query?: {
+        caption?: string
+      }
+      header?: never
+      path: {
+        universityId: string
+      }
+      cookie?: never
+    }
+    requestBody?: {
+      content: {
+        'multipart/form-data': {
+          /** Format: binary */
+          file: string
+        }
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UniversityImageResponse']
+        }
+      }
+    }
+  }
+  delete_8: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        universityId: string
+        imageId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  caption: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        universityId: string
+        imageId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ImageCaptionRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UniversityImageResponse']
+        }
+      }
+    }
+  }
+  content: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        universityId: string
+        imageId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': string
+        }
+      }
+    }
+  }
+  setCover: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        universityId: string
+        imageId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['UniversityImageResponse'][]
         }
       }
     }

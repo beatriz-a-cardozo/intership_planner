@@ -42,6 +42,11 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/actuator/health/**", "/actuator/info").permitAll()
                         .requestMatchers("/error").permitAll()
+                        // protegido pelo token próprio (InternalJobsController), não por JWT
+                        .requestMatchers(HttpMethod.POST, "/api/internal/jobs/*").permitAll()
+                        // imagem única (SpaConfig): páginas e arquivos do frontend são públicos; os dados vêm da API
+                        .requestMatchers(r -> (HttpMethod.GET.matches(r.getMethod()) || HttpMethod.HEAD.matches(r.getMethod()))
+                                && !SpaConfig.isBackendPath(r.getRequestURI())).permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(rs -> rs
                         .authenticationEntryPoint(entryPoint)

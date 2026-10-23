@@ -11,14 +11,14 @@ export function AuthLayout() {
             Cada real guardado
             <br />é um passo
             <br />
-            <span className="text-accent">mais perto.</span>
+            <span className="text-accent-soft">mais perto.</span>
           </p>
-          <p className="mt-6 max-w-md text-primary-foreground/75">
+          <p className="mt-6 max-w-md text-primary-foreground/85">
             Planeje gastos, acompanhe sua economia, compare universidades e veja o cronograma até a viagem num só
             lugar.
           </p>
         </div>
-        <p className="text-sm text-primary-foreground/60">Planejamento financeiro e de intercâmbio</p>
+        <p className="text-sm text-primary-foreground/80">Planejamento financeiro e de intercâmbio</p>
         {/* Linha do tempo decorativa: assinatura visual do produto */}
         <div aria-hidden className="pointer-events-none absolute right-16 top-0 h-full w-1.5 bg-accent/80" />
       </section>

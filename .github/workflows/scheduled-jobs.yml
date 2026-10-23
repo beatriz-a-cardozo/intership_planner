@@ -1,0 +1,39 @@
+name: Jobs agendados
+
+# No plano gratuito o servidor "dorme" sem acesso e o agendador interno para junto. Este cron acorda a aplicação e
+# dispara os jobs pelo endpoint interno (protegido por token). Os jobs têm ShedLock: se o agendador interno também
+# rodar, nada é executado duas vezes.
+#   segredo INTERNAL_JOB_TOKEN = mesmo valor da variável INTERNAL_JOB_TOKEN no Render
+#   variável APP_URL           = endereço público da aplicação
+on:
+  schedule:
+    - cron: '0 11 * * *' # 08:00 em Brasília: recorrências, notificações e limpeza
+    - cron: '0 */6 * * *' # cotações a cada 6 h
+  workflow_dispatch:
+    inputs:
+      job:
+        description: 'Qual job'
+        type: choice
+        options: [daily, exchange]
+        default: daily
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Chama o endpoint interno
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+          TOKEN: ${{ secrets.INTERNAL_JOB_TOKEN }}
+          JOB: ${{ github.event_name == 'workflow_dispatch' && inputs.job || (github.event.schedule == '0 11 * * *' && 'daily' || 'exchange') }}
+        run: |
+          if [ -z "$APP_URL" ] || [ -z "$TOKEN" ]; then
+            echo "Deploy ainda não configurado (APP_URL / INTERNAL_JOB_TOKEN); nada a fazer."
+            exit 0
+          fi
+          # acordar o serviço gratuito pode levar ~1 min: tentativas com espera
+          curl -fsS --retry 6 --retry-delay 30 --retry-all-errors --max-time 180 \
+            -X POST -H "X-Job-Token: $TOKEN" "$APP_URL/api/internal/jobs/$JOB"

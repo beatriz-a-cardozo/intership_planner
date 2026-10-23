@@ -13,6 +13,8 @@ server {
   # API no mesmo domínio: o cookie de refresh funciona sem CORS.
   # $http_host preserva a porta (localhost:8081): o backend vê Host == Origin e não trata como CORS.
   location /api/ {
+    # upload de imagens (o backend limita a 5 MB por imagem)
+    client_max_body_size 8m;
     proxy_pass ${BACKEND_URL};
     proxy_set_header Host $http_host;
     proxy_set_header X-Forwarded-Host $http_host;

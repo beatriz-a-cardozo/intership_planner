@@ -20,3 +20,12 @@ if (!window.matchMedia) {
     }),
   })
 }
+
+// jsdom não implementa ResizeObserver (usado pelo Switch do Radix)
+if (typeof globalThis.ResizeObserver === 'undefined') {
+  globalThis.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+}

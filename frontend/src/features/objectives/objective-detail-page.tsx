@@ -15,6 +15,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { formatDate, formatMoney, pluralize } from '@/lib/format'
 import { countryName, EXPENSE_SCOPE_LABELS } from '@/lib/labels'
 import { AdjustmentsCard } from './adjustments-card'
+import { ProjectionCard } from './projection-card'
+import { ScopeGoalsCard } from './scope-goals-card'
 import { useDeleteObjective, useMakePrimary, useObjective, useObjectiveProgress } from './api'
 import { ObjectiveFormDialog } from './objective-form-dialog'
 
@@ -121,8 +123,16 @@ export function ObjectiveDetailPage() {
             )}
           </CardContent>
         </Card>
-        <AdjustmentsCard objectiveId={o.id} currency={o.currency} />
+        <div className="grid content-start gap-5">
+          <ProjectionCard objectiveId={o.id} />
+          <AdjustmentsCard objectiveId={o.id} currency={o.currency} />
+        </div>
       </div>
+      {progress.data && (
+        <div className="mt-5">
+          <ScopeGoalsCard progress={progress.data} />
+        </div>
+      )}
 
       {editing && <ObjectiveFormDialog open onOpenChange={setEditing} objective={o} />}
       <ConfirmDialog

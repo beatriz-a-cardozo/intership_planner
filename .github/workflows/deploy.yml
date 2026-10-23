@@ -1,0 +1,76 @@
+name: Deploy
+
+# Publica no Render quando uma tag v* é enviada (ou manualmente), sempre depois do CI completo.
+# Configuração (docs/DEPLOY.md):
+#   segredo RENDER_DEPLOY_HOOK_URL = Deploy Hook do serviço no Render
+#   variável APP_URL               = endereço público, ex.: https://intercambio-planner.onrender.com
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  deploy:
+    name: Render + smoke test
+    needs: ci
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ vars.APP_URL }}
+    steps:
+      - name: Configuração presente
+        env:
+          HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          APP_URL: ${{ vars.APP_URL }}
+        run: |
+          if [ -z "$HOOK" ] || [ -z "$APP_URL" ]; then
+            echo "::error::Defina o segredo RENDER_DEPLOY_HOOK_URL e a variável APP_URL (docs/DEPLOY.md)."
+            exit 1
+          fi
+
+      - name: Dispara o deploy no Render
+        env:
+          HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: curl -fsS -X POST "$HOOK" > /dev/null
+
+      - name: Espera a nova versão responder (até 20 min; o plano gratuito constrói devagar)
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+          VERSION: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
+        run: |
+          expected="${VERSION#v}"
+          for i in $(seq 1 80); do
+            info=$(curl -fsS --max-time 30 "$APP_URL/actuator/info" || true)
+            health=$(curl -fsS --max-time 30 "$APP_URL/actuator/health/readiness" || true)
+            if echo "$health" | grep -q '"UP"' && { [ -z "$expected" ] || echo "$info" | grep -q "\"$expected\""; }; then
+              echo "No ar: $info"
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "::error::A aplicação não respondeu com a versão esperada a tempo."
+          exit 1
+
+      - name: Smoke test
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+        run: |
+          set -e
+          # página do app (SPA) e uma rota interna do React Router
+          curl -fsS "$APP_URL/" | grep -q '<div id="root">'
+          curl -fsS "$APP_URL/universities" | grep -q '<div id="root">'
+          # API pública e API protegida (401 sem token, em Problem Details)
+          curl -fsS "$APP_URL/api/currencies" | grep -q '"BRL"'
+          status=$(curl -s -o /dev/null -w '%{http_code}' "$APP_URL/api/me")
+          test "$status" = "401"
+          echo "Smoke test ok"

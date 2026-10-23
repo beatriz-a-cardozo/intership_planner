@@ -5,6 +5,8 @@ import { useAuth } from '@/app/providers/auth-provider'
 import { Brand } from '@/components/brand'
 import { Badge } from '@/components/ui/badge'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { NotificationBell } from '@/features/notifications/notification-bell'
+import { SearchButton } from '@/features/search/search-button'
 import { cn } from '@/lib/utils'
 import { isAvailable, NAV_ITEMS, type NavItem } from './navigation'
 
@@ -27,7 +29,9 @@ function SidebarLink({ item, onNavigate }: { item: NavItem; onNavigate?: () => v
       className={({ isActive }) =>
         cn(
           'group flex h-11 items-center gap-3 rounded-xl px-3 text-sm transition-colors',
-          isActive ? 'bg-primary-soft font-medium text-primary' : 'text-muted hover:bg-surface-2 hover:text-foreground',
+          isActive
+            ? 'bg-primary-soft font-medium text-primary'
+            : 'text-muted hover:bg-surface-2 hover:text-foreground',
         )
       }
     >
@@ -43,7 +47,10 @@ function UserFooter() {
   if (!user) return null
   return (
     <div className="flex items-center gap-3 rounded-2xl bg-surface-2 p-3">
-      <div className="grid size-9 place-items-center rounded-full bg-primary text-xs font-semibold text-primary-foreground" aria-hidden>
+      <div
+        className="grid size-9 place-items-center rounded-full bg-primary text-xs font-semibold text-primary-foreground"
+        aria-hidden
+      >
         {initials(user.displayName)}
       </div>
       <div className="min-w-0 flex-1">
@@ -68,9 +75,15 @@ function DesktopSidebar() {
   const settings = NAV_ITEMS.find((i) => i.to === '/settings')!
   return (
     <aside className="sticky top-0 hidden h-dvh w-68 shrink-0 flex-col border-r border-border bg-surface px-4 py-6 lg:flex">
-      <Link to="/" className="mb-8 px-2" aria-label="Ir para o dashboard">
-        <Brand />
-      </Link>
+      <div className="mb-8 flex items-center justify-between gap-2 px-2">
+        <Link to="/" title="Ir para o dashboard">
+          <Brand />
+        </Link>
+        <div className="flex items-center gap-1">
+          <SearchButton shortcut />
+          <NotificationBell />
+        </div>
+      </div>
       <nav aria-label="Principal" className="flex flex-1 flex-col gap-1 overflow-y-auto">
         {main.map((item) => (
           <SidebarLink key={item.to} item={item} />
@@ -149,12 +162,19 @@ export function AppShell() {
       </a>
       <DesktopSidebar />
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-14 items-center border-b border-border bg-background/90 px-4 backdrop-blur lg:hidden">
-          <Link to="/" aria-label="Ir para o dashboard">
+        <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-background/90 px-4 backdrop-blur lg:hidden">
+          <Link to="/" title="Ir para o dashboard">
             <Brand />
           </Link>
+          <div className="flex items-center gap-1">
+            <SearchButton />
+            <NotificationBell />
+          </div>
         </header>
-        <main id="conteudo" className="mx-auto w-full max-w-6xl flex-1 px-4 pb-28 pt-6 sm:px-6 lg:px-10 lg:pb-12 lg:pt-10">
+        <main
+          id="conteudo"
+          className="mx-auto w-full max-w-6xl flex-1 px-4 pb-28 pt-6 sm:px-6 lg:px-10 lg:pb-12 lg:pt-10"
+        >
           <Outlet />
         </main>
       </div>

@@ -1,6 +1,7 @@
 import {
   ArrowRight,
   CalendarClock,
+  GraduationCap,
   MapPin,
   PiggyBank,
   Receipt,
@@ -9,7 +10,7 @@ import {
   Wallet,
 } from 'lucide-react'
 import { Link } from 'react-router'
-import type { Dashboard, ExchangeRate } from '@/api/types'
+import type { ApplicationsOverview, Dashboard, ExchangeRate, TimelineItem } from '@/api/types'
 import { useAuth } from '@/app/providers/auth-provider'
 import { RateSparkline } from '@/components/charts/rate-sparkline'
 import { SplitBarList } from '@/components/charts/split-bar-list'
@@ -25,8 +26,12 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useExchangeHistory } from '@/features/finance/api'
+import { useProjection } from '@/features/finance/ledger-api'
 import { useDashboard } from '@/features/objectives/api'
-import { formatDate, formatMoney, formatRate, pluralize } from '@/lib/format'
+import { ScopeGoalsCard } from '@/features/objectives/scope-goals-card'
+import { TimelineIcon } from '@/features/timeline/timeline-icon'
+import { itemLink } from '@/features/timeline/timeline-item'
+import { formatDate, formatMoney, formatMonth, formatRate, pluralize } from '@/lib/format'
 import { countryName } from '@/lib/labels'
 
 function greeting(date = new Date()) {
@@ -150,6 +155,7 @@ function DashboardContent({ data }: { data: Dashboard }) {
                     {formatMoney(progress.plannedMonthlySaving)}/mês
                   </Badge>
                 )}
+                <ProjectionLine objectiveId={objective.id} />
               </>
             )}
           </div>
@@ -165,6 +171,8 @@ function DashboardContent({ data }: { data: Dashboard }) {
           <HeroStat label="Em contas" value={formatMoney(progress.accountsBalance)} />
         </div>
       </Card>
+
+      {expenses && expenses.totals.count > 0 && <ScopeGoalsCard progress={progress} />}
 
       <div className="grid gap-5 lg:grid-cols-[1.4fr_1fr]">
         {/* Gastos */}
@@ -240,7 +248,9 @@ function DashboardContent({ data }: { data: Dashboard }) {
         </Card>
 
         <div className="grid content-start gap-5">
+          <UpcomingCard items={data.upcoming} />
           <BalancesCard data={data} />
+          <ApplicationsCard overview={data.applications} />
           <ExchangeCard rate={exchangeRate} />
         </div>
       </div>
@@ -253,22 +263,74 @@ function DashboardContent({ data }: { data: Dashboard }) {
             icon={CalendarClock}
             hint="Aluguel, alimentação e outros gastos mensais"
           />
-          <StatCard
-            label="Obrigatórios"
-            value={formatMoney(expenses.totals.requiredAfterAdjustments)}
-            icon={Target}
-            tone="primary"
-            hint="com ajustes"
-          />
-          <StatCard
-            label="Opcionais"
-            value={formatMoney(expenses.totals.optional)}
-            icon={TrendingUp}
-            hint="fora da meta se o escopo for só obrigatórios"
-          />
         </div>
       )}
     </div>
+  )
+}
+
+/** Próximos itens da timeline: o que está atrasado primeiro, depois o que vence nos próximos 60 dias. */
+function UpcomingCard({ items }: { items: TimelineItem[] }) {
+  return (
+    <Card>
+      <CardHeader>
+        <div>
+          <CardTitle>Próximos</CardTitle>
+          <CardDescription>
+            Gastos com data, prazos das universidades e tarefas dos próximos 60 dias.
+          </CardDescription>
+        </div>
+        <Button asChild variant="ghost" size="sm">
+          <Link to="/timeline">
+            Timeline <ArrowRight aria-hidden />
+          </Link>
+        </Button>
+      </CardHeader>
+      <CardContent>
+        {items.length === 0 ? (
+          <p className="text-sm text-muted">Nada pendente nos próximos 60 dias.</p>
+        ) : (
+          <ul className="grid gap-3">
+            {items.map((item) => {
+              const overdue = item.status === 'OVERDUE'
+              const content = (
+                <>
+                  <span
+                    className={
+                      overdue
+                        ? 'grid size-8 shrink-0 place-items-center rounded-lg bg-danger-soft text-danger'
+                        : 'grid size-8 shrink-0 place-items-center rounded-lg bg-primary-soft text-primary'
+                    }
+                    aria-hidden
+                  >
+                    <TimelineIcon item={item} className="size-4" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-medium">{item.title}</span>
+                    <span className={overdue ? 'text-xs font-medium text-danger' : 'text-xs text-muted'}>
+                      {overdue ? 'Atrasado · ' : ''}
+                      {formatDate(item.date)}
+                      {item.subtitle && ` · ${item.subtitle}`}
+                    </span>
+                  </span>
+                  {item.amount && (
+                    <span className="shrink-0 text-sm tabular">{formatMoney(item.amount)}</span>
+                  )}
+                </>
+              )
+              const link = itemLink(item) ?? '/timeline'
+              return (
+                <li key={item.id}>
+                  <Link to={link} className="flex items-center gap-3 rounded-lg hover:bg-surface-2/60">
+                    {content}
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </CardContent>
+    </Card>
   )
 }
 
@@ -366,5 +428,89 @@ function DashboardSkeleton() {
         <Skeleton className="h-80 rounded-card" />
       </div>
     </div>
+  )
+}
+
+/** Uma linha com a previsão de atingimento (Fase 4); some se não houver dados suficientes. */
+function ProjectionLine({ objectiveId }: { objectiveId: string }) {
+  const projection = useProjection(objectiveId)
+  const p = projection.data
+  if (!p) return null
+  return (
+    <p className="mt-3 flex items-center gap-1.5 text-sm text-muted">
+      <TrendingUp className="size-4 shrink-0" aria-hidden />
+      {p.reachesByTarget ? (
+        <span>
+          Previsão: meta alcançada em{' '}
+          <span className="font-medium text-foreground">{formatMonth(p.reachMonth)}</span>
+        </span>
+      ) : (
+        <span>
+          Previsão: faltariam{' '}
+          <span className="font-medium tabular text-foreground">{formatMoney(p.deficitAtTarget)}</span> na
+          data alvo
+        </span>
+      )}
+    </p>
+  )
+}
+
+const UPCOMING_LABEL: Record<ApplicationsOverview['upcoming'][number]['kind'], string> = {
+  DEADLINE: 'Prazo de inscrição',
+  RESPONSE: 'Resposta provável',
+  REQUEST: 'Prazo de solicitação',
+}
+
+/** Candidaturas ativas (Fase 5): contagem por resultado e próximos marcos. */
+function ApplicationsCard({ overview }: { overview: ApplicationsOverview }) {
+  return (
+    <Card>
+      <CardHeader>
+        <div>
+          <CardTitle>Candidaturas</CardTitle>
+          <CardDescription>{pluralize(overview.active, 'ativa', 'ativas')}</CardDescription>
+        </div>
+        <Button asChild variant="ghost" size="sm">
+          <Link to="/applications">
+            Ver <ArrowRight aria-hidden />
+          </Link>
+        </Button>
+      </CardHeader>
+      <CardContent>
+        {overview.active === 0 ? (
+          <div className="flex items-center gap-3 text-sm text-muted">
+            <GraduationCap className="size-5" aria-hidden /> Marque programas como &quot;Escolhida&quot; em
+            Universidades.
+          </div>
+        ) : (
+          <>
+            <div className="flex flex-wrap gap-2">
+              {overview.pending > 0 && <Badge>{overview.pending} em andamento</Badge>}
+              {overview.accepted > 0 && <Badge tone="primary">{overview.accepted} aprovada(s)</Badge>}
+              {overview.waitlisted > 0 && <Badge tone="accent">{overview.waitlisted} em espera</Badge>}
+              {overview.rejected > 0 && <Badge tone="danger">{overview.rejected} não aceita(s)</Badge>}
+            </div>
+            {overview.upcoming.length > 0 && (
+              <ul className="mt-4 grid gap-2.5">
+                {overview.upcoming.map((u) => (
+                  <li
+                    key={`${u.applicationId}-${u.kind}`}
+                    className="flex items-start justify-between gap-3 text-sm"
+                  >
+                    <span className="min-w-0">
+                      <span className="block truncate">{u.programName}</span>
+                      <span className="block truncate text-xs text-muted">
+                        {UPCOMING_LABEL[u.kind]} · {u.universityName}
+                      </span>
+                    </span>
+                    <span className="shrink-0 tabular">{formatDate(u.date)}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
+        )}
+      </CardContent>
+    </Card>
   )
 }

@@ -1,5 +1,6 @@
 package com.interchangeplanner.dashboard;
 
+import com.interchangeplanner.applications.application.ApplicationService;
 import com.interchangeplanner.exchange.ExchangeProperties;
 import com.interchangeplanner.exchange.api.ExchangeRateResponse;
 import com.interchangeplanner.exchange.application.CurrencyConverter;
@@ -11,6 +12,10 @@ import com.interchangeplanner.objective.api.ObjectiveResponse;
 import com.interchangeplanner.objective.application.ObjectiveProgressService;
 import com.interchangeplanner.objective.application.ObjectiveService;
 import com.interchangeplanner.objective.domain.Objective;
+import com.interchangeplanner.timeline.application.TimelineService;
+import com.interchangeplanner.user.application.UserClock;
+import java.time.Clock;
+import java.time.LocalDate;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,15 +30,22 @@ public class DashboardService {
     private final ExpenseSummaryService expenses;
     private final ExchangeRateService exchange;
     private final ExchangeProperties.Pair mainPair;
+    private final ApplicationService applications;
+    private final TimelineService timeline;
+    private final UserClock userClock;
 
     public DashboardService(ObjectiveService objectives, ObjectiveProgressService progress, AccountService accounts,
-            ExpenseSummaryService expenses, ExchangeRateService exchange, ExchangeProperties exchangeProperties) {
+            ExpenseSummaryService expenses, ExchangeRateService exchange, ExchangeProperties exchangeProperties,
+            ApplicationService applications, TimelineService timeline, UserClock userClock) {
         this.objectives = objectives;
         this.progress = progress;
         this.accounts = accounts;
         this.expenses = expenses;
         this.exchange = exchange;
         this.mainPair = exchangeProperties.pairs().getFirst();
+        this.applications = applications;
+        this.timeline = timeline;
+        this.userClock = userClock;
     }
 
     @Transactional(readOnly = true)
@@ -43,14 +55,17 @@ public class DashboardService {
         ExchangeRateResponse rate = ExchangeRateResponse.of(
                 exchange.resolve(userId, mainPair.base(), mainPair.quote()),
                 exchange.market(mainPair.base(), mainPair.quote()));
+        ApplicationsOverview apps = ApplicationsOverview.of(applications.list(userId, null, null, false),
+                userClock.today(userId));
+        var upcoming = timeline.upcoming(userId, 6);
         if (objective == null) {
-            return new DashboardResponse(null, null, accounts.summary(userId), null, rate);
+            return new DashboardResponse(null, null, accounts.summary(userId), null, rate, apps, upcoming);
         }
         return new DashboardResponse(
                 ObjectiveResponse.from(objective),
                 progress.progress(userId, objective, converter),
                 accounts.summary(userId),
                 expenses.summary(userId, objective, ExpenseSummaryResponse.GroupBy.CYCLE, converter),
-                rate);
+                rate, apps, upcoming);
     }
 }

@@ -11,6 +11,7 @@ import com.interchangeplanner.objective.application.ObjectiveService;
 import com.interchangeplanner.objective.domain.TargetMode;
 import com.interchangeplanner.shared.error.BusinessRuleException;
 import com.interchangeplanner.shared.error.ConflictException;
+import com.interchangeplanner.user.application.UserClock;
 import com.interchangeplanner.user.application.UserService;
 import java.time.Clock;
 import java.time.LocalDate;
@@ -34,12 +35,14 @@ public class OnboardingService {
     private final AccountService accounts;
     private final UserService users;
     private final Clock clock;
+    private final UserClock userClock;
 
-    public OnboardingService(ObjectiveService objectives, AccountService accounts, UserService users, Clock clock) {
+    public OnboardingService(ObjectiveService objectives, AccountService accounts, UserService users, UserClock userClock) {
         this.objectives = objectives;
         this.accounts = accounts;
         this.users = users;
-        this.clock = clock;
+        this.clock = userClock.clock();
+        this.userClock = userClock;
     }
 
     @Transactional
@@ -47,7 +50,7 @@ public class OnboardingService {
         if (users.me(userId).onboardingCompleted()) {
             throw new ConflictException("O onboarding já foi concluído.", "objectiveName");
         }
-        if (!r.targetDate().isAfter(LocalDate.now(clock))) {
+        if (!r.targetDate().isAfter(userClock.today(userId))) {
             throw new BusinessRuleException("A data alvo precisa estar no futuro.", "targetDate");
         }
         TargetMode mode = r.targetAmount() != null ? TargetMode.MANUAL : TargetMode.DERIVED;
@@ -59,7 +62,7 @@ public class OnboardingService {
             String currency = r.currentSavingsCurrency() != null ? r.currentSavingsCurrency() : r.currency();
             AccountResponse account = accounts.create(userId,
                     new AccountRequest(SAVINGS_ACCOUNT_NAME, currency, AccountType.SAVINGS, objective.id(), false));
-            accounts.recordBalance(userId, account.id(), new BalanceRequest(LocalDate.now(clock), r.currentSavings()));
+            accounts.recordBalance(userId, account.id(), new BalanceRequest(userClock.today(userId), r.currentSavings()));
         }
 
         users.completeOnboarding(userId, clock.instant());

@@ -1,5 +1,6 @@
 package com.interchangeplanner.auth.application;
 
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -18,6 +19,8 @@ public class RefreshTokenCleanupJob {
     public RefreshTokenCleanupJob(RefreshTokenService refreshTokens) {
         this.refreshTokens = refreshTokens;
     }
+
+    @SchedulerLock(name = "refreshTokenCleanup")
 
     @Scheduled(cron = "${app.jobs.refresh-token-cleanup-cron:0 30 3 * * *}", zone = "UTC")
     public void purge() {

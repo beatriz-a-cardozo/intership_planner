@@ -8,6 +8,7 @@
 /*
  * Tokens de design. Cores semânticas: o código usa bg-surface, text-muted etc.,
  * nunca valores crus — trocar a identidade visual = editar só este bloco.
+ * Texto sobre surface, background e os fundos *-soft mantém contraste WCAG AA (≥ 4,5:1), verificado pelo axe nos E2E.
  */
 :root {
   --background: #f6f5f1;
@@ -15,18 +16,21 @@
   --surface-2: #efede6;
   --foreground: #1b1f1d;
   --muted: #5f6662;
-  --subtle: #8a908c;
+  --subtle: #676d69;
   --border: #e3e0d7;
   --primary: #1f4d3f; /* verde-pinho */
   --primary-hover: #183e33;
   --primary-foreground: #f6f5f1;
   --primary-soft: #dfe9e3;
-  --accent: #b7791f; /* âmbar: atenção */
+  --accent: #8a5a12; /* âmbar: atenção (≥ 4,5:1 sobre surface e accent-soft) */
   --accent-soft: #f6ead2;
-  --danger: #c2533f; /* coral: alerta/excesso */
+  --danger: #a8432f; /* coral: alerta/excesso */
   --danger-soft: #f7e1dc;
-  --success: #2f7a52;
+  --success: #2a6e4a;
   --ring: #2f6d5a;
+  /* séries de gráfico (paleta categórica validada: slots 1 e 2) */
+  --series-income: #2a78d6;
+  --series-expense: #eb6834;
   --shadow: 0 1px 2px rgb(27 31 29 / 0.04), 0 4px 16px rgb(27 31 29 / 0.05);
   color-scheme: light;
 }
@@ -37,7 +41,7 @@
   --surface-2: #1d2622;
   --foreground: #e9ece8;
   --muted: #a3aca7;
-  --subtle: #7b8580;
+  --subtle: #8a948f;
   --border: #26302c;
   --primary: #7cc4a6;
   --primary-hover: #93d3b8;
@@ -49,6 +53,8 @@
   --danger-soft: #3d2420;
   --success: #6cc895;
   --ring: #7cc4a6;
+  --series-income: #3987e5;
+  --series-expense: #d95926;
   --shadow: none; /* no escuro, elevação vem da luminosidade, não de sombra */
   color-scheme: dark;
 }
@@ -71,6 +77,8 @@
   --color-danger-soft: var(--danger-soft);
   --color-success: var(--success);
   --color-ring: var(--ring);
+  --color-series-income: var(--series-income);
+  --color-series-expense: var(--series-expense);
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Fraunces Variable', ui-serif, Georgia, serif;
   --radius-card: 1.25rem;

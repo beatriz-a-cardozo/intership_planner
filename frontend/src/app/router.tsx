@@ -79,6 +79,49 @@ export const router = createBrowserRouter([
                 lazy: page(() => import('@/features/finance/finance-page'), 'FinancePage'),
               },
               {
+                path: '/universities',
+                lazy: page(() => import('@/features/universities/universities-page'), 'UniversitiesPage'),
+              },
+              {
+                path: '/universities/compare',
+                lazy: page(() => import('@/features/universities/compare-page'), 'ComparePage'),
+              },
+              {
+                path: '/universities/:id',
+                lazy: page(
+                  () => import('@/features/universities/university-detail-page'),
+                  'UniversityDetailPage',
+                ),
+              },
+              {
+                path: '/programs/:id',
+                lazy: page(() => import('@/features/universities/program-detail-page'), 'ProgramDetailPage'),
+              },
+              {
+                path: '/applications',
+                lazy: page(() => import('@/features/applications/applications-page'), 'ApplicationsPage'),
+              },
+              {
+                path: '/timeline',
+                lazy: page(() => import('@/features/timeline/timeline-page'), 'TimelinePage'),
+              },
+              {
+                path: '/tasks',
+                lazy: page(() => import('@/features/tasks/tasks-page'), 'TasksPage'),
+              },
+              {
+                path: '/luggage',
+                lazy: page(() => import('@/features/luggage/luggage-page'), 'LuggagePage'),
+              },
+              {
+                path: '/notifications',
+                lazy: page(() => import('@/features/notifications/notifications-page'), 'NotificationsPage'),
+              },
+              {
+                path: '/import',
+                lazy: page(() => import('@/features/importer/import-page'), 'ImportPage'),
+              },
+              {
                 path: '/settings',
                 lazy: page(() => import('@/features/settings/settings-page'), 'SettingsPage'),
               },
