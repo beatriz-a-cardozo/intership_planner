@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM eclipse-temurin:21-jdk-alpine AS build
+FROM eclipse-temurin:24-jdk-alpine AS build
 WORKDIR /app
 COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
@@ -8,7 +8,7 @@ COPY src/ src/
 RUN --mount=type=cache,target=/root/.m2 sh ./mvnw -B -q package -DskipTests \
     && java -Djarmode=tools -jar target/*.jar extract --layers --launcher --destination target/extracted
 
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:24-jre-alpine
 RUN addgroup -S app && adduser -S app -G app
 WORKDIR /app
 # Camadas separadas: dependências mudam pouco e ficam em cache entre builds
