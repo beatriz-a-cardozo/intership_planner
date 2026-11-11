@@ -22,7 +22,7 @@
         <springdoc.version>3.1.1</springdoc.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <poi.version>5.5.1</poi.version>
-        <shedlock.version>7.10.1</shedlock.version>
+        <shedlock.version>7.11.0</shedlock.version>
     </properties>
 
     <dependencies>
